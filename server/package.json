@@ -1,0 +1,17 @@
+{
+  "name": "misa-tax-refund-server",
+  "version": "1.0.0",
+  "description": "Backend for Misa - Israeli Tax Refund Chatbot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.0",
+    "multer": "^1.4.5-lts.1",
+    "sql.js": "^1.11.0"
+  }
+}

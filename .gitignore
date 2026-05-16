@@ -1,0 +1,6 @@
+node_modules/
+.env
+server/misa.db
+server/uploads/
+server/server.log
+.DS_Store

@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>החזר מס – בודקים בכמה מגיע לך</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: linear-gradient(135deg, #0b1121 0%, #1a1f36 50%, #0f1a2e 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      direction: rtl;
+    }
+    #app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: #ffffff;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+
+    /* ─── Header ─── */
+    .app-header {
+      background: linear-gradient(135deg, #1a56db 0%, #0d3b9e 100%);
+      padding: 18px 20px 14px;
+      color: #fff;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+    }
+    .app-header .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .app-header .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.3px;
+    }
+    .app-header .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .app-header .badge {
+      background: rgba(255, 255, 255, 0.18);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      backdrop-filter: blur(4px);
+    }
+    .app-header .badge .dot {
+      width: 7px;
+      height: 7px;
+      background: #34d399;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 1.8s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(0.85);
+      }
+    }
+
+    /* ─── Refund Counter ─── */
+    .refund-counter {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #1a1a2e;
+      margin-top: 2px;
+    }
+    .refund-counter .label {
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0.8;
+    }
+    .refund-counter .amount {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      direction: ltr;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .refund-counter .amount .currency {
+      font-size: 18px;
+      font-weight: 700;
+      margin-left: 2px;
+    }
+    .refund-counter .amount .num {
+      display: inline-block;
+      min-width: 80px;
+      text-align: left;
+    }
+    .refund-counter .zero-risk {
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.1);
+      padding: 3px 10px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    /* ─── Progress Bar ─── */
+    .progress-section {
+      padding: 14px 20px 6px;
+      flex-shrink: 0;
+    }
+    .progress-bar-track {
+      width: 100%;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #1a56db, #3b82f6);
+      border-radius: 10px;
+      transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+    .progress-labels .step.active {
+      color: #1a56db;
+      font-weight: 700;
+    }
+
+    /* ─── Chat Area ─── */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 18px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+      background: #f8fafc;
+    }
+    .chat-area::-webkit-scrollbar {
+      width: 4px;
+    }
+    .chat-area::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    /* ─── Bubbles ─── */
+    .bubble {
+      max-width: 88%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.6;
+      animation: fadeUp 0.5s ease forwards;
+      opacity: 0;
+      transform: translateY(12px);
+      word-wrap: break-word;
+    }
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .bubble.bot {
+      align-self: flex-start;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #1e293b;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .bubble.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #1a56db, #2563eb);
+      color: #fff;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 4px 14px rgba(26, 86, 219, 0.25);
+    }
+    .bubble.system {
+      align-self: center;
+      background: #fef9c3;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      max-width: 95%;
+      border-radius: 14px;
+    }
+    .bubble.system .icon {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .bubble .typing-dots {
+      display: flex;
+      gap: 5px;
+      padding: 4px 0;
+    }
+    .bubble .typing-dots span {
+      width: 9px;
+      height: 9px;
+      background: #94a3b8;
+      border-radius: 50%;
+      animation: typingBounce 1.4s infinite;
+    }
+    .bubble .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .bubble .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes typingBounce {
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+      }
+      30% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* ─── Question Buttons ─── */
+    .options-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-self: flex-start;
+      max-width: 95%;
+      animation: fadeUp 0.5s ease forwards;
+      opacity: 0;
+      transform: translateY(12px);
+      margin-top: -4px;
+    }
+    .option-btn {
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      flex: 1 1 auto;
+      min-width: 70px;
+      text-align: center;
+      touch-action: manipulation;
+    }
+    .option-btn:hover {
+      border-color: #1a56db;
+      background: #eff6ff;
+    }
+    .option-btn:active {
+      transform: scale(0.96);
+    }
+    .option-btn.selected {
+      border-color: #1a56db;
+      background: #1a56db;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+    }
+
+    /* ─── Input Area ─── */
+    .input-area {
+      flex-shrink: 0;
+      padding: 12px 18px 18px;
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+    }
+    .input-area .lead-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .input-area .lead-form input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+      text-align: right;
+      direction: rtl;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .input-area .lead-form input:focus {
+      border-color: #1a56db;
+    }
+    .input-area .lead-form .submit-btn {
+      background: linear-gradient(135deg, #1a56db, #2563eb);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .input-area .lead-form .submit-btn:active {
+      transform: scale(0.97);
+    }
+    .input-area .lead-form .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .input-area .lead-form .disclaimer {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .input-area .lead-form .disclaimer strong {
+      color: #1a56db;
+    }
+
+    /* ─── Welcome Screen ─── */
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      padding: 30px 24px 40px;
+      text-align: center;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+    .welcome-screen .emoji-big {
+      font-size: 64px;
+      margin-bottom: 10px;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .welcome-screen h1 {
+      font-size: 25px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.4;
+      margin: 0 0 12px;
+    }
+    .welcome-screen h1 .highlight {
+      color: #1a56db;
+    }
+    .welcome-screen .sub {
+      font-size: 16px;
+      color: #475569;
+      line-height: 1.6;
+      max-width: 320px;
+      margin: 0 auto 20px;
+    }
+    .welcome-screen .usp-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .welcome-screen .usp-item {
+      background: #f1f5f9;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .welcome-screen .fee-badge {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 18px;
+      color: #1a1a2e;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+    }
+    .welcome-screen .fee-badge small {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .welcome-btn {
+      background: linear-gradient(135deg, #1a56db, #2563eb);
+      color: #fff;
+      border: none;
+      padding: 18px 48px;
+      border-radius: 60px;
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      box-shadow: 0 8px 30px rgba(26, 86, 219, 0.35);
+      width: 100%;
+      max-width: 300px;
+    }
+    .welcome-btn:active {
+      transform: scale(0.96);
+    }
+    .welcome-screen .confidence {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ─── Result Screen ─── */
+    .result-screen {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      padding: 30px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+    .result-screen .big-result {
+      font-size: 56px;
+      font-weight: 900;
+      color: #1a56db;
+      direction: ltr;
+      line-height: 1;
+      margin: 8px 0;
+    }
+    .result-screen .big-result .currency {
+      font-size: 30px;
+    }
+    .result-screen .result-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .result-screen .result-sub {
+      font-size: 14px;
+      color: #64748b;
+      max-width: 280px;
+      margin: 0 auto 20px;
+    }
+    .result-screen .fee-note {
+      background: #fef9c3;
+      padding: 10px 20px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #92400e;
+      margin-bottom: 20px;
+    }
+    .result-screen .fee-note strong {
+      color: #1a56db;
+    }
+
+    /* ─── Confetti Canvas ─── */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ─── ─── */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- ─── Header ─── -->
+    <div class="app-header">
+      <div class="top-row">
+        <div class="logo">
+          <span class="logo-icon">💸</span>
+          <span>מיסה</span>
+        </div>
+        <div class="badge">
+          <span class="dot"></span>
+          בדיקה חינם
+        </div>
+      </div>
+      <div class="refund-counter" id="refundCounter">
+        <div>
+          <div class="label">💰 החזר משוער</div>
+          <div class="zero-risk">* אפס סיכון</div>
+        </div>
+        <div class="amount">
+          <span class="currency">₪</span>
+          <span class="num" id="refundAmount">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Progress ─── -->
+    <div class="progress-section" id="progressSection">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-labels">
+        <span class="step" data-step="0">התחלה</span>
+        <span class="step" data-step="1">עבודה</span>
+        <span class="step" data-step="2">תעסוקה</span>
+        <span class="step" data-step="3">לימודים</span>
+        <span class="step" data-step="4">בריאות</span>
+        <span class="step" data-step="5">סיום</span>
+      </div>
+    </div>
+
+    <!-- ─── Welcome ─── -->
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="emoji-big">🤑</div>
+      <h1>
+        ידעת שהמדינה כנראה<br>
+        <span class="highlight">חייבת לך אלפי שקלים</span><br>
+        ואתה אפילו לא יודע?
+      </h1>
+      <div class="sub">
+        בוא נבדוק ב-<strong>60 שניות</strong> - 100% חינם!<br>
+        משלמים רק <strong>12%</strong> עמלה ורק אם הכסף נכנס אליך לחשבון.
+      </div>
+      <div class="usp-grid">
+        <span class="usp-item">⚡ 60 שניות</span>
+        <span class="usp-item">✅ 100% חינם</span>
+        <span class="usp-item">🔒 מאובטח</span>
+        <span class="usp-item">📱 פשוט ברמות</span>
+      </div>
+      <div class="fee-badge">
+        12% עמלה <small>בלבד! (השוק: 20%)</small>
+      </div>
+      <button class="welcome-btn" id="startBtn">בואו נתחיל 🚀</button>
+      <div class="confidence">
+        <span>🔐</span> הפרטים שלך בטוחים איתנו
+      </div>
+    </div>
+
+    <!-- ─── Chat ─── -->
+    <div class="chat-area hidden" id="chatArea"></div>
+
+    <!-- ─── Input Area ─── -->
+    <div class="input-area hidden" id="inputArea">
+      <div class="lead-form" id="leadForm">
+        <input type="tel" id="phoneInput" placeholder="📱 מספר נייד" dir="rtl" inputmode="tel" />
+        <input type="text" id="nameInput" placeholder="👤 שם מלא" dir="rtl" />
+        <button class="submit-btn" id="leadSubmit">שלחו לי את התוצאה! 🎯</button>
+        <div class="disclaimer">
+          שליחת הפרטים מהווה הסכמה לתנאי השימוש. נשמור על הפרטים שלך ולא נעביר לגורם שלישי. <strong>בדיקה完全没有</strong> התחייבות.
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Result (after lead submit) ─── -->
+    <div class="result-screen" id="resultScreen">
+      <div style="font-size:60px;margin-bottom:6px;">🎉</div>
+      <div class="result-label">החזר מס משוער:</div>
+      <div class="big-result">
+        <span class="currency">₪</span><span id="finalRefund">0</span>
+      </div>
+      <div class="result-sub">
+        הסכום מבוסס על התשובות שלך. נציג יחזור אליך עם בדיקה מדויקת.
+      </div>
+      <div class="fee-note">
+        💡 <strong>12%</strong> עמלה רק על מה שמתקבל — <strong>88%</strong> לך!
+      </div>
+      <button class="welcome-btn" id="uploadBtn" style="margin-top:4px;font-size:16px;padding:14px 30px;max-width:260px;">
+        📎 העלה טופס 106
+      </button>
+      <div style="font-size:12px;color:#94a3b8;margin-top:10px;">אפשר גם מאוחר יותר</div>
+      <button class="welcome-btn" id="gotoPaymentBtn" style="margin-top:8px;font-size:14px;padding:12px 24px;max-width:220px;background:linear-gradient(135deg,#059669,#10b981);">
+        💳 אמת כרטיס וסיים
+      </button>
+    </div>
+
+    <!-- ─── Upload Screen ─── -->
+    <div class="result-screen" id="uploadScreen" style="display:none;">
+      <div style="font-size:48px;margin-bottom:6px;">📄</div>
+      <div class="result-label">העלאת טופס 106</div>
+      <div class="result-sub">
+        העלה את טופס 106 שקיבלת מהמעסיק. אפשר לצלם ולשלוח.
+      </div>
+      <form id="uploadForm" style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:12px;">
+        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple
+               style="padding:12px;border:2px dashed #cbd5e1;border-radius:14px;text-align:center;font-size:14px;background:#f8fafc;cursor:pointer;" />
+        <button type="submit" class="submit-btn" id="uploadSubmit" style="padding:14px;">
+          📤 העלה מסמכים
+        </button>
+        <div id="uploadStatus" style="font-size:13px;color:#64748b;text-align:center;"></div>
+        <button type="button" id="skipUploadBtn" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;font-family:inherit;">
+          דלג, אעלה אחר כך
+        </button>
+      </form>
+    </div>
+
+    <!-- ─── Payment Screen ─── -->
+    <div class="result-screen" id="paymentScreen" style="display:none;">
+      <div style="font-size:40px;margin-bottom:4px;">💳</div>
+      <div class="result-label" style="font-size:16px;">אימות כרטיס אשראי</div>
+      <div class="result-sub" style="font-size:13px;max-width:320px;">
+        כדי להגיש את הדוח לרשות המיסים, יש לאמת כרטיס אשראי.
+        <strong>לא נחייב אותך עכשיו!</strong> החיוב של ה-12% יתבצע
+        רק לאחר שהכסף יופקד בחשבון הבנק שלך.
+      </div>
+      <div id="paymentError" style="color:#ef4444;font-size:13px;font-weight:600;margin-bottom:4px;display:none;"></div>
+      <form id="paymentForm" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:10px;">
+        <input type="text" id="cardNumber" inputmode="numeric" placeholder="📇 מספר כרטיס" dir="ltr"
+               style="text-align:left;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:16px;font-family:inherit;outline:none;direction:ltr;letter-spacing:1px;" />
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="cardExpiry" inputmode="numeric" placeholder="📅 תוקף (MM/YY)" dir="ltr"
+                 style="flex:1;text-align:left;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;direction:ltr;" />
+          <input type="text" id="cardCvv" inputmode="numeric" placeholder="🔒 CVV" dir="ltr"
+                 style="flex:0 0 80px;text-align:left;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;direction:ltr;" />
+        </div>
+        <input type="text" id="cardHolderId" inputmode="numeric" placeholder="🆔 תעודת זהות" dir="rtl"
+               style="padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:right;" />
+        <input type="text" id="cardHolderName" placeholder="👤 שם בעל הכרטיס" dir="rtl"
+               style="padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:right;" />
+        <button type="submit" class="submit-btn" id="paymentSubmit" style="padding:16px;font-size:16px;">
+          🔐 אמת כרטיס
+        </button>
+        <div id="paymentStatus" style="font-size:13px;color:#64748b;text-align:center;"></div>
+      </form>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center;">
+        <span style="font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:3px;">🔒 מאובטח ב-SSL</span>
+        <span style="font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:3px;">🛡️ PCI DSS</span>
+        <span style="font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:3px;">🇮🇱 סליקה ישראלית</span>
+      </div>
+    </div>
+
+    <!-- ─── Final Success Screen ─── -->
+    <div class="result-screen" id="successScreen" style="display:none;">
+      <div style="font-size:72px;margin-bottom:6px;">✅</div>
+      <div class="result-label">הקובץ הוגש בהצלחה!</div>
+      <div class="result-sub" style="max-width:300px;">
+        אנחנו נעקוב אחרי הזיכוי שלך מול רשות המיסים.
+        עדכנו אותך ב-SMS כשהכסף בדרך.
+      </div>
+      <div class="fee-note" style="margin-top:4px;">
+        💡 <strong>12%</strong> עמלה — תשלם <strong>רק</strong> אם הכסף נכנס לחשבון שלך!
+      </div>
+      <div style="font-size:13px;color:#94a3b8;margin-top:8px;">נשמח לעזור בכל שאלה ❤️</div>
+    </div>
+
+  </div>
+
+  <!-- ─── Confetti Canvas ─── -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    // ──────────────────────────────────────────────────────────────────
+    // State
+    // ──────────────────────────────────────────────────────────────────
+    const state = {
+      currentStep: 0, // 0 = welcome, 1-4 = questions, 5 = lead gen
+      refund: 0,
+      answers: [],
+      isAnimating: false,
+    };
+
+    // ──────────────────────────────────────────────────────────────────
+    // Questions
+    // ──────────────────────────────────────────────────────────────────
+    const QUESTIONS = [{
+      id: 'work',
+      text: 'החלפת עבודה ב-6 השנים האחרונות?',
+      yesAdd: 1800,
+      noAdd: 0,
+      options: ['כן 👍', 'לא 👎'],
+    }, {
+      id: 'unemployment',
+      text: 'היית מובטל/ת בתקופה כלשהי?',
+      yesAdd: 1700,
+      noAdd: 0,
+      options: ['כן 😔', 'לא 😊'],
+    }, {
+      id: 'student',
+      text: 'היית סטודנט/ית בשנים האחרונות?',
+      yesAdd: 2000,
+      noAdd: 0,
+      options: ['כן 🎓', 'לא 🙅'],
+    }, {
+      id: 'medical',
+      text: 'שילמת על טיפולים רפואיים או שיניים?',
+      yesAdd: 2500,
+      noAdd: 0,
+      options: ['כן 🏥', 'לא ✅'],
+    }, ];
+
+    const TOTAL_REFUND_MAX = 8000;
+    const API_BASE = window.location.origin;
+
+    // ──────────────────────────────────────────────────────────────────
+    // DOM refs
+    // ──────────────────────────────────────────────────────────────────
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const chatArea = document.getElementById('chatArea');
+    const inputArea = document.getElementById('inputArea');
+    const resultScreen = document.getElementById('resultScreen');
+    const startBtn = document.getElementById('startBtn');
+    const progressFill = document.getElementById('progressFill');
+    const refundAmount = document.getElementById('refundAmount');
+    const leadForm = document.getElementById('leadForm');
+    const phoneInput = document.getElementById('phoneInput');
+    const nameInput = document.getElementById('nameInput');
+    const leadSubmit = document.getElementById('leadSubmit');
+    const finalRefund = document.getElementById('finalRefund');
+
+    // Payment screen refs
+    const paymentScreen = document.getElementById('paymentScreen');
+    const paymentForm = document.getElementById('paymentForm');
+    const cardNumber = document.getElementById('cardNumber');
+    const cardExpiry = document.getElementById('cardExpiry');
+    const cardCvv = document.getElementById('cardCvv');
+    const cardHolderId = document.getElementById('cardHolderId');
+    const cardHolderName = document.getElementById('cardHolderName');
+    const paymentSubmit = document.getElementById('paymentSubmit');
+    const paymentStatus = document.getElementById('paymentStatus');
+    const paymentError = document.getElementById('paymentError');
+    const successScreen = document.getElementById('successScreen');
+
+    // ──────────────────────────────────────────────────────────────────
+    // Confetti
+    // ──────────────────────────────────────────────────────────────────
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const pieces = [];
+      const colors = ['#1a56db', '#fbbf24', '#34d399', '#f43f5e', '#8b5cf6', '#f97316', '#06b6d4'];
+
+      for (let i = 0; i < 180; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * -1 - 20,
+          w: Math.random() * 10 + 5,
+          h: Math.random() * 6 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 3 + 2,
+          rot: Math.random() * 360,
+          rotV: (Math.random() - 0.5) * 8,
+          opacity: 1,
+        });
+      }
+
+      let frame = 0;
+      const maxFrames = 160;
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        for (const p of pieces) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.05;
+          p.rot += p.rotV;
+          if (frame > maxFrames - 40) p.opacity = Math.max(0, p.opacity - 0.025);
+          if (p.y > canvas.height + 20 || p.opacity <= 0) continue;
+          alive = true;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.globalAlpha = p.opacity;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        }
+        frame++;
+        if (alive && frame < maxFrames) requestAnimationFrame(draw);
+        else { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+      }
+      draw();
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // Helpers
+    // ──────────────────────────────────────────────────────────────────
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function formatNumber(n) {
+      return n.toLocaleString('he-IL');
+    }
+
+    function updateRefundDisplay(value) {
+      refundAmount.textContent = formatNumber(value);
+    }
+
+    function updateProgress(step) {
+      const pct = (step / 5) * 100;
+      progressFill.style.width = pct + '%';
+      document.querySelectorAll('.progress-labels .step').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.step) <= step);
+      });
+    }
+
+    function scrollChatDown() {
+      chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // Chat bubble helpers
+    // ──────────────────────────────────────────────────────────────────
+    function addBotBubble(text) {
+      const div = document.createElement('div');
+      div.className = 'bubble bot';
+      div.textContent = text;
+      chatArea.appendChild(div);
+      scrollChatDown();
+      return div;
+    }
+
+    function addUserBubble(text) {
+      const div = document.createElement('div');
+      div.className = 'bubble user';
+      div.textContent = text;
+      chatArea.appendChild(div);
+      scrollChatDown();
+      return div;
+    }
+
+    function addTypingBubble() {
+      const div = document.createElement('div');
+      div.className = 'bubble bot';
+      div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+      chatArea.appendChild(div);
+      scrollChatDown();
+      return div;
+    }
+
+    function addSystemBubble(text, icon) {
+      const div = document.createElement('div');
+      div.className = 'bubble system';
+      div.innerHTML = (icon ? '<span class="icon">' + icon + '</span>' : '') + text;
+      chatArea.appendChild(div);
+      scrollChatDown();
+      return div;
+    }
+
+    function removeTyping(typingEl) {
+      if (typingEl && typingEl.parentNode) typingEl.remove();
+    }
+
+    function showOptions(options, onSelect) {
+      const container = document.createElement('div');
+      container.className = 'options-container';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+          btn.classList.add('selected');
+          setTimeout(() => onSelect(opt), 300);
+        });
+        container.appendChild(btn);
+      });
+      chatArea.appendChild(container);
+      scrollChatDown();
+      return container;
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // Animate refund counter tick
+    // ──────────────────────────────────────────────────────────────────
+    function animateRefund(from, to, duration = 800) {
+      const start = performance.now();
+
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutQuart
+        const eased = 1 - Math.pow(1 - progress, 4);
+        const current = Math.round(from + (to - from) * eased);
+        updateRefundDisplay(current);
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // The Chat Flow
+    // ──────────────────────────────────────────────────────────────────
+    async function startChat() {
+      state.currentStep = 0;
+      state.refund = 0;
+      state.answers = [];
+      updateRefundDisplay(0);
+      updateProgress(0);
+
+      welcomeScreen.classList.add('hidden');
+      resultScreen.style.display = 'none';
+      inputArea.classList.add('hidden');
+      chatArea.classList.remove('hidden');
+      chatArea.innerHTML = '';
+
+      await sleep(400);
+
+      // Intro
+      addBotBubble('שלום! 👋 אני מיסה, העוזרת החכמה שלך לבדיקת החזר מס.');
+      await sleep(600);
+      addBotBubble('אני הולכת לשאול אותך 4 שאלות קצרות. זה לוקח בערך דקה!');
+      await sleep(500);
+      addBotBubble('בוא נתחיל! 🚀');
+      await sleep(500);
+
+      // Ask questions one by one
+      for (let i = 0; i < QUESTIONS.length; i++) {
+        const q = QUESTIONS[i];
+        state.currentStep = i + 1;
+        updateProgress(state.currentStep);
+
+        const typing = addTypingBubble();
+        await sleep(500 + Math.random() * 400);
+        removeTyping(typing);
+
+        addBotBubble(q.text);
+
+        const answer = await new Promise(resolve => {
+          showOptions(q.options, (selected) => {
+            resolve(selected);
+          });
+        });
+
+        const isYes = answer.startsWith('כן');
+        addUserBubble(answer);
+        state.answers.push({ questionId: q.id, answer: isYes ? 'כן' : 'לא' });
+
+        if (isYes) {
+          const from = state.refund;
+          state.refund += q.yesAdd;
+          animateRefund(from, state.refund, 900);
+          addSystemBubble('הוספנו ' + formatNumber(q.yesAdd) + ' ₪ להחזר המשוער! 🚀', '📈');
+        } else {
+          addSystemBubble('לא נורא, עברנו לשאלה הבאה!', '👍');
+        }
+
+        await sleep(500);
+      }
+
+      // Done with questions
+      state.currentStep = 5;
+      updateProgress(5);
+
+      const typing2 = addTypingBubble();
+      await sleep(600);
+      removeTyping(typing2);
+
+      addBotBubble('סיימנו! 🎉 בדקתי את כל הפרטים...');
+      await sleep(500);
+
+      const finalVal = state.refund > 0 ? state.refund : 800;
+      if (state.refund === 0) {
+        state.refund = 800;
+        animateRefund(0, 800, 1000);
+      }
+
+      addBotBubble('לפי התשובות שלך, את/ה עשוי/ה לקבל החזר מס של:');
+      await sleep(400);
+
+      // Show lead gen
+      inputArea.classList.remove('hidden');
+      leadSubmit.disabled = false;
+      leadSubmit.textContent = 'שלחו לי את התוצאה! 🎯';
+      scrollChatDown();
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // Lead form submission → Backend API
+    // ──────────────────────────────────────────────────────────────────
+    leadForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+
+      if (!name || name.length < 2) {
+        nameInput.style.borderColor = '#ef4444';
+        nameInput.placeholder = 'נא להזין שם מלא';
+        return;
+      }
+      if (!phone || phone.length < 9) {
+        phoneInput.style.borderColor = '#ef4444';
+        phoneInput.placeholder = 'נא להזין מספר נייד תקין';
+        return;
+      }
+
+      nameInput.style.borderColor = '#e2e8f0';
+      phoneInput.style.borderColor = '#e2e8f0';
+
+      leadSubmit.disabled = true;
+      leadSubmit.textContent = 'שולח... ⏳';
+
+      try {
+        const res = await fetch(API_BASE + '/api/submit-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            phone,
+            answers: state.answers,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'שגיאה בשליחה');
+        }
+
+        leadSubmit.textContent = 'נשלח! ✅';
+        await sleep(600);
+
+        inputArea.classList.add('hidden');
+        chatArea.classList.add('hidden');
+
+        finalRefund.textContent = formatNumber(state.refund);
+        resultScreen.style.display = 'flex';
+        launchConfetti();
+      } catch (err) {
+        console.error('Submit lead error:', err);
+        leadSubmit.disabled = false;
+        leadSubmit.textContent = 'שלחו לי את התוצאה! 🎯';
+        addBotBubble('❌ ' + err.message + ' נסה שוב.');
+      }
+    });
+
+    // ──────────────────────────────────────────────────────────────────
+    // Document Upload
+    // ──────────────────────────────────────────────────────────────────
+    const uploadScreen = document.getElementById('uploadScreen');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadForm = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const uploadSubmit = document.getElementById('uploadSubmit');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const skipUploadBtn = document.getElementById('skipUploadBtn');
+
+    uploadBtn.addEventListener('click', () => {
+      resultScreen.style.display = 'none';
+      uploadScreen.style.display = 'flex';
+    });
+
+    skipUploadBtn.addEventListener('click', () => {
+      uploadScreen.style.display = 'none';
+      paymentScreen.style.display = 'flex';
+    });
+
+    uploadForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!fileInput.files || fileInput.files.length === 0) {
+        uploadStatus.textContent = '⚠️ נא לבחור קבצים קודם';
+        return;
+      }
+
+      const phone = phoneInput.value.trim().replace(/[^0-9]/g, '');
+
+      const formData = new FormData();
+      formData.append('phone', phone);
+      for (const file of fileInput.files) {
+        formData.append('documents', file);
+      }
+
+      uploadSubmit.disabled = true;
+      uploadSubmit.textContent = 'מעלה... ⏳';
+      uploadStatus.textContent = '';
+
+      try {
+        const res = await fetch(API_BASE + '/api/upload-106', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'שגיאה בהעלאה');
+        }
+
+        uploadStatus.textContent = '✅ ' + data.message;
+        uploadStatus.style.color = '#16a34a';
+        uploadSubmit.textContent = 'הועלה! ✅';
+
+        setTimeout(() => {
+          uploadScreen.style.display = 'none';
+          paymentScreen.style.display = 'flex';
+        }, 1200);
+      } catch (err) {
+        console.error('Upload error:', err);
+        uploadStatus.textContent = '❌ ' + err.message;
+        uploadStatus.style.color = '#ef4444';
+        uploadSubmit.disabled = false;
+        uploadSubmit.textContent = '📤 העלה מסמכים';
+      }
+    });
+
+    // ──────────────────────────────────────────────────────────────────
+    // Quick payment button from result screen
+    // ──────────────────────────────────────────────────────────────────
+    document.getElementById('gotoPaymentBtn').addEventListener('click', () => {
+      resultScreen.style.display = 'none';
+      paymentScreen.style.display = 'flex';
+    });
+
+    // ──────────────────────────────────────────────────────────────────
+    // Card formatting helpers
+    // ──────────────────────────────────────────────────────────────────
+    cardNumber.addEventListener('input', () => {
+      let val = cardNumber.value.replace(/[^0-9]/g, '').slice(0, 16);
+      cardNumber.value = val.replace(/(.{4})/g, '$1 ').trim();
+      cardNumber.style.borderColor = '#e2e8f0';
+    });
+
+    cardExpiry.addEventListener('input', () => {
+      let val = cardExpiry.value.replace(/[^0-9]/g, '').slice(0, 4);
+      if (val.length >= 3) {
+        cardExpiry.value = val.slice(0, 2) + '/' + val.slice(2);
+      } else {
+        cardExpiry.value = val;
+      }
+      cardExpiry.style.borderColor = '#e2e8f0';
+    });
+
+    cardCvv.addEventListener('input', () => {
+      cardCvv.value = cardCvv.value.replace(/[^0-9]/g, '').slice(0, 4);
+      cardCvv.style.borderColor = '#e2e8f0';
+    });
+
+    cardHolderId.addEventListener('input', () => {
+      cardHolderId.value = cardHolderId.value.replace(/[^0-9]/g, '').slice(0, 9);
+      cardHolderId.style.borderColor = '#e2e8f0';
+    });
+
+    // ──────────────────────────────────────────────────────────────────
+    // Payment form submission
+    // ──────────────────────────────────────────────────────────────────
+    paymentForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const phone = phoneInput.value.trim().replace(/[^0-9]/g, '');
+      const ccNum = cardNumber.value.replace(/\s/g, '');
+      const expRaw = cardExpiry.value.replace('/', '');
+      const expMonth = expRaw.slice(0, 2);
+      const expYear = expRaw.slice(2);
+      const cvv = cardCvv.value;
+      const holderId = cardHolderId.value.replace(/[^0-9]/g, '');
+      const holderName = cardHolderName.value.trim() || nameInput.value.trim();
+
+      // Validate
+      paymentError.style.display = 'none';
+
+      if (ccNum.length < 13) {
+        cardNumber.style.borderColor = '#ef4444';
+        showPaymentError('נא להזין מספר כרטיס תקין');
+        return;
+      }
+      if (expRaw.length < 4) {
+        cardExpiry.style.borderColor = '#ef4444';
+        showPaymentError('נא להזין תוקף כרטיס תקין (MM/YY)');
+        return;
+      }
+      if (cvv.length < 3) {
+        cardCvv.style.borderColor = '#ef4444';
+        showPaymentError('נא להזין קוד אבטחה (CVV)');
+        return;
+      }
+      if (holderId.length < 8) {
+        cardHolderId.style.borderColor = '#ef4444';
+        showPaymentError('נא להזין תעודת זהות תקינה');
+        return;
+      }
+
+      paymentSubmit.disabled = true;
+      paymentSubmit.textContent = 'מאמת כרטיס... ⏳';
+      paymentStatus.textContent = '';
+
+      try {
+        const res = await fetch(API_BASE + '/api/setup-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone,
+            cardNumber: ccNum,
+            expMonth,
+            expYear,
+            cvv,
+            holderId,
+            holderName,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'אימות הכרטיס נכשל');
+        }
+
+        paymentSubmit.textContent = 'אומת! ✅';
+        paymentStatus.textContent = 'כרטיס אומת בהצלחה! מעביר...';
+        paymentStatus.style.color = '#16a34a';
+
+        await sleep(1000);
+
+        paymentScreen.style.display = 'none';
+        successScreen.style.display = 'flex';
+        launchConfetti();
+      } catch (err) {
+        console.error('Payment error:', err);
+        showPaymentError(err.message);
+        paymentSubmit.disabled = false;
+        paymentSubmit.textContent = '🔐 אמת כרטיס';
+      }
+    });
+
+    function showPaymentError(msg) {
+      paymentError.textContent = '⚠️ ' + msg;
+      paymentError.style.display = 'block';
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // Start button
+    // ──────────────────────────────────────────────────────────────────
+    startBtn.addEventListener('click', startChat);
+
+    // ──────────────────────────────────────────────────────────────────
+    // Input validation fix on focus
+    // ──────────────────────────────────────────────────────────────────
+    nameInput.addEventListener('focus', () => {
+      nameInput.style.borderColor = '#e2e8f0';
+      nameInput.placeholder = '👤 שם מלא';
+    });
+    phoneInput.addEventListener('focus', () => {
+      phoneInput.style.borderColor = '#e2e8f0';
+      phoneInput.placeholder = '📱 מספר נייד';
+    });
+
+    // ──────────────────────────────────────────────────────────────────
+    // Responsive confetti resize
+    // ──────────────────────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('confetti-canvas');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+
+</body>
+</html>
