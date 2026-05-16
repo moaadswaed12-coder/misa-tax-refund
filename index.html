@@ -348,24 +348,70 @@
     .input-area .lead-form input:focus {
       border-color: #1a56db;
     }
-    .input-area .lead-form .submit-btn {
+    .submit-btn {
       background: linear-gradient(135deg, #1a56db, #2563eb);
       color: #fff;
       border: none;
-      padding: 16px;
+      padding: 16px 28px;
       border-radius: 14px;
       font-size: 17px;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: inherit;
+      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.35);
+      width: 100%;
+      letter-spacing: 0.3px;
+      position: relative;
+      overflow: hidden;
     }
-    .input-area .lead-form .submit-btn:active {
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1a56db);
+      box-shadow: 0 8px 28px rgba(26, 86, 219, 0.45);
+      transform: translateY(-1px);
+    }
+    .submit-btn:active {
       transform: scale(0.97);
+      box-shadow: 0 3px 12px rgba(26, 86, 219, 0.3);
     }
-    .input-area .lead-form .submit-btn:disabled {
+    .submit-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .submit-btn.green {
+      background: linear-gradient(135deg, #059669, #10b981);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35);
+    }
+    .submit-btn.green:hover {
+      background: linear-gradient(135deg, #047857, #059669);
+      box-shadow: 0 8px 28px rgba(5, 150, 105, 0.45);
+    }
+    .submit-btn.green:active {
+      box-shadow: 0 3px 12px rgba(5, 150, 105, 0.3);
+    }
+    .skip-btn {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      color: #64748b;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      width: 100%;
+      text-align: center;
+    }
+    .skip-btn:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+    .skip-btn:active {
+      transform: scale(0.97);
     }
     .input-area .lead-form .disclaimer {
       font-size: 12px;
@@ -460,14 +506,23 @@
       font-size: 20px;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: inherit;
       box-shadow: 0 8px 30px rgba(26, 86, 219, 0.35);
       width: 100%;
       max-width: 300px;
+      letter-spacing: 0.3px;
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1a56db);
+      box-shadow: 0 12px 40px rgba(26, 86, 219, 0.45);
+      transform: translateY(-2px);
     }
     .welcome-btn:active {
       transform: scale(0.96);
+      box-shadow: 0 4px 16px rgba(26, 86, 219, 0.25);
     }
     .welcome-screen .confidence {
       margin-top: 18px;
@@ -640,11 +695,11 @@
       <div class="fee-note">
         💡 <strong>12%</strong> עמלה רק על מה שמתקבל — <strong>88%</strong> לך!
       </div>
-      <button class="welcome-btn" id="uploadBtn" style="margin-top:4px;font-size:16px;padding:14px 30px;max-width:260px;">
+      <button class="submit-btn" id="uploadBtn" style="margin-top:6px;max-width:260px;border-radius:60px;padding:14px 30px;font-size:16px;">
         📎 העלה טופס 106
       </button>
       <div style="font-size:12px;color:#94a3b8;margin-top:10px;">אפשר גם מאוחר יותר</div>
-      <button class="welcome-btn" id="gotoPaymentBtn" style="margin-top:8px;font-size:14px;padding:12px 24px;max-width:220px;background:linear-gradient(135deg,#059669,#10b981);">
+      <button class="submit-btn green" id="gotoPaymentBtn" style="margin-top:8px;max-width:220px;border-radius:60px;padding:12px 24px;font-size:15px;">
         💳 אמת כרטיס וסיים
       </button>
     </div>
@@ -659,12 +714,12 @@
       <form id="uploadForm" style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:12px;">
         <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple
                style="padding:12px;border:2px dashed #cbd5e1;border-radius:14px;text-align:center;font-size:14px;background:#f8fafc;cursor:pointer;" />
-        <button type="submit" class="submit-btn" id="uploadSubmit" style="padding:14px;">
+        <button type="submit" class="submit-btn" id="uploadSubmit" style="border-radius:14px;padding:16px;font-size:17px;">
           📤 העלה מסמכים
         </button>
         <div id="uploadStatus" style="font-size:13px;color:#64748b;text-align:center;"></div>
-        <button type="button" id="skipUploadBtn" style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;font-family:inherit;">
-          דלג, אעלה אחר כך
+        <button type="button" class="skip-btn" id="skipUploadBtn">
+          דלג, אעלה אחר כך →
         </button>
       </form>
     </div>
@@ -692,7 +747,7 @@
                style="padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:right;" />
         <input type="text" id="cardHolderName" placeholder="👤 שם בעל הכרטיס" dir="rtl"
                style="padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:right;" />
-        <button type="submit" class="submit-btn" id="paymentSubmit" style="padding:16px;font-size:16px;">
+        <button type="submit" class="submit-btn" id="paymentSubmit" style="border-radius:14px;padding:16px;font-size:17px;">
           🔐 אמת כרטיס
         </button>
         <div id="paymentStatus" style="font-size:13px;color:#64748b;text-align:center;"></div>
