@@ -28,44 +28,23 @@ function getTerminal() {
 }
 
 /**
- * Call Meshulam API to tokenize a card.
- *
- * In production this sends card data directly to Meshulam's server
- * and returns a secure token. The backend never stores raw card numbers.
- *
- * @param {Object} cardData
- * @param {string} cardData.cardNumber
- * @param {string} cardData.expMonth
- * @param {string} cardData.expYear
- * @param {string} cardData.cvv
- * @param {string} cardData.holderId – Israeli ID (ת.ז.)
- * @param {string} cardData.holderName
- * @returns {Promise<{success: boolean, token: string, lastFour: string, message: string}>}
+ * Tokenize a card (₪0 auth – no charge).
  */
 function createCardToken(cardData) {
   const apiKey = getApiKey();
   const terminal = getTerminal();
 
-  // ── Sandbox / No-API-key mode ─────────────────────────────────
-  // If no real API key is configured, simulate success.
-  // This lets development proceed without a real merchant account.
   if (!apiKey || apiKey === 'your_api_key_here') {
     console.log('⚠️  Meshulam API key not set. Simulating tokenization...');
     return new Promise((resolve) => {
       const lastFour = cardData.cardNumber.slice(-4);
       const token = 'tok_sim_' + Date.now() + '_' + lastFour;
       setTimeout(() => {
-        resolve({
-          success: true,
-          token,
-          lastFour,
-          message: 'Token created (simulated – set MESHULAM_API_KEY for live)',
-        });
+        resolve({ success: true, token, lastFour, message: 'Token created (simulated)' });
       }, 1200);
     });
   }
 
-  // ── Live Meshulam API call ──────────────────────────────────
   const payload = JSON.stringify({
     apiKey,
     terminalId: terminal,
@@ -76,7 +55,6 @@ function createCardToken(cardData) {
     cvv: cardData.cvv,
     holderId: cardData.holderId.replace(/[^0-9]/g, ''),
     holderName: cardData.holderName,
-    // ₪0 auth – validates card without charging
     amount: 0,
     currency: 'ILS',
     description: 'אימות כרטיס - מיסה החזרי מס',
@@ -84,7 +62,64 @@ function createCardToken(cardData) {
     jFailure: 'https://misa.co.il/payment/failure',
   });
 
-  const url = new URL(getBaseUrl() + '/transaction/tokenize');
+  return meshulamRequest('/transaction/tokenize', payload, apiKey, (data) => ({
+    success: true,
+    token: data.token || data.cardToken,
+    lastFour: data.lastFour || cardData.cardNumber.slice(-4),
+    message: 'כרטיס אומת בהצלחה',
+  }));
+}
+
+/**
+ * Charge a previously-tokenized card.
+ *
+ * @param {string} token  – The card token returned from createCardToken
+ * @param {number} amount – Amount in AGOROT (e.g. 1200 = ₪12.00)
+ * @param {string} description – Description for the charge
+ */
+function chargeCard(token, amount, description) {
+  const apiKey = getApiKey();
+  const terminal = getTerminal();
+
+  if (!apiKey || apiKey === 'your_api_key_here') {
+    console.log('⚠️  Meshulam API key not set. Simulating charge...');
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          success: true,
+          transactionId: 'sim_txn_' + Date.now(),
+          amount,
+          message: `חיוב של ₪${(amount / 100).toFixed(2)} 시뮜ציה (set MESHULAM_API_KEY for live)`,
+        });
+      }, 1500);
+    });
+  }
+
+  const payload = JSON.stringify({
+    apiKey,
+    terminalId: terminal,
+    action: 'charge',
+    token,
+    amount,
+    currency: 'ILS',
+    description: description || 'מיסה - עמלת החזר מס',
+    JSuccess: 'https://misa.co.il/charge/success',
+    JFailure: 'https://misa.co.il/charge/failure',
+  });
+
+  return meshulamRequest('/transaction/charge', payload, apiKey, (data) => ({
+    success: true,
+    transactionId: data.transactionId || data.txnId || 'unknown',
+    amount,
+    message: `חיוב של ₪${(amount / 100).toFixed(2)} בוצע בהצלחה`,
+  }));
+}
+
+/**
+ * Generic Meshulam API request helper.
+ */
+function meshulamRequest(path, payload, apiKey, onSuccess) {
+  const url = new URL(getBaseUrl() + path);
 
   return new Promise((resolve, reject) => {
     const req = https.request(
@@ -105,19 +140,9 @@ function createCardToken(cardData) {
           try {
             const data = JSON.parse(body);
             if (data.success || data.status === 'success') {
-              resolve({
-                success: true,
-                token: data.token || data.cardToken,
-                lastFour: data.lastFour || cardData.cardNumber.slice(-4),
-                message: 'כרטיס אומת בהצלחה',
-              });
+              resolve(onSuccess(data));
             } else {
-              resolve({
-                success: false,
-                token: null,
-                lastFour: null,
-                message: data.error || data.message || 'שגיאה באימות הכרטיס',
-              });
+              resolve({ success: false, message: data.error || data.message || 'שגיאה' });
             }
           } catch {
             reject(new Error('תשובה לא צפויה ממערכת הסליקה'));
@@ -125,11 +150,10 @@ function createCardToken(cardData) {
         });
       }
     );
-
-    req.on('error', (err) => reject(new Error('שגיאת תקשורת עם מערכת הסליקה: ' + err.message)));
+    req.on('error', (err) => reject(new Error('שגיאת תקשורת: ' + err.message)));
     req.write(payload);
     req.end();
   });
 }
 
-module.exports = { createCardToken };
+module.exports = { createCardToken, chargeCard };

@@ -38,17 +38,19 @@ function initSchema() {
     )
   `);
 
-  // Add card columns if upgrading from v1 schema
+  // Auto-migrate columns for schema upgrades
   try {
     const cols = db.exec("PRAGMA table_info(leads)");
     const colNames = cols[0]?.values.map(r => r[1]) || [];
-    if (!colNames.includes('card_token')) {
-      db.run("ALTER TABLE leads ADD COLUMN card_token TEXT");
-    }
-    if (!colNames.includes('card_last_four')) {
-      db.run("ALTER TABLE leads ADD COLUMN card_last_four TEXT");
-    }
-  } catch (_) { /* table already has columns */ }
+    const addCol = (name, type) => {
+      if (!colNames.includes(name)) db.run(`ALTER TABLE leads ADD COLUMN ${name} ${type}`);
+    };
+    addCol('card_token', 'TEXT');
+    addCol('card_last_four', 'TEXT');
+    addCol('charged_amount', 'REAL DEFAULT 0');
+    addCol('approved_at', 'TEXT');
+    addCol('charged_at', 'TEXT');
+  } catch (_) { /* ignore */ }
 
   db.run(`
     CREATE TABLE IF NOT EXISTS documents (

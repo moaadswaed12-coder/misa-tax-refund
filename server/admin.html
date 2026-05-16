@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מיסה - לוח בקרה</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a56db, #0d3b9e);
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 { font-size: 22px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 10px; }
+    .header .badge { background: rgba(255,255,255,0.15); padding: 4px 14px; border-radius: 20px; font-size: 13px; }
+    .stats-bar {
+      display: flex; gap: 16px; padding: 16px 24px;
+      flex-wrap: wrap; background: #1e293b; border-bottom: 1px solid #334155;
+    }
+    .stat-card {
+      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+      padding: 14px 20px; flex: 1; min-width: 120px; text-align: center;
+    }
+    .stat-card .num { font-size: 28px; font-weight: 900; color: #3b82f6; }
+    .stat-card .label { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+    .stat-card.green .num { color: #10b981; }
+    .stat-card.yellow .num { color: #f59e0b; }
+    .stat-card.purple .num { color: #8b5cf6; }
+    .table-wrap {
+      overflow-x: auto; padding: 16px 24px;
+    }
+    table {
+      width: 100%; border-collapse: collapse; font-size: 14px;
+    }
+    thead th {
+      background: #1e293b; color: #94a3b8; font-weight: 700;
+      padding: 12px 10px; text-align: right; border-bottom: 2px solid #334155;
+      white-space: nowrap; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    tbody tr {
+      border-bottom: 1px solid #1e293b; transition: background 0.2s;
+    }
+    tbody tr:hover { background: #1e293b; }
+    tbody td {
+      padding: 12px 10px; vertical-align: middle; color: #cbd5e1;
+    }
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+    }
+    .status-badge.new { background: #1e3a5f; color: #60a5fa; }
+    .status-badge.card_verified { background: #1e3a5f; color: #60a5fa; }
+    .status-badge.approved_waiting_delay { background: #713f12; color: #fbbf24; }
+    .status-badge.completed_paid { background: #14532d; color: #34d399; }
+    .status-badge.updated { background: #1e293b; color: #94a3b8; }
+    .status-badge.default { background: #1e293b; color: #94a3b8; }
+    .action-btn {
+      padding: 6px 14px; border-radius: 8px; border: none; font-size: 12px;
+      font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit;
+      white-space: nowrap; margin: 2px;
+    }
+    .action-btn:hover { transform: translateY(-1px); }
+    .action-btn:active { transform: scale(0.96); }
+    .action-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+    .action-btn.blue { background: #1a56db; color: #fff; }
+    .action-btn.green { background: #059669; color: #fff; }
+    .action-btn.gray { background: #475569; color: #fff; }
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: #64748b;
+    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+      padding: 14px 28px; border-radius: 12px; font-weight: 600;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4); z-index: 999;
+      display: none; max-width: 90%;
+    }
+    .toast.success { border-color: #10b981; }
+    .toast.error { border-color: #ef4444; }
+    .toast .close {
+      margin-right: 12px; cursor: pointer; opacity: 0.6; font-weight: 400;
+    }
+    .toast .close:hover { opacity: 1; }
+    .refresh-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 24px 0;
+    }
+    .refresh-bar .info { font-size: 13px; color: #64748b; }
+    .refresh-btn {
+      background: #1e293b; border: 1px solid #334155; color: #94a3b8;
+      padding: 8px 18px; border-radius: 8px; cursor: pointer; font-family: inherit;
+      font-size: 13px; transition: all 0.2s;
+    }
+    .refresh-btn:hover { background: #334155; color: #e2e8f0; }
+    .card-link { color: #3b82f6; text-decoration: none; font-weight: 600; }
+    .card-link:hover { text-decoration: underline; }
+    .doc-link { color: #10b981; text-decoration: none; font-weight: 600; }
+    .doc-link:hover { text-decoration: underline; }
+    .loader {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid #334155; border-top-color: #3b82f6;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      margin-left: 6px; vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .phone-link { color: #94a3b8; text-decoration: none; direction: ltr; display: inline-block; }
+    .phone-link:hover { color: #e2e8f0; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>
+      <span>💸</span> מיסה — לוח בקרה
+    </h1>
+    <span class="badge" id="liveBadge">🟢 פעיל</span>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">סה"כ לידים</div></div>
+    <div class="stat-card green"><div class="num" id="statCompleted">0</div><div class="label">הושלם + נגבה</div></div>
+    <div class="stat-card yellow"><div class="num" id="statApproved">0</div><div class="label">מאושר להמתנה</div></div>
+    <div class="stat-card purple"><div class="num" id="statRevenue">₪0</div><div class="label">עמלה שנגבתה</div></div>
+  </div>
+
+  <div class="refresh-bar">
+    <div class="info">🔄 מתרענן אוטומטית כל 30 שניות</div>
+    <button class="refresh-btn" onclick="loadLeads()">🔄 רענן עכשיו</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>שם</th>
+          <th>טלפון</th>
+          <th>תאריך</th>
+          <th>החזר משוער</th>
+          <th>סטטוס</th>
+          <th>מסמכים</th>
+          <th>כרטיס אשראי</th>
+          <th>פעולות</th>
+        </tr>
+      </thead>
+      <tbody id="leadsBody">
+        <tr><td colspan="9"><div class="empty-state"><div class="icon">📋</div>טוען לידים...</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API = '';
+    const STATUS_MAP = {
+      'new': 'חדש',
+      'updated': 'עודכן',
+      'documents_uploaded': 'מסמכים הועלו',
+      'card_verified': 'כרטיס אומת',
+      'approved_waiting_delay': 'מאושר להמתנה',
+      'completed_paid': 'הושלם + נגבה',
+    };
+
+    async function loadLeads() {
+      const tbody = document.getElementById('leadsBody');
+      tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="loader" style="width:32px;height:32px;border-width:3px;"></div>טוען לידים...</div></td></tr>';
+
+      try {
+        const res = await fetch(API + '/api/admin/leads');
+        if (res.status === 401) {
+          tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🔒</div>אין גישה. הזן סיסמה.</div></td></tr>';
+          return;
+        }
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+
+        const leads = data.leads;
+        renderStats(leads);
+        renderTable(leads);
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">❌</div>' + err.message + '</div></td></tr>';
+      }
+    }
+
+    function renderStats(leads) {
+      const total = leads.length;
+      const completed = leads.filter(l => l.status === 'completed_paid').length;
+      const approved = leads.filter(l => l.status === 'approved_waiting_delay').length;
+      let revenue = 0;
+      leads.forEach(l => {
+        if (l.status === 'completed_paid' && l.charged_amount) {
+          revenue += l.charged_amount;
+        }
+      });
+
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statCompleted').textContent = completed;
+      document.getElementById('statApproved').textContent = approved;
+      document.getElementById('statRevenue').textContent = '₪' + revenue.toLocaleString('he-IL');
+    }
+
+    function renderTable(leads) {
+      const tbody = document.getElementById('leadsBody');
+
+      if (leads.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">📭</div>אין לידים עדיין</div></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = leads.map((l, i) => {
+        const statusKey = l.status || 'default';
+        const statusLabel = STATUS_MAP[statusKey] || l.status;
+        const statusClass = statusKey in STATUS_MAP ? statusKey : 'default';
+
+        const docCount = l.document_count || 0;
+        const docsHtml = docCount > 0
+          ? '<a class="doc-link" href="' + API + '/api/admin/leads/' + l.id + '/documents" target="_blank">📎 ' + docCount + ' מסמכים</a>'
+          : '<span style="color:#475569;">—</span>';
+
+        const cardHtml = l.card_token
+          ? '<span style="color:#34d399;">✅ אומת</span> <span style="color:#64748b;font-size:12px;">****' + (l.card_last_four || '') + '</span>'
+          : '<span style="color:#475569;">—</span>';
+
+        const refundFormatted = '₪' + (l.refund_estimate || 0).toLocaleString('he-IL');
+        const dateFormatted = formatDate(l.created_at);
+        const phoneFormatted = formatPhone(l.phone);
+        const chargedAmount = l.charged_amount || 0;
+        const chargePct = l.refund_estimate ? Math.round((chargedAmount / l.refund_estimate) * 100) : 0;
+
+        const canApprove = statusKey === 'card_verified' || statusKey === 'updated' || statusKey === 'documents_uploaded';
+        const canCharge = statusKey === 'approved_waiting_delay';
+        const isCompleted = statusKey === 'completed_paid';
+
+        const btn1 = canApprove
+          ? `<button class="action-btn blue" onclick="approveLead(${l.id}, '${l.phone}', '${l.name}')">📨 SMS: אשר החזר</button>`
+          : isCompleted
+            ? `<button class="action-btn gray" disabled>✅ בוצע</button>`
+            : `<button class="action-btn gray" disabled>${statusKey === 'approved_waiting_delay' ? '✅ נשלח' : '🔒 לא זמין'}</button>`;
+
+        let chargeLabel, chargeClass;
+        if (isCompleted) {
+          chargeLabel = `✅ נגבה ₪${chargedAmount}`;
+          chargeClass = 'gray';
+        } else if (canCharge) {
+          const fee = Math.round((l.refund_estimate || 0) * 0.12);
+          chargeLabel = `💳 גבה ₪${fee.toLocaleString('he-IL')}`;
+          chargeClass = 'green';
+        } else {
+          chargeLabel = `🔒 גביה`;
+          chargeClass = 'gray';
+        }
+
+        const btn2 = `<button class="action-btn ${chargeClass}" onclick="chargeLead(${l.id}, '${l.phone}', '${l.name}')" ${!canCharge && !isCompleted ? 'disabled' : ''}>${chargeLabel}</button>`;
+
+        return `<tr>
+          <td style="color:#64748b;">${i + 1}</td>
+          <td style="font-weight:600;">${escapeHtml(l.name)}</td>
+          <td><a class="phone-link" href="tel:${l.phone}">${phoneFormatted}</a></td>
+          <td style="font-size:12px;color:#94a3b8;">${dateFormatted}</td>
+          <td style="font-weight:700;color:#fbbf24;">${refundFormatted}</td>
+          <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+          <td>${docsHtml}</td>
+          <td>${cardHtml}</td>
+          <td style="display:flex;gap:4px;flex-wrap:wrap;">${btn1} ${btn2}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function approveLead(id, phone, name) {
+      if (!confirm(`לאשר החזר עבור ${name} (${phone})? ישלח SMS "הכסף בדרך".`)) return;
+      const btn = event.target;
+      btn.disabled = true; btn.innerHTML = '⏳ שולח...';
+
+      try {
+        const res = await fetch(API + '/api/admin/leads/' + id + '/approve', { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'שגיאה');
+        showToast('✅ ' + data.message, 'success');
+        loadLeads();
+      } catch (err) {
+        showToast('❌ ' + err.message, 'error');
+        btn.disabled = false; btn.textContent = '📨 SMS: אשר החזר';
+      }
+    }
+
+    async function chargeLead(id, phone, name) {
+      const fee = 0; // will get from server response
+      if (!confirm(`לגבות 12% עמלה מ-${name} (${phone})? החיוב יבוצע על הכרטיס השמור.`)) return;
+      const btn = event.target;
+      btn.disabled = true; btn.innerHTML = '⏳ גובה...';
+
+      try {
+        const res = await fetch(API + '/api/admin/leads/' + id + '/charge', { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'שגיאה');
+        showToast('✅ ' + data.message, 'success');
+        loadLeads();
+      } catch (err) {
+        showToast('❌ ' + err.message, 'error');
+        btn.disabled = false; btn.textContent = '💳 גביה';
+      }
+    }
+
+    function showToast(msg, type) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast ' + (type || '');
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
+
+    function formatDate(d) {
+      if (!d) return '—';
+      try {
+        const date = new Date(d + 'Z');
+        return date.toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      } catch { return d; }
+    }
+
+    function formatPhone(p) {
+      if (!p) return '—';
+      if (p.startsWith('0')) return p.slice(0, 3) + '-' + p.slice(3);
+      if (p.startsWith('972')) return '+' + p.slice(0, 2) + '-' + p.slice(2);
+      return p;
+    }
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    // Auto-refresh every 30s
+    loadLeads();
+    setInterval(loadLeads, 30000);
+  </script>
+
+</body>
+</html>
