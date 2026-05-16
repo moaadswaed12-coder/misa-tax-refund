@@ -7,7 +7,7 @@ const { calculateRefund } = require('./tax-calc');
 const { upload } = require('./upload');
 const { notifyNewLead } = require('./notify');
 const { createCardToken, chargeCard } = require('./payment');
-const { sendSMS } = require('./sms');
+const { sendWelcomeSMS, sendApprovedSMS, sendChargedSMS, sendRejectedSMS } = require('./sms');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -135,6 +135,9 @@ app.post('/api/setup-payment', async (req, res) => {
       [result.token, result.lastFour, cleanPhone]);
     console.log(`✅ Card tokenized for ${cleanPhone}: ${result.token} (****${result.lastFour})`);
 
+    // Auto welcome SMS – only sent after card verification (cost-protected)
+    sendWelcomeSMS(cleanPhone, lead.name);
+
     res.json({ success: true, token: result.token, lastFour: result.lastFour, message: 'כרטיס אומת בהצלחה! הטוקן נשמר במערכת.' });
   } catch (err) {
     console.error('❌ /api/setup-payment error:', err);
@@ -215,16 +218,13 @@ app.post('/api/admin/leads/:id/approve', requireAdmin, async (req, res) => {
     if (!lead) return res.status(404).json({ error: 'ליד לא נמצא' });
     if (lead.status === 'completed_paid') return res.status(400).json({ error: 'הליד כבר הושלם' });
 
-    const refundFormatted = '₪' + (lead.refund_estimate || 0).toLocaleString('he-IL');
-
-    // Send SMS to user
-    const smsText = `שלום ${lead.name} 👍 רשות המיסים אישרה את החזר המס שלך על סך ${refundFormatted}! הכסף יועבר לחשבון הבנק שלך בתוך 3 ימי עסקים. צוות מיסה 💸`;
-    sendSMS(lead.phone, smsText);
+    // Send Step 1 SMS: "שלח SMS בשורה משמחת"
+    sendApprovedSMS(lead.phone, lead.name, lead.refund_estimate);
 
     // Update status
     run(`UPDATE leads SET status = 'approved_waiting_delay', approved_at = datetime('now', '+2 hours') WHERE id = ?`, [lead.id]);
 
-    res.json({ success: true, message: `✅ SMS נשלח ל-${lead.name}: "${smsText}"` });
+    res.json({ success: true, message: `✅ SMS נשלח ל-${lead.name}` });
   } catch (err) {
     console.error('❌ /api/admin/leads/:id/approve error:', err);
     res.status(500).json({ error: 'שגיאה בשליחת האישור' });
@@ -253,9 +253,8 @@ app.post('/api/admin/leads/:id/charge', requireAdmin, async (req, res) => {
       return res.status(402).json({ error: '⚠️ החיוב נכשל: ' + (chargeResult.message || 'נסה שוב או בדוק את פרטי הכרטיס') });
     }
 
-    // Send final SMS
-    const finalSms = `שלום ${lead.name} ✅ תהליך החזר המס הושלם! העמלה בגין הטיפול (12%) נגבתה בהצלחה. סך הכל קיבלת ${'₪' + (refundAmount - feeShekels).toFixed(0).toLocaleString()} לחשבונך. תודה שבחרת במיסה! 💸`;
-    sendSMS(lead.phone, finalSms);
+    // Send Step 2 SMS: "בצע גבייה ושלח SMS סופי"
+    sendChargedSMS(lead.phone, lead.name, lead.refund_estimate, feeShekels);
 
     // Update status
     run(`UPDATE leads SET status = 'completed_paid', charged_amount = ?, charged_at = datetime('now', '+2 hours') WHERE id = ?`,
