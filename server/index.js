@@ -11,7 +11,7 @@ const { sendSMS } = require('./sms');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.trim() !== '' ? process.env.ADMIN_PASSWORD.trim() : 'MisaAdmin2026!';
 
 // ──────────────────────────────────────────────────────────────────
 // Middleware

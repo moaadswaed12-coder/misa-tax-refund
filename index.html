@@ -821,6 +821,18 @@
     const TOTAL_REFUND_MAX = 8000;
     const API_BASE = window.location.origin;
 
+    // ─── Session Persistence ─────────────────────────────────────
+    function saveSession(screen, extra) {
+      const data = { screen, refund: state.refund, answers: state.answers, ...extra };
+      try { sessionStorage.setItem('misa_state', JSON.stringify(data)); } catch (_) {}
+    }
+    function clearSession() {
+      try { sessionStorage.removeItem('misa_state'); } catch (_) {}
+    }
+    function loadSession() {
+      try { return JSON.parse(sessionStorage.getItem('misa_state')); } catch (_) { return null; }
+    }
+
     // ──────────────────────────────────────────────────────────────────
     // DOM refs
     // ──────────────────────────────────────────────────────────────────
@@ -1141,6 +1153,7 @@
         }
 
         leadSubmit.textContent = 'נשלח! ✅';
+        saveSession('result', { name, phone });
         await sleep(600);
 
         inputArea.classList.add('hidden');
@@ -1171,11 +1184,13 @@
     uploadBtn.addEventListener('click', () => {
       resultScreen.style.display = 'none';
       uploadScreen.style.display = 'flex';
+      saveSession('upload', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
     });
 
     skipUploadBtn.addEventListener('click', () => {
       uploadScreen.style.display = 'none';
       paymentScreen.style.display = 'flex';
+      saveSession('payment', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
     });
 
     uploadForm.addEventListener('submit', async function(e) {
@@ -1213,6 +1228,7 @@
         uploadStatus.textContent = '✅ ' + data.message;
         uploadStatus.style.color = '#16a34a';
         uploadSubmit.textContent = 'הועלה! ✅';
+        saveSession('payment', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
 
         setTimeout(() => {
           uploadScreen.style.display = 'none';
@@ -1233,6 +1249,7 @@
     document.getElementById('gotoPaymentBtn').addEventListener('click', () => {
       resultScreen.style.display = 'none';
       paymentScreen.style.display = 'flex';
+      saveSession('payment', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
     });
 
     // ──────────────────────────────────────────────────────────────────
@@ -1332,10 +1349,12 @@
         paymentStatus.textContent = 'כרטיס אומת בהצלחה! מעביר...';
         paymentStatus.style.color = '#16a34a';
 
+        saveSession('payment', { name: cardHolderName.value.trim() || nameInput.value.trim(), phone: phoneInput.value.trim() });
         await sleep(1000);
 
         paymentScreen.style.display = 'none';
         successScreen.style.display = 'flex';
+        clearSession();
         launchConfetti();
       } catch (err) {
         console.error('Payment error:', err);
@@ -1375,6 +1394,55 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     });
+
+    // ──────────────────────────────────────────────────────────────────
+    // Session restore on page load (refresh resilience)
+    // ──────────────────────────────────────────────────────────────────
+    function restoreSession() {
+      const saved = loadSession();
+      if (!saved) return;
+
+      state.refund = saved.refund || 0;
+      state.answers = saved.answers || [];
+      updateRefundDisplay(state.refund);
+
+      if (saved.name) nameInput.value = saved.name;
+      if (saved.phone) phoneInput.value = saved.phone;
+
+      switch (saved.screen) {
+        case 'result':
+          finalRefund.textContent = formatNumber(state.refund);
+          welcomeScreen.classList.add('hidden');
+          chatArea.classList.add('hidden');
+          inputArea.classList.add('hidden');
+          resultScreen.style.display = 'flex';
+          updateProgress(5);
+          break;
+        case 'upload':
+          finalRefund.textContent = formatNumber(state.refund);
+          welcomeScreen.classList.add('hidden');
+          chatArea.classList.add('hidden');
+          inputArea.classList.add('hidden');
+          resultScreen.style.display = 'none';
+          uploadScreen.style.display = 'flex';
+          updateProgress(5);
+          break;
+        case 'payment':
+          finalRefund.textContent = formatNumber(state.refund);
+          welcomeScreen.classList.add('hidden');
+          chatArea.classList.add('hidden');
+          inputArea.classList.add('hidden');
+          resultScreen.style.display = 'none';
+          paymentScreen.style.display = 'flex';
+          updateProgress(5);
+          break;
+        default:
+          break;
+      }
+    }
+
+    // Restore saved session on page load
+    restoreSession();
   </script>
 
 </body>

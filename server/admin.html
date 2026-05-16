@@ -168,7 +168,8 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const API = '';
+    const SECRET = new URLSearchParams(window.location.search).get('secret') || '';
+    const API = '?secret=' + SECRET;
     const STATUS_MAP = {
       'new': 'חדש',
       'updated': 'עודכן',
@@ -183,7 +184,7 @@
       tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="loader" style="width:32px;height:32px;border-width:3px;"></div>טוען לידים...</div></td></tr>';
 
       try {
-        const res = await fetch(API + '/api/admin/leads');
+        const res = await fetch('/api/admin/leads?secret=' + SECRET);
         if (res.status === 401) {
           tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🔒</div>אין גישה. הזן סיסמה.</div></td></tr>';
           return;
@@ -231,7 +232,7 @@
 
         const docCount = l.document_count || 0;
         const docsHtml = docCount > 0
-          ? '<a class="doc-link" href="' + API + '/api/admin/leads/' + l.id + '/documents" target="_blank">📎 ' + docCount + ' מסמכים</a>'
+          ? '<a class="doc-link" href="/api/admin/leads/' + l.id + '/documents?secret=' + SECRET + '" target="_blank">📎 ' + docCount + ' מסמכים</a>'
           : '<span style="color:#475569;">—</span>';
 
         const cardHtml = l.card_token
@@ -289,7 +290,7 @@
       btn.disabled = true; btn.innerHTML = '⏳ שולח...';
 
       try {
-        const res = await fetch(API + '/api/admin/leads/' + id + '/approve', { method: 'POST' });
+        const res = await fetch('/api/admin/leads/' + id + '/approve?secret=' + SECRET, { method: 'POST' });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'שגיאה');
         showToast('✅ ' + data.message, 'success');
@@ -307,7 +308,7 @@
       btn.disabled = true; btn.innerHTML = '⏳ גובה...';
 
       try {
-        const res = await fetch(API + '/api/admin/leads/' + id + '/charge', { method: 'POST' });
+        const res = await fetch('/api/admin/leads/' + id + '/charge?secret=' + SECRET, { method: 'POST' });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'שגיאה');
         showToast('✅ ' + data.message, 'success');
