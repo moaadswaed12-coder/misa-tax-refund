@@ -17,7 +17,7 @@ function calculateRefund(answers) {
     'שכיר': 600,
     'עצמאי': 2200,
     'גם וגם': 2800,
-    'חייל משוחרר': 400,
+    'חייל משוחרר (ב-3 השנים האחרונות)': 400,
   };
   const empAns = answers.find(a => a.questionId === 'employment');
   const base = empAns ? (employmentBases[empAns.answer] || 0) : 0;
@@ -25,8 +25,8 @@ function calculateRefund(answers) {
   // Additions
   const rules = [
     { id: 'job_changes', val: 'כן', amount: 1800, label: 'שינויים תעסוקתיים' },
-    { id: 'pensya',      val: 'כן',       amount: 2200, label: 'קרנות השתלמות וביטוחים' },
-    { id: 'pensya',      val: 'לא בטוח',       amount: 1000, label: 'קרנות השתלמות — נדרשת בדיקה' },
+    { id: 'pensya',      val: 'בטוח שיש לי',       amount: 2200, label: 'קרנות השתלמות וביטוחים' },
+    { id: 'pensya',      val: 'לא בטוח, תבדקו לי',       amount: 1000, label: 'קרנות השתלמות — נדרשת בדיקה' },
   ];
 
   const breakdown = [];

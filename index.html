@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>מיסה — אשף החזרי מס</title>
+  <title>מיסה — הכסף שלך מחכה לך</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -248,7 +248,7 @@
       content: ' *'; color: #EF4444; font-size: 16px;
     }
     .drop-zone.required .title::after {
-      content: ' *נדרש'; color: #EF4444; font-size: 11px; margin-right: 4px; font-weight: 400;
+      content: ' *חובה'; color: #EF4444; font-size: 11px; margin-right: 4px; font-weight: 400;
     }
 
     /* ─── Payment Step ─── */
@@ -315,7 +315,7 @@
     <div class="app-header">
       <div class="top-row">
         <div class="logo"><span class="logo-icon">מ</span>מיסה</div>
-        <div class="badge">אשף החזרי מס</div>
+        <div class="badge">בדיקה חינם</div>
       </div>
       <div class="refund-counter">
         <div>
@@ -348,65 +348,65 @@
 
           <!-- ═══ Step 1: Name & Phone ═══ -->
           <div class="wizard-step" data-step="1">
-            <div class="step-title">ברוכים הבאים</div>
-            <div class="step-sub">נשמח לבצע בדיקת זכאות מהירה. יש למלא את הפרטים הבאים:</div>
+            <div class="step-title">הכסף שלך מחכה לך</div>
+            <div class="step-sub">בדיקה דיגיטלית מהירה להחזרי מס ואיתור כספים אבודים ב-הראל, מנורה וחברות הביטוח. 100% חינם - משלמים רק על הצלחה!</div>
             <div class="field-group">
               <input type="text" id="nameInput" placeholder="שם מלא" dir="rtl" />
               <input type="tel" id="phoneInput" placeholder="טלפון נייד" dir="rtl" inputmode="tel" />
             </div>
-            <button class="cta-btn" id="step1Btn">להמשך הבדיקה</button>
+            <button class="cta-btn" id="step1Btn">בוא נתחיל</button>
           </div>
 
           <!-- ═══ Step 2: Employment Status ═══ -->
           <div class="wizard-step" data-step="2">
-            <div class="step-title">סטטוס תעסוקתי</div>
-            <div class="step-sub">מהו הסטטוס התעסוקתי שלכם ב-6 השנים האחרונות?</div>
+            <div class="step-title">מה הסטטוס שלך?</div>
+            <div class="step-sub">איך עבדת ב-6 השנים האחרונות?</div>
             <div class="option-group" id="employmentGroup">
               <button class="option-btn" data-value="שכיר">שכיר</button>
               <button class="option-btn" data-value="עצמאי">עצמאי</button>
               <button class="option-btn" data-value="גם וגם">גם שכיר וגם עצמאי</button>
-              <button class="option-btn" data-value="חייל משוחרר">חייל משוחרר</button>
+              <button class="option-btn" data-value="חייל משוחרר (ב-3 השנים האחרונות)">חייל משוחרר (ב-3 השנים האחרונות)</button>
             </div>
-            <button class="cta-btn" id="step2Btn" disabled>לשלב הבא</button>
+            <button class="cta-btn" id="step2Btn" disabled>המשך</button>
             <div class="back-link" data-goto="1">חזרה</div>
           </div>
 
           <!-- ═══ Step 3: Job Changes ═══ -->
           <div class="wizard-step" data-step="3">
-            <div class="step-title">שינויים תעסוקתיים</div>
-            <div class="step-sub">האם החלפתם מקומות עבודה או חוויתם תקופות אבטלה ב-6 השנים האחרונות?</div>
+            <div class="step-title">החלפת עבודה?</div>
+            <div class="step-sub">החלפת עבודה או שהיו לך חודשים שלא עבדת ב-6 השנים האחרונות?</div>
             <div class="option-group" id="jobGroup">
               <button class="option-btn" data-value="כן">כן</button>
               <button class="option-btn" data-value="לא">לא</button>
             </div>
-            <button class="cta-btn" id="step3Btn" disabled>לשלב הבא</button>
+            <button class="cta-btn" id="step3Btn" disabled>המשך</button>
             <div class="back-link" data-goto="2">חזרה</div>
           </div>
 
           <!-- ═══ Step 4: Pensya / Insurance ═══ -->
           <div class="wizard-step" data-step="4">
-            <div class="step-title">קרנות וביטוחים</div>
-            <div class="step-sub">האם יש לכם קרנות השתלמות, קופות גמל או ביטוחי חיים מחברות כמו הראל, מנורה ומגדל?</div>
+            <div class="step-title">כסף שאתה לא זוכר</div>
+            <div class="step-sub">יש לך פנסיות, קופות גמל או קרנות השתלמות ישנות?</div>
             <div class="option-group" id="pensyaGroup">
-              <button class="option-btn" data-value="כן">כן</button>
-              <button class="option-btn" data-value="לא">לא</button>
-              <button class="option-btn" data-value="לא בטוח">לא בטוח — נדרשת בדיקה</button>
+              <button class="option-btn" data-value="בטוח שיש לי">בטוח שיש לי</button>
+              <button class="option-btn" data-value="אין לי">אין לי</button>
+              <button class="option-btn" data-value="לא בטוח, תבדקו לי">לא בטוח, תבדקו לי</button>
             </div>
-            <button class="cta-btn" id="step4Btn" disabled>להמשך לקבצים</button>
+            <button class="cta-btn" id="step4Btn" disabled>המשך לקבצים</button>
             <div class="back-link" data-goto="3">חזרה</div>
           </div>
 
           <!-- ═══ Step 5: Upload ═══ -->
           <div class="wizard-step" data-step="5">
-            <div class="step-title">העלאת מסמכים</div>
-            <div class="step-sub">יש להעלות את המסמכים הנדרשים לבדיקה מקיפה מול רשות המיסים.</div>
+            <div class="step-title">מעלים טפסים ומקפיצים את הסיכוי להחזר</div>
+            <div class="step-sub">כדי שנמצא את המקסימום מול רשות המיסים וחברות הביטוח, צריך להעלות:</div>
 
             <div class="upload-area">
               <!-- Form 106 -->
               <div class="drop-zone" id="drop106">
                 <input type="file" id="fileInput106" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple style="display:none" />
                 <div class="icon">&#128196;</div>
-                <div class="title">טופס 106</div>
+                <div class="title">טופס 106 (מכל מקום עבודה ב-6 השנים האחרונות)</div>
                 <div class="hint">PDF, JPG, PNG, DOC — עד 15MB לקובץ</div>
                 <div class="file-name" id="file106Name"></div>
               </div>
@@ -415,23 +415,24 @@
               <div class="drop-zone required" id="dropId">
                 <input type="file" id="fileInputId" accept=".jpg,.jpeg,.png,.pdf" style="display:none" />
                 <div class="icon">&#128179;</div>
-                <div class="title">צילום תעודת זהות + ספח</div>
+                <div class="title">צילום תעודת זהות + ספח (חובה בשביל הבדיקה בחברות הביטוח)</div>
                 <div class="hint">JPG, PNG, PDF — צילום ברור</div>
                 <div class="file-name" id="idFileName"></div>
               </div>
             </div>
 
             <div id="uploadStatus" class="status-msg neutral"></div>
-            <button class="cta-btn" id="step5Btn">העלאה והמשך</button>
+            <button class="cta-btn" id="step5Btn">מעלים וממשיכים</button>
             <div class="back-link" data-goto="4">חזרה</div>
           </div>
 
           <!-- ═══ Step 6: Payment ═══ -->
           <div class="wizard-step" data-step="6">
-            <div class="step-title">אימות כרטיס אשראי</div>
-            <div class="step-sub" style="max-width:300px;">
-              נדרש אימות כרטיס לצורך הגשת הדוח.<br/>
-              <strong>לא יחויב כרטיסכם בשלב זה.</strong> החיוב (12%) יתבצע רק עם קבלת הכסף בפועל.
+            <div class="step-title">אבטחה ברמת בנק ומשרד הביטחון</div>
+            <div class="step-sub" style="max-width:310px;">
+              הבדיקה והגשת הטפסים הן 100% חינם! כרטיס האשראי משמש לשירייון בלבד ומאובטח ע״י משולם.<br/><br/>
+              אנחנו גובים רק <strong>12%</strong> עמלת הצלחה - ורק אחרי שהכסף נכנס אליך לחשבון הבנק.<br/>
+              לא נכנס? לא שילמת שקל!
             </div>
             <div id="paymentError" class="status-msg err" style="display:none;"></div>
             <div class="payment-grid">
@@ -444,7 +445,7 @@
               <input type="text" id="cardHolderName" placeholder="שם בעל הכרטיס" dir="rtl" style="text-align:right;" />
             </div>
             <div id="paymentStatus" class="status-msg neutral"></div>
-            <button class="cta-btn" id="step6Btn">אימות כרטיס</button>
+            <button class="cta-btn" id="step6Btn">אבטחו את מקומי עכשיו</button>
             <div class="back-link" data-goto="5">חזרה</div>
             <div class="security-badges">
               <span>מאובטח ב-SSL</span>
@@ -457,13 +458,13 @@
           <div class="wizard-step" data-step="done">
             <div class="success-wrap">
               <div class="success-icon">✓</div>
-              <div class="success-title">בקשתכם התקבלה</div>
+              <div class="success-title">הטופס נשלח!</div>
               <div class="success-sub">
-                פרטיכם נשלחו לצוות הבדיקה.<br/>
-                נעדכן אתכם בהודעת <strong>SMS</strong> מיד עם קבלת אישור מרשות המיסים.
+                כל הפרטים נשלחו לצוות הבדיקה.<br/>
+                נעדכן אתכם ב-<strong>SMS</strong> ברגע שיש תוצאות מול רשות המיסים וחברות הביטוח.
               </div>
               <div class="success-note">
-                <strong>12%</strong> עמלת הצלחה — בפועל בלבד
+                <strong>12%</strong> עמלת הצלחה — ורק אחרי שהכסף אצלך
               </div>
               <div style="font-size:13px;color:rgba(148,163,184,0.35);margin-top:14px;">צוות מיסה לרשותכם</div>
             </div>
@@ -494,7 +495,7 @@
       'שכיר': 600,
       'עצמאי': 2200,
       'גם וגם': 2800,
-      'חייל משוחרר': 400,
+      'חייל משוחרר (ב-3 השנים האחרונות)': 400,
     };
 
     const API_BASE = window.location.origin;
@@ -590,8 +591,8 @@
       const jobAns = state.answers.find(a => a.questionId === 'job_changes');
       if (jobAns && jobAns.answer === 'כן') total += 1800;
       const penAns = state.answers.find(a => a.questionId === 'pensya');
-      if (penAns && penAns.answer === 'כן') total += 2200;
-      else if (penAns && penAns.answer === 'לא בטוח') total += 1000;
+      if (penAns && penAns.answer === 'בטוח שיש לי') total += 2200;
+      else if (penAns && penAns.answer === 'לא בטוח, תבדקו לי') total += 1000;
       if (total === 0) total = 800;
       return total;
     }
@@ -673,7 +674,7 @@
         goToStep(5);
       }).catch(err => {
         step4Btn.disabled = false;
-        step4Btn.textContent = 'להמשך לקבצים';
+        step4Btn.textContent = 'המשך לקבצים';
         alert('שגיאה בשליחת הפרטים: ' + err.message);
       });
     });
@@ -752,7 +753,7 @@
         uploadStatus.textContent = err.message;
         uploadStatus.className = 'status-msg err';
         step5Btn.disabled = false;
-        step5Btn.textContent = 'העלאה והמשך';
+        step5Btn.textContent = 'מעלים וממשיכים';
       }
     });
 
@@ -834,7 +835,7 @@
       } catch (err) {
         showPayError(err.message);
         step6Btn.disabled = false;
-        step6Btn.textContent = 'אימות כרטיס';
+        step6Btn.textContent = 'אבטחו את מקומי עכשיו';
       }
     });
 
