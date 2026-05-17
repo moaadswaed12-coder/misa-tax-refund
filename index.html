@@ -171,17 +171,18 @@
     }
 
     /* ─── Wizard Track ─── */
-    .wizard-body { flex: 1; overflow: hidden; position: relative; display: flex; }
+    .wizard-body { flex: 1; overflow: hidden; position: relative; display: flex; align-items: stretch; }
     .wizard-track {
-      display: flex;
+      display: flex; flex-shrink: 0;
       transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
-      width: 100%;
+      width: 100%; will-change: transform;
     }
     .wizard-step {
       flex: 0 0 100%; min-width: 0;
       display: flex; flex-direction: column;
-      padding: 20px 20px 24px;
+      padding: 24px 20px 24px;
       overflow-y: auto;
+      background: var(--surface);
     }
     .wizard-step::-webkit-scrollbar { width: 3px; }
     .wizard-step::-webkit-scrollbar-thumb { background: var(--surface-alt); border-radius: 10px; }
@@ -213,20 +214,19 @@
       width: 100%; padding: 16px 20px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: 12px;
       font-size: 16px; font-weight: 500;
       color: var(--text); cursor: pointer;
       transition: all 0.2s ease; font-family: inherit;
-      text-align: center; touch-action: manipulation;
+      text-align: right; touch-action: manipulation;
       box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .option-btn:hover { border-color: var(--text-tertiary); }
+    .option-btn:hover { border-color: var(--text-secondary); }
     .option-btn:active { transform: scale(0.98); }
-    .option-btn.selected {
-      border-color: var(--accent);
-      background: rgba(0,122,255,0.1);
-      color: var(--accent);
-    }
+    .option-btn .check { opacity: 0; color: var(--accent); font-size: 18px; transition: opacity 0.2s ease; }
+    .option-btn.selected { border-color: var(--accent); background: rgba(0,122,255,0.06); }
+    .option-btn.selected .check { opacity: 1; }
 
     /* CTA button */
     .cta-btn {
@@ -432,13 +432,13 @@
 
           <!-- ═══ Step 2: Employment Status ═══ -->
           <div class="wizard-step" data-step="2">
-            <div class="step-title">מה הסטטוס שלך?</div>
-            <div class="step-sub">איך עבדת ב-6 השנים האחרונות?</div>
+            <div class="step-title">מה הסטטוס התעסוקתי שלך ב-6 השנים האחרונות?</div>
+            <div class="step-sub">בחר את הקטגוריה שמתאימה לך ביותר:</div>
             <div class="option-group" id="employmentGroup">
-              <button class="option-btn" data-value="שכיר">שכיר</button>
-              <button class="option-btn" data-value="עצמאי">עצמאי</button>
-              <button class="option-btn" data-value="גם וגם">גם שכיר וגם עצמאי</button>
-              <button class="option-btn" data-value="חייל משוחרר (ב-3 השנים האחרונות)">חייל משוחרר (ב-3 השנים האחרונות)</button>
+              <button class="option-btn" data-value="שכיר"><span>שכיר</span><span class="check">✓</span></button>
+              <button class="option-btn" data-value="עצמאי"><span>עצמאי</span><span class="check">✓</span></button>
+              <button class="option-btn" data-value="גם וגם"><span>גם שכיר וגם עצמאי</span><span class="check">✓</span></button>
+              <button class="option-btn" data-value="חייל משוחרר (ב-3 השנים האחרונות)"><span>חייל משוחרר (ב-3 השנים האחרונות)</span><span class="check">✓</span></button>
             </div>
             <button class="cta-btn" id="step2Btn" disabled>המשך</button>
             <div class="back-link" data-goto="1">חזרה</div>
@@ -449,8 +449,8 @@
             <div class="step-title">החלפת עבודה?</div>
             <div class="step-sub">החלפת עבודה או שהיו לך חודשים שלא עבדת ב-6 השנים האחרונות?</div>
             <div class="option-group" id="jobGroup">
-              <button class="option-btn" data-value="כן">כן</button>
-              <button class="option-btn" data-value="לא">לא</button>
+              <button class="option-btn" data-value="כן"><span>כן</span><span class="check">✓</span></button>
+              <button class="option-btn" data-value="לא"><span>לא</span><span class="check">✓</span></button>
             </div>
             <button class="cta-btn" id="step3Btn" disabled>המשך</button>
             <div class="back-link" data-goto="2">חזרה</div>
@@ -461,9 +461,9 @@
             <div class="step-title">כסף שאתה לא זוכר</div>
             <div class="step-sub">יש לך פנסיות, קופות גמל או קרנות השתלמות ישנות?</div>
             <div class="option-group" id="pensyaGroup">
-              <button class="option-btn" data-value="בטוח שיש לי">בטוח שיש לי</button>
-              <button class="option-btn" data-value="אין לי">אין לי</button>
-              <button class="option-btn" data-value="לא בטוח, תבדקו לי">לא בטוח, תבדקו לי</button>
+              <button class="option-btn" data-value="בטוח שיש לי"><span>בטוח שיש לי</span><span class="check">✓</span></button>
+              <button class="option-btn" data-value="אין לי"><span>אין לי</span><span class="check">✓</span></button>
+              <button class="option-btn" data-value="לא בטוח, תבדקו לי"><span>לא בטוח, תבדקו לי</span><span class="check">✓</span></button>
             </div>
             <button class="cta-btn" id="step4Btn" disabled>המשך לקבצים</button>
             <div class="back-link" data-goto="3">חזרה</div>
