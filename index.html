@@ -90,10 +90,77 @@
     .refund-counter .amount .currency { font-size: 16px; font-weight: 700; margin-left: 2px; }
     .refund-counter .amount .num { display: inline-block; min-width: 70px; text-align: left; }
 
+    /* ─── Welcome Landing Screen ─── */
+    .welcome-screen {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 30px 28px 40px;
+      text-align: center;
+      position: relative; z-index: 2;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .welcome-screen.hidden {
+      opacity: 0; transform: translateY(-20px);
+      pointer-events: none; position: absolute;
+      inset: 0; z-index: 0;
+    }
+    .welcome-screen .logo-premium {
+      font-weight: 200; font-size: 42px;
+      letter-spacing: 14px; color: #D4AF37;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      animation: logoFadeIn 1.4s ease forwards;
+    }
+    @keyframes logoFadeIn {
+      0% { opacity: 0; transform: scale(0.9); letter-spacing: 28px; }
+      100% { opacity: 1; transform: scale(1); letter-spacing: 14px; }
+    }
+    .welcome-screen .glow-line {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+      margin: 0 auto 20px;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    .welcome-screen h1 {
+      font-size: 26px; font-weight: 900; color: #fff;
+      line-height: 1.4; margin: 0 0 14px;
+    }
+    .welcome-screen .sub {
+      font-size: 15px; color: #64748B;
+      line-height: 1.7; max-width: 320px; margin: 0 auto 28px;
+    }
+    .welcome-screen .sub strong { color: #94A3B8; }
+    .welcome-btn {
+      background: linear-gradient(135deg, #D4AF37 0%, #C5A880 100%);
+      color: #0B0F19; border: none; border-radius: 60px;
+      padding: 18px 44px; font-size: 19px; font-weight: 800;
+      cursor: pointer; font-family: inherit;
+      box-shadow: 0 8px 32px rgba(212,175,55,0.2);
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      width: 100%; max-width: 320px;
+    }
+    .welcome-btn:hover {
+      background: linear-gradient(135deg, #C5A880 0%, #B8993E 100%);
+      box-shadow: 0 12px 48px rgba(212,175,55,0.3);
+      transform: translateY(-2px);
+    }
+    .welcome-btn:active { transform: scale(0.96); }
+
     /* ─── Wizard Container ─── */
     .wizard {
       flex: 1; display: flex; flex-direction: column;
       position: relative; z-index: 2; padding: 0;
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.5s ease 0.15s, transform 0.5s ease 0.15s;
+      pointer-events: none;
+    }
+    .wizard.visible {
+      opacity: 1; transform: translateY(0);
+      pointer-events: auto;
     }
     .wizard-header {
       padding: 16px 22px 6px; flex-shrink: 0;
@@ -321,6 +388,18 @@
       </div>
     </div>
 
+    <!-- ─── Welcome Landing Screen ─── -->
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="logo-premium">M I S A</div>
+      <div class="glow-line"></div>
+      <h1>הכסף שלך מחכה לך</h1>
+      <div class="sub">
+        בדיקה דיגיטלית מהירה להחזרי מס ואיתור כספים אבודים ב-הראל, מנורה וחברות הביטוח.<br/>
+        100% חינם — משלמים רק על הצלחה!
+      </div>
+      <button class="welcome-btn" id="landingCta">בדיקה חינם ב-60 שניות 🚀</button>
+    </div>
+
     <!-- ─── Wizard ─── -->
     <div class="wizard" id="wizard">
 
@@ -341,13 +420,13 @@
 
           <!-- ═══ Step 1: Name & Phone ═══ -->
           <div class="wizard-step" data-step="1">
-            <div class="step-title">הכסף שלך מחכה לך</div>
-            <div class="step-sub">בדיקה דיגיטלית מהירה להחזרי מס ואיתור כספים אבודים ב-הראל, מנורה וחברות הביטוח. 100% חינם - משלמים רק על הצלחה!</div>
+            <div class="step-title">פרטים אישיים</div>
+            <div class="step-sub">נא למלא את פרטיכם לצורך בדיקת הזכאות:</div>
             <div class="field-group">
               <input type="text" id="nameInput" placeholder="שם מלא" dir="rtl" />
               <input type="tel" id="phoneInput" placeholder="טלפון נייד" dir="rtl" inputmode="tel" />
             </div>
-            <button class="cta-btn" id="step1Btn">בוא נתחיל</button>
+            <button class="cta-btn" id="step1Btn">להמשך הבדיקה</button>
           </div>
 
           <!-- ═══ Step 2: Employment Status ═══ -->
@@ -503,6 +582,10 @@
     const progressFill = document.getElementById('progressFill');
     const refundAmount = document.getElementById('refundAmount');
 
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const landingCta = document.getElementById('landingCta');
+    const wizardEl = document.getElementById('wizard');
+
     const nameInput = document.getElementById('nameInput');
     const phoneInput = document.getElementById('phoneInput');
     const step1Btn = document.getElementById('step1Btn');
@@ -534,11 +617,19 @@
     const paymentStatus = document.getElementById('paymentStatus');
     const step6Btn = document.getElementById('step6Btn');
 
+    // ─── Landing CTA ─────────────────────────────────────────────
+    landingCta.addEventListener('click', () => {
+      welcomeScreen.classList.add('hidden');
+      wizardEl.classList.add('visible');
+      goToStep(1);
+    });
+
     // ─── Navigation ─────────────────────────────────────────────
     function goToStep(n) {
       state.step = n;
       const disp = Math.min(n, TOTAL_STEPS);
-      const pct = Math.round((disp / TOTAL_STEPS) * 100);
+      let pct = Math.round((disp / TOTAL_STEPS) * 100);
+      if (pct < 15) pct = 15; // first step shows 15%
       stepNum.textContent = disp;
       stepTotal.textContent = TOTAL_STEPS;
       stepPct.textContent = pct + '%';
@@ -909,6 +1000,8 @@
 
       if (saved.step && saved.step > 1 && saved.step <= TOTAL_STEPS) {
         restoreOpts();
+        welcomeScreen.classList.add('hidden');
+        wizardEl.classList.add('visible');
         goToStep(saved.step);
       }
     }
