@@ -20,13 +20,23 @@
       direction: rtl;
     }
     .header {
-      background: linear-gradient(135deg, #1a56db, #0d3b9e);
+      background: linear-gradient(135deg, #0F172A, #0B0F19);
       padding: 20px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid rgba(212,175,55,0.1);
     }
-    .header h1 { font-size: 22px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 10px; }
+    .header .logo {
+      font-weight: 300;
+      font-size: 22px;
+      letter-spacing: 7px;
+      color: #D4AF37;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .header .badge { background: rgba(255,255,255,0.15); padding: 4px 14px; border-radius: 20px; font-size: 13px; }
     .stats-bar {
       display: flex; gap: 16px; padding: 16px 24px;
@@ -126,10 +136,8 @@
 <body>
 
   <div class="header">
-    <h1>
-      <span>💸</span> מיסה — לוח בקרה
-    </h1>
-    <span class="badge" id="liveBadge">🟢 פעיל</span>
+    <div class="logo">M I S A</div>
+    <div class="badge">לוח בקרה</div>
   </div>
 
   <div class="stats-bar" id="statsBar">
