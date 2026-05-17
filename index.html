@@ -4,18 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>מיסה — הכסף שלך מחכה לך</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --bg: #000000;
-      --surface: #1C1C1E;
-      --surface-alt: #2C2C2E;
-      --border: #2C2C2E;
-      --text: #FFFFFF;
+      --bg: #F2F2F7;
+      --surface: #FFFFFF;
+      --surface-alt: #E5E5EA;
+      --border: #D1D1D6;
+      --text: #1C1C1E;
       --text-secondary: #8E8E93;
-      --text-tertiary: #48484A;
+      --text-tertiary: #C7C7CC;
       --accent: #007AFF;
       --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       --radius: 14px;
@@ -45,9 +43,7 @@
 
     /* ─── Header ─── */
     .app-header {
-      background: rgba(28,28,30,0.85);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
+      background: var(--surface);
       padding: 18px 20px 12px;
       color: var(--text);
       flex-shrink: 0;
@@ -62,7 +58,7 @@
       margin-bottom: 10px;
     }
     .app-header .logo {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 20px;
       letter-spacing: 4px;
       color: var(--text);
@@ -82,11 +78,12 @@
       align-items: center;
       justify-content: space-between;
       margin-top: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     .refund-counter .label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
     .refund-counter .amount {
       font-size: 24px; font-weight: 700; line-height: 1;
-      direction: ltr; display: flex; align-items: center; gap: 2px; color: var(--text);
+      direction: ltr; display: flex; align-items: center; gap: 2px; color: var(--accent);
     }
     .refund-counter .amount .currency { font-size: 15px; font-weight: 600; margin-left: 2px; }
     .refund-counter .amount .num { display: inline-block; min-width: 60px; text-align: left; }
@@ -106,7 +103,7 @@
       inset: 0; z-index: 0;
     }
     .welcome-screen .logo-premium {
-      font-weight: 600; font-size: 36px;
+      font-weight: 700; font-size: 36px;
       letter-spacing: 8px; color: var(--text);
       text-transform: uppercase;
       margin-bottom: 20px;
@@ -132,14 +129,14 @@
     }
     .welcome-screen .sub strong { color: var(--text); }
     .welcome-btn {
-      background: var(--text); color: #000;
+      background: var(--accent); color: #FFFFFF;
       border: none; border-radius: var(--radius-lg);
       padding: 16px 40px; font-size: 17px; font-weight: 600;
       cursor: pointer; font-family: inherit;
       transition: all 0.25s ease;
       width: 100%; max-width: 320px;
     }
-    .welcome-btn:hover { background: #E5E5EA; }
+    .welcome-btn:hover { background: #0066D6; }
     .welcome-btn:active { transform: scale(0.97); }
 
     /* ─── Wizard Container ─── */
@@ -204,6 +201,7 @@
       text-align: right; direction: rtl; outline: none;
       transition: border 0.2s ease;
       color: var(--text);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
     .field-group input::placeholder { color: var(--text-tertiary); }
     .field-group input:focus { border-color: var(--accent); }
@@ -220,6 +218,7 @@
       color: var(--text); cursor: pointer;
       transition: all 0.2s ease; font-family: inherit;
       text-align: center; touch-action: manipulation;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
     .option-btn:hover { border-color: var(--text-tertiary); }
     .option-btn:active { transform: scale(0.98); }
@@ -232,13 +231,13 @@
     /* CTA button */
     .cta-btn {
       width: 100%; padding: 16px 28px; margin-top: auto;
-      background: var(--text); color: #000;
+      background: var(--accent); color: #FFFFFF;
       border: none; border-radius: var(--radius);
       font-size: 17px; font-weight: 600; cursor: pointer;
       transition: all 0.25s ease;
       font-family: inherit;
     }
-    .cta-btn:hover { background: #E5E5EA; }
+    .cta-btn:hover { background: #0066D6; }
     .cta-btn:active { transform: scale(0.97); }
     .cta-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
@@ -280,6 +279,7 @@
       font-size: 16px; font-family: inherit;
       outline: none; transition: border 0.2s ease;
       color: var(--text);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
     .payment-grid input::placeholder { color: var(--text-tertiary); }
     .payment-grid input:focus { border-color: var(--accent); }
@@ -320,19 +320,18 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       font-size: 13px; color: var(--text-secondary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
     /* ─── SMS Toast ─── */
     .sms-toast {
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
       width: calc(100% - 32px); max-width: 400px;
-      background: rgba(28,28,30,0.95);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 16px 18px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.12);
       z-index: 1000;
       opacity: 0; transform: translateX(-50%) translateY(20px);
       transition: opacity 0.4s ease, transform 0.4s ease;
@@ -356,7 +355,7 @@
     .sms-toast .to { font-size: 12px; color: var(--text-tertiary); margin-bottom: 4px; direction: ltr; text-align: left; }
     .sms-toast .body {
       font-size: 14px; color: var(--text); line-height: 1.7;
-      padding: 10px 14px; background: rgba(255,255,255,0.04);
+      padding: 10px 14px; background: var(--bg);
       border-radius: 10px; margin-bottom: 8px;
     }
     .sms-toast .time {
@@ -399,7 +398,7 @@
         בדיקה דיגיטלית מהירה להחזרי מס ואיתור כספים אבודים ב-הראל, מנורה וחברות הביטוח.<br/>
         100% חינם — משלמים רק על הצלחה!
       </div>
-      <button class="welcome-btn" id="landingCta">בדיקה חינם ב-60 שניות 🚀</button>
+      <button class="welcome-btn" id="landingCta">בדיקה חינם ב-60 שניות</button>
     </div>
 
     <!-- ─── Wizard ─── -->
@@ -540,7 +539,7 @@
               <div class="success-note">
                 <strong>12%</strong> עמלת הצלחה — ורק אחרי שהכסף אצלך
               </div>
-              <div style="font-size:13px;color:rgba(148,163,184,0.35);margin-top:14px;">צוות מיסה לרשותכם</div>
+              <div style="font-size:13px;color:#C7C7CC;margin-top:14px;">צוות מיסה לרשותכם</div>
             </div>
           </div>
 
@@ -652,7 +651,7 @@
       stepPct.textContent = pct + '%';
       progressFill.style.width = pct + '%';
       const idx = n > TOTAL_STEPS ? TOTAL_SLIDES - 1 : n - 1;
-      track.style.transform = `translateX(-${(idx / TOTAL_SLIDES) * 100}%)`;
+      track.style.transform = `translateX(-${idx * 100}%)`;
     }
 
     function goBack(e) {
