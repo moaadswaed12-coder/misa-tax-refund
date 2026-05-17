@@ -39,6 +39,7 @@ function initSchema() {
   `);
 
   // Auto-migrate columns for schema upgrades
+  // leads table
   try {
     const cols = db.exec("PRAGMA table_info(leads)");
     const colNames = cols[0]?.values.map(r => r[1]) || [];
@@ -50,6 +51,15 @@ function initSchema() {
     addCol('charged_amount', 'REAL DEFAULT 0');
     addCol('approved_at', 'TEXT');
     addCol('charged_at', 'TEXT');
+    addCol('id_photo_path', 'TEXT');
+    addCol('id_photo_verified', 'INTEGER DEFAULT 0');
+  } catch (_) { /* ignore */ }
+
+  // documents table
+  try {
+    const cols = db.exec("PRAGMA table_info(documents)");
+    const colNames = cols[0]?.values.map(r => r[1]) || [];
+    if (!colNames.includes('doc_type')) db.run("ALTER TABLE documents ADD COLUMN doc_type TEXT DEFAULT '106'");
   } catch (_) { /* ignore */ }
 
   db.run(`

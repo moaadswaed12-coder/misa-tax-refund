@@ -80,24 +80,42 @@ app.post('/api/submit-lead', (req, res) => {
 });
 
 // ──────────────────────────────────────────────────────────────────
-// API: Upload Form 106 document(s)
+// API: Upload documents (Form 106 + ID photo)
 // ──────────────────────────────────────────────────────────────────
-app.post('/api/upload-106', upload.array('documents', 10), (req, res) => {
+app.post('/api/upload-106', upload.fields([
+  { name: 'documents', maxCount: 10 },
+  { name: 'id_photo', maxCount: 1 },
+]), (req, res) => {
   try {
     const { phone } = req.body;
     const cleanPhone = (phone || '').replace(/[^0-9]/g, '');
     if (!cleanPhone || cleanPhone.length < 9) return res.status(400).json({ error: 'נא לספק מספר טלפון תקין' });
-    if (!req.files || req.files.length === 0) return res.status(400).json({ error: 'לא התקבלו קבצים להעלאה' });
 
     const lead = queryOne('SELECT id FROM leads WHERE phone = ?', [cleanPhone]);
     if (!lead) return res.status(404).json({ error: 'לא נמצא משתמש. יש להשלים תחילה את השאלון.' });
 
     const uploaded = [];
-    for (const file of req.files) {
-      run(`INSERT INTO documents (lead_id, filename, original_name, file_path, mime_type, file_size) VALUES (?, ?, ?, ?, ?, ?)`,
-        [lead.id, file.filename, file.originalname, file.path, file.mimetype, file.size]);
-      uploaded.push({ filename: file.filename, originalName: file.originalname, mimeType: file.mimetype, size: file.size, url: `/uploads/${cleanPhone}/${file.filename}` });
+
+    // Form 106 documents
+    const docs106 = req.files?.documents || [];
+    for (const file of docs106) {
+      run(`INSERT INTO documents (lead_id, filename, original_name, file_path, mime_type, file_size, doc_type) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [lead.id, file.filename, file.originalname, file.path, file.mimetype, file.size, '106']);
+      uploaded.push({ filename: file.filename, originalName: file.originalname, type: '106', url: `/uploads/${cleanPhone}/${file.filename}` });
     }
+
+    // ID photo
+    const idPhotos = req.files?.id_photo || [];
+    for (const file of idPhotos) {
+      run(`INSERT INTO documents (lead_id, filename, original_name, file_path, mime_type, file_size, doc_type) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [lead.id, file.filename, file.originalname, file.path, file.mimetype, file.size, 'id_photo']);
+      run(`UPDATE leads SET id_photo_path = ?, id_photo_verified = 1 WHERE id = ?`,
+        [file.path, lead.id]);
+      uploaded.push({ filename: file.filename, originalName: file.originalname, type: 'id_photo', url: `/uploads/${cleanPhone}/${file.filename}` });
+    }
+
+    if (uploaded.length === 0) return res.status(400).json({ error: 'לא התקבלו קבצים להעלאה' });
+
     run(`UPDATE leads SET status = 'documents_uploaded' WHERE id = ?`, [lead.id]);
     res.json({ success: true, uploaded, count: uploaded.length, message: `${uploaded.length} מסמכים הועלו בהצלחה` });
   } catch (err) {

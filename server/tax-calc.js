@@ -1,12 +1,10 @@
 /**
- * Stupid Simple Tax Refund Estimator
+ * Tax Refund Estimator – Wizard Flow
  *
- * Rules (based on common Israeli tax refund scenarios):
- *   - Changed jobs in last 6 years  → ₪1,500
- *   - Was unemployed                → ₪2,000
- *   - Was a student                 → ₪1,200
- *   - Paid medical/dental           → ₪2,500
- *   - Base minimum (if all "no")    → ₪800
+ * Questions:
+ *   Step 2 – Employment status  → base amount
+ *   Step 3 – Job changes        → addition
+ *   Step 4 – Pensya / insurance → addition
  */
 
 function calculateRefund(answers) {
@@ -14,25 +12,35 @@ function calculateRefund(answers) {
     return { refund: 0, breakdown: [], totalAdditions: 0 };
   }
 
+  // Employment status base
+  const employmentBases = {
+    'שכיר': 600,
+    'עצמאי': 2200,
+    'גם וגם': 2800,
+    'חייל משוחרר': 400,
+  };
+  const empAns = answers.find(a => a.questionId === 'employment');
+  const base = empAns ? (employmentBases[empAns.answer] || 0) : 0;
+
+  // Additions
   const rules = [
-    { id: 'work',          label: 'החלפת עבודה',         amount: 1500, keywords: ['כן'] },
-    { id: 'unemployment',  label: 'תקופת אבטלה',         amount: 2000, keywords: ['כן'] },
-    { id: 'student',       label: 'לימודים אקדמיים',     amount: 1200, keywords: ['כן'] },
-    { id: 'medical',       label: 'הוצאות רפואיות',      amount: 2500, keywords: ['כן'] },
+    { id: 'job_changes', val: 'כן', amount: 1800, label: 'שינויים תעסוקתיים' },
+    { id: 'pensya',      val: 'כן',       amount: 2200, label: 'קרנות השתלמות וביטוחים' },
+    { id: 'pensya',      val: 'לא בטוח',       amount: 1000, label: 'קרנות השתלמות — נדרשת בדיקה' },
   ];
 
   const breakdown = [];
-  let total = 0;
+  let additions = 0;
 
-  for (const rule of rules) {
-    const match = answers.find(
-      a => a.questionId === rule.id && rule.keywords.includes(a.answer)
-    );
-    if (match) {
-      total += rule.amount;
-      breakdown.push({ label: rule.label, amount: rule.amount });
+  for (const r of rules) {
+    if (answers.find(a => a.questionId === r.id && a.answer === r.val)) {
+      additions += r.amount;
+      breakdown.push({ label: r.label, amount: r.amount });
     }
   }
+
+  let total = base + additions;
+  if (base > 0) breakdown.unshift({ label: 'בסיס תעסוקתי', amount: base });
 
   if (total === 0) {
     total = 800;
