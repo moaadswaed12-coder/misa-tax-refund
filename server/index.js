@@ -154,9 +154,9 @@ app.post('/api/setup-payment', async (req, res) => {
     console.log(`✅ Card tokenized for ${cleanPhone}: ${result.token} (****${result.lastFour})`);
 
     // Auto welcome SMS – only sent after card verification (cost-protected)
-    sendWelcomeSMS(cleanPhone, lead.name);
+    const smsResult = sendWelcomeSMS(cleanPhone, lead.name);
 
-    res.json({ success: true, token: result.token, lastFour: result.lastFour, message: 'כרטיס אומת בהצלחה! הטוקן נשמר במערכת.' });
+    res.json({ success: true, token: result.token, lastFour: result.lastFour, message: 'כרטיס אומת בהצלחה! הטוקן נשמר במערכת.', sentSms: smsResult });
   } catch (err) {
     console.error('❌ /api/setup-payment error:', err);
     res.status(500).json({ error: err.message || 'שגיאה באימות הכרטיס, נסה שוב מאוחר יותר' });
@@ -237,12 +237,12 @@ app.post('/api/admin/leads/:id/approve', requireAdmin, async (req, res) => {
     if (lead.status === 'completed_paid') return res.status(400).json({ error: 'הליד כבר הושלם' });
 
     // Send Step 1 SMS: "שלח SMS בשורה משמחת"
-    sendApprovedSMS(lead.phone, lead.name, lead.refund_estimate);
+    const smsResult = sendApprovedSMS(lead.phone, lead.name, lead.refund_estimate);
 
     // Update status
     run(`UPDATE leads SET status = 'approved_waiting_delay', approved_at = datetime('now', '+2 hours') WHERE id = ?`, [lead.id]);
 
-    res.json({ success: true, message: `✅ SMS נשלח ל-${lead.name}` });
+    res.json({ success: true, message: `✅ SMS נשלח ל-${lead.name}`, sentSms: smsResult });
   } catch (err) {
     console.error('❌ /api/admin/leads/:id/approve error:', err);
     res.status(500).json({ error: 'שגיאה בשליחת האישור' });
@@ -272,7 +272,7 @@ app.post('/api/admin/leads/:id/charge', requireAdmin, async (req, res) => {
     }
 
     // Send Step 2 SMS: "בצע גבייה ושלח SMS סופי"
-    sendChargedSMS(lead.phone, lead.name, lead.refund_estimate, feeShekels);
+    const smsResult = sendChargedSMS(lead.phone, lead.name, lead.refund_estimate, feeShekels);
 
     // Update status
     run(`UPDATE leads SET status = 'completed_paid', charged_amount = ?, charged_at = datetime('now', '+2 hours') WHERE id = ?`,
@@ -283,6 +283,7 @@ app.post('/api/admin/leads/:id/charge', requireAdmin, async (req, res) => {
       message: `✅ נגבה ₪${(feeAgurot / 100).toFixed(2)} מ-${lead.name}. SMS סופי נשלח.`,
       transactionId: chargeResult.transactionId,
       chargedAmount: feeAgurot / 100,
+      sentSms: smsResult,
     });
   } catch (err) {
     console.error('❌ /api/admin/leads/:id/charge error:', err);

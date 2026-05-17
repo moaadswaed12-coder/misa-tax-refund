@@ -365,6 +365,44 @@
     #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
 
     .hidden { display: none !important; }
+
+    /* ─── SMS Toast ─── */
+    .sms-toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 32px); max-width: 400px;
+      background: #0F172A; border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 16px; padding: 16px 18px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      z-index: 1000;
+      opacity: 0; transform: translateX(-50%) translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+    .sms-toast.show {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+    .sms-toast .close-btn {
+      position: absolute; top: 10px; left: 14px;
+      background: none; border: none; color: rgba(148,163,184,0.4);
+      font-size: 18px; cursor: pointer; font-family: inherit;
+      transition: color 0.2s;
+    }
+    .sms-toast .close-btn:hover { color: #94A3B8; }
+    .sms-toast .header {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; color: #D4AF37; margin-bottom: 10px;
+    }
+    .sms-toast .header .icon { font-size: 18px; }
+    .sms-toast .to { font-size: 12px; color: rgba(148,163,184,0.5); margin-bottom: 4px; direction: ltr; text-align: left; }
+    .sms-toast .body {
+      font-size: 14px; color: #E2E8F0; line-height: 1.7;
+      padding: 10px 14px; background: rgba(255,255,255,0.03);
+      border-radius: 10px; margin-bottom: 8px;
+    }
+    .sms-toast .time {
+      font-size: 11px; color: rgba(148,163,184,0.3); text-align: left; direction: ltr;
+    }
   </style>
 </head>
 <body>
@@ -548,6 +586,15 @@
 
   </div>
 
+  <!-- ─── SMS Toast ─── -->
+  <div class="sms-toast" id="smsToast">
+    <button class="close-btn" id="smsToastClose">&times;</button>
+    <div class="header"><span class="icon">📨</span> SMS נשלח</div>
+    <div class="to" id="smsToastTo"></div>
+    <div class="body" id="smsToastBody"></div>
+    <div class="time" id="smsToastTime"></div>
+  </div>
+
   <canvas id="confetti-canvas"></canvas>
 
   <script>
@@ -616,6 +663,12 @@
     const paymentError = document.getElementById('paymentError');
     const paymentStatus = document.getElementById('paymentStatus');
     const step6Btn = document.getElementById('step6Btn');
+
+    const smsToast = document.getElementById('smsToast');
+    const smsToastTo = document.getElementById('smsToastTo');
+    const smsToastBody = document.getElementById('smsToastBody');
+    const smsToastTime = document.getElementById('smsToastTime');
+    const smsToastClose = document.getElementById('smsToastClose');
 
     // ─── Landing CTA ─────────────────────────────────────────────
     landingCta.addEventListener('click', () => {
@@ -912,6 +965,8 @@
         paymentStatus.textContent = 'כרטיס אומת בהצלחה';
         paymentStatus.className = 'status-msg ok';
 
+        if (data.sentSms) showSmsToast(data.sentSms);
+
         clearSession();
         await sleep(800);
         goToStep(7); // done step (index 7, but we have 6 steps, so we use step = 7 for done)
@@ -963,6 +1018,21 @@
       }
       draw();
     }
+
+    // ─── SMS Toast ───────────────────────────────────────────────
+    let smsToastTimer = null;
+    function showSmsToast(sms) {
+      smsToastTo.textContent = '📱 ' + (sms.phone || '');
+      smsToastBody.textContent = sms.text || '';
+      smsToastTime.textContent = '🕐 ' + (sms.timestamp || '');
+      smsToast.classList.add('show');
+      clearTimeout(smsToastTimer);
+      smsToastTimer = setTimeout(() => smsToast.classList.remove('show'), 8000);
+    }
+    smsToastClose.addEventListener('click', () => {
+      smsToast.classList.remove('show');
+      clearTimeout(smsToastTimer);
+    });
 
     // ─── Session restore ────────────────────────────────────────
     function restoreSession() {

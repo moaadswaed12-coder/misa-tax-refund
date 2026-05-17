@@ -24,32 +24,7 @@ function sendSMS(phone, text) {
   `;
   console.log(logLine);
 
-  /*
-   * ─── Integration placeholder ─────────────────────────────────
-   *
-   * 1. Inforu:
-   *    const res = await fetch('https://api.inforu.co.il/api/v1/SMS', {
-   *      method: 'POST',
-   *      headers: { 'Content-Type': 'application/json' },
-   *      body: JSON.stringify({
-   *        username: process.env.INFORU_USER,
-   *        password: process.env.INFORU_PASS,
-   *        recipients: [{ phone: phone.replace('+', '') }],
-   *        message: text,
-   *      }),
-   *    });
-   *
-   * 2. Twilio:
-   *    const client = require('twilio')(TWILIO_SID, TWILIO_TOKEN);
-   *    await client.messages.create({ body: text, from: TWILIO_NUMBER, to: phone });
-   *
-   * 3. SMS019:
-   *    const res = await fetch(`https://api.sms019.co.il/SendSMS`, { ... });
-   *
-   * ─────────────────────────────────────────────────────────────
-   */
-
-  return { success: true, phone, text, timestamp };
+  return { success: true, phone, text, timestamp, formattedFor: phone };
 }
 
 // ──────────────────────────────────────────────────────────────────
